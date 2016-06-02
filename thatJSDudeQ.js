@@ -357,3 +357,226 @@ function testQ8() {
 	console.log("you are a nice dude" === "edud ecin a era uoy".protoReverseString());
 }
 // testQ8();
+
+// 9. reverse words
+// Question: How would you reverse words in a sentence? --> Without using the simple split and reverse :)
+function reverseMapThisSentense(strToReverse) {
+	var arrayOfWord = strToReverse.split(' ');
+	var arrToReturn = [];
+	arrayOfWord.map(function(str){
+		arrToReturn.unshift(str);
+	});
+	return arrToReturn.join(' ');
+}
+
+function reverseRecuThisSentense(strToReverse) {
+	var nextSpace = strToReverse.indexOf(' ');
+	if (nextSpace < 0) {
+		return strToReverse;
+	} else {
+		return reverseRecuThisSentense(strToReverse.substr(nextSpace + 1)) + ' ' + strToReverse.substr(0, nextSpace);
+	}
+}
+
+exports.reverseMapThisSentense = reverseMapThisSentense;
+exports.reverseRecuThisSentense = reverseRecuThisSentense;
+
+// 10. reverse in place
+// Question: If you have a string like "I am the good boy". How can you generate "I ma eht doog yob"? Please note that the words are in place but reverse.
+
+var Q10 = {};
+
+Q10.reverseMapInPlace = function(strToModify) {
+	var arrToModify = strToModify.split(' ');
+	var reversedArray = arrToModify.map(function(obj){
+		return obj.split('').reverse().join('');
+	});
+	return reversedArray.join(' ');
+};
+
+Q10.reverseRecuInPlace = function(strToModify) {
+	var nextSpace = strToModify.indexOf(' ');
+	if (nextSpace < 0) {
+		return reverseStr(strToModify);
+	} else {
+		var reverseWord = strToModify.substr(0, nextSpace);
+		// make the recursion
+		return reverseStr(reverseWord) + ' ' + Q10.reverseRecuInPlace(strToModify.substr(nextSpace + 1));
+	}
+};
+exports.Q10 = Q10;
+
+
+// 11. First non repeating char
+// Question: How could you find the first non repeating char in a string? (small string,)
+var Q11 = {};
+
+Q11.giveMeFirstRepeatChar = function(strToInvestigate) {
+	var miniString = strToInvestigate;
+	// if (strToInvestigate.length > 1000) {
+		// TODO: Loop trough the rest later
+		miniString = strToInvestigate.substr(0, 1000).replace(/ /g, '');
+		var uniqueValue = [];
+		var totalLength = miniString.length;
+		for (var i = 0; i < totalLength; i++) {
+			if (uniqueValue.indexOf(miniString[i]) == -1) {
+				uniqueValue.push(miniString[i]);
+			} else {
+				// This was found already so Send it.
+				return miniString[i];
+			}
+		}
+	// }
+	// No unique item was found.
+	return false;
+};
+
+Q11.giveMeFirstNonRepeatChar = function(strToInvestigate) {
+	var len = strToInvestigate.length;
+	for (var charAt = 0; charAt < len; charAt++) {
+		if (strToInvestigate.indexOf(strToInvestigate[charAt]) === strToInvestigate.lastIndexOf(strToInvestigate[charAt])) {
+			return strToInvestigate[charAt];
+		}
+	}
+	// No unique car
+	return false;
+};
+
+exports.Q11 = Q11;
+
+
+// 15. missing number
+// Question: from a unsorted array of numbers 1 to 100 excluding one number, how will you find that number.
+// First guess: Sort the array and go trough it.
+// Second guess: if all are there, just loop until you find one. 
+
+var Q15 = {};
+
+Q15.sortAndLoop = function(arrayToCheck) {
+	arrayToCheck.sort(function(a,b) {return a - b;});
+	for (var i = 0; i < arrayToCheck.length; i++) {
+		// this is problematic for first and last number. but can be applied to any number
+		if (arrayToCheck[i] + 1 <  arrayToCheck[i + 1]) {
+			return arrayToCheck[i] + 1;
+		}
+	}
+	return false;
+};
+
+function getMaxOfArray(numArray) {
+  return Math.max.apply(null, numArray);
+}
+
+Q15.loopAndCheckMissing = function(arrayToCheck) {
+	var maximum = getMaxOfArray(arrayToCheck);
+	// console.log(maximum);
+	for (var i = arrayToCheck.length - 1; i >= 0; i--) {
+		if (arrayToCheck[i] < maximum && arrayToCheck.indexOf(arrayToCheck[i] + 1) == -1) {
+			return arrayToCheck[i] + 1;
+		}
+	}
+	return false;
+};
+
+Q15.doItMathStyle = function(arrayToCheck) {
+	// Here we assume the array always atart at 1 ??
+	var len = arrayToCheck.length;
+	sumOfTheArray = 0;
+	expectedSum = (len + 1) * (len + 2) / 2;
+
+	sumOfTheArray = arrayToCheck.reduce(function(before, item) {
+		return before + item;
+	});
+	// console.log("sum Of the array: ",sumOfTheArray, expectedSum);
+	return expectedSum - sumOfTheArray;
+};
+
+exports.Q15 = Q15;
+
+
+// 16. Sum of two
+// Question: From a unsorted array, check whether there are any two numbers that will sum up to a given number?
+// I would go reverse, Find all divisor pair of that number and check if both are part of the array.
+
+var Q16 = {};
+
+Q16.isDivisorPartOfTheArray = function(nbrToDivide, arrayToCheck) {
+	function giveMeAllDivisorPair(nbrToCheck) {
+		var max = nbrToCheck;
+		var arrToReturn = [];
+		for (var i = 1; i < max; i++) {
+			if (nbrToCheck % i === 0) {
+				max = nbrToCheck / i;
+				arrToReturn.push([i, max]);
+			}
+		}
+		return arrToReturn;
+	}
+	var divisorPairList = giveMeAllDivisorPair(nbrToDivide);
+
+	for (var pair = divisorPairList.length - 1; pair >= 0; pair--) {
+		var minDiv = divisorPairList[pair][0];
+		var maxDiv = divisorPairList[pair][1];
+		if (arrayToCheck.indexOf(minDiv) > -1 && arrayToCheck.indexOf(maxDiv) > -1) {
+			// Found a Match
+			return true;
+		}
+	}
+	return false;
+};
+
+Q16.istheSUMthere = function(nbrToAddTo, arrayToCheck) {
+	for (var i = arrayToCheck.length - 1; i >= 0; i--) {
+		for (var j = 0; j < i; j++) {
+			if (arrayToCheck[j] + arrayToCheck[i] === nbrToAddTo) {
+				// console.log("Bingo: ", arrayToCheck[j],arrayToCheck[i],nbrToAddTo);
+				return true;
+			}
+		}
+	}
+	return false;
+};
+
+Q16.isTheSumBySoustraction = function(nbrToAddTo, arrayToCheck) {
+	var difference = {}, len = arrayToCheck.length;
+
+	for (var item = arrayToCheck.length - 1; item >= 0; item--) {
+		var remaining = nbrToAddTo - arrayToCheck[item];
+		if (difference[remaining]) {
+			return true;
+		} else {
+			difference[arrayToCheck[item]] = true;
+		}
+	}
+	return false;
+};
+
+exports.Q16 = Q16;
+
+// 18. Counting Zeros
+// Question: Count Total number of zeros from 1 upto n?
+// Answer: If n = 50. number of 0 would be 11 (0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100). Please note that 100 has two 0. This one looks simple but little tricky
+
+var Q18 = {};
+
+Q18.countNbrOfZeroUpToN = function(nbrToReach) {
+	var nbrOfZ = 0;
+	for (var i = nbrToReach; i >= 0; i--) {
+		var str = "" + i;
+		var nbrToAdd = str.match(/0/g);
+		if (nbrToAdd) {
+			console.log(str, nbrToAdd);
+			nbrOfZ += nbrToAdd.length;
+		}
+	}
+	return nbrOfZ;
+};
+
+exports.Q18 = Q18;
+
+
+
+
+
+
+
