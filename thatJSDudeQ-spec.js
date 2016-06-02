@@ -98,3 +98,17 @@ describe('Question of 0', function() {
 		// expect(allQ.Q18.countNbrOfZeroUpToN(2014)).toEqual(223); that one dosent work.
 	});
 });
+
+describe('Testing Multiple Multiplication', function() {
+	it('should return the sum of Function', function(){
+		// javascript console.log(mul(2)(3)(4)); // output : 24 console.log(mul(4)(3)(4)); // output : 48
+		expect(allQ.Qmul.mul(2)(3)(4)).toEqual(24);
+		expect(allQ.Qmul.mul(4)(3)(4)).toEqual(48);
+	});
+
+	it('should return the sum of Function', function(){
+		// javascript console.log(mul(2)(3)(4)); // output : 24 console.log(mul(4)(3)(4)); // output : 48
+		expect(allQ.Qmul.recuMult(2)(3)(4)).toEqual(24);
+		expect(allQ.Qmul.recuMult(4)(3)(4)).toEqual(48);
+	});
+});

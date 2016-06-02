@@ -565,7 +565,7 @@ Q18.countNbrOfZeroUpToN = function(nbrToReach) {
 		var str = "" + i;
 		var nbrToAdd = str.match(/0/g);
 		if (nbrToAdd) {
-			console.log(str, nbrToAdd);
+			// console.log(str, nbrToAdd);
 			nbrOfZ += nbrToAdd.length;
 		}
 	}
@@ -574,6 +574,30 @@ Q18.countNbrOfZeroUpToN = function(nbrToReach) {
 
 exports.Q18 = Q18;
 
+
+// Write a mul function which will produce the following outputs when invoked:
+// javascript console.log(mul(2)(3)(4)); // output : 24 console.log(mul(4)(3)(4)); // output : 48
+var Qmul = {};
+
+Qmul.recuMult = function (x) {
+	// This dosent work. Not sure how to fire function recursively... 
+	console.log("this is X: ", x);
+	if (x) {
+		return 1;
+	} else {
+		return x * function(y){Qmul.mul(y);};
+	}
+};
+
+Qmul.mul = function(x) {
+	return function(y) {
+		return function(z) {
+			return x * y * z;
+		};
+	};
+};
+
+exports.Qmul = Qmul;
 
 
 
