@@ -1,0 +1,28 @@
+{
+  "name": "randomtestfiles",
+  "version": "1.0.0",
+  "description": "The best way to learn is to challenge yourself.",
+  "main": "lessThanOneHourChallenge-spec.js",
+  "dependencies": {
+    "bl": "^1.1.2",
+    "es6-promise": "^3.2.1",
+    "q-fs": "^0.1.36",
+    "q-io": "^1.13.2",
+    "scope-chains-closures": "^1.0.4",
+    "through2-map": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatMath/randomJSChallenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatMath/randomJSChallenge/issues"
+  },
+  "homepage": "https://github.com/MatMath/randomJSChallenge#readme"
+}
