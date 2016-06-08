@@ -119,5 +119,32 @@ describe('Some test from GlassDoor on Addapa', function() {
 		expect(allQ.Q.findTheMissingtwo([1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,18,19,20,21])).toEqual([7, 17]);
 		expect(allQ.Q.findTheMissingtwo([1,2,3,4,5,6,9,10,11,12,13,14,15,16,17,18,19,20,21])).toEqual([7, 8]);
 	});
+
+	it('should get The RegEx Right', function() {
+		expect(allQ.Q.isMatch('','*')).toBeTruthy();
+		expect(allQ.Q.isMatch('','*****')).toBeTruthy();
+		expect(allQ.Q.isMatch('','**a*')).toBeFalsy();
+		expect(allQ.Q.isMatch('b','*b')).toBeTruthy();
+		expect(allQ.Q.isMatch('cabt','c*t')).toBeTruthy();
+		expect(allQ.Q.isMatch('abbbbbbb','a*b')).toBeTruthy();
+		expect(allQ.Q.isMatch('Something really long that should not match','**really long that*')).toBeTruthy();
+		
+		expect(allQ.Q.isMatch('bcat','c*t')).toBeFalsy();
+		expect(allQ.Q.isMatch('cats','c*t')).toBeFalsy();
+	});
+
+	it('Test the support function of the RegEx Match', function() {
+		expect(allQ.Q.cleanTestStr('asdfgh')).toEqual('asdfgh');
+		expect(allQ.Q.cleanTestStr('asd***fgh')).toEqual('asd*fgh');
+		expect(allQ.Q.cleanTestStr('**asdfgh')).toEqual('*asdfgh');
+		expect(allQ.Q.cleanTestStr('****')).toEqual('*');
+		expect(allQ.Q.cleanTestStr('*')).toEqual('*');
+	});
+
+	it('testing The SubString split', function() {
+		expect(allQ.Q.splitinSubStrWithMatch("this Dog chace this cat and it is Stupid this Is What it is", 'this')).toEqual(["this Dog chace this cat and it is Stupid this Is What it is", "this cat and it is Stupid this Is What it is", "this Is What it is"])
+		expect(allQ.Q.splitinSubStrWithMatch("abcabcabcabcd", 'abc')).toEqual(["abcabcabcabcd", "abcabcabcd", "abcabcd", "abcd"]);
+		expect(allQ.Q.splitinSubStrRecuWithMatch(undefined, "abcabcabcabcd", 'abc')).toEqual(["abcabcabcabcd", "abcabcabcd", "abcabcd", "abcd"]);
+	});
 });
 
