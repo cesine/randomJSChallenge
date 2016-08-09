@@ -40,9 +40,73 @@ describe('Testing the basic', function() {
 
   it('should do a simple insert', function(done) {
     exp.app.simpleInsert().then(function(res) {
-      console.log(res);
+      // console.log(res);
       expect(res.id).toBeDefined();
       done();
     });
   })
+
+  it('should call a function', function(done) {
+    exp.app.functionCall().then(function(res) {
+      // console.log(res);
+      expect(res[0].id).toEqual(1);
+      done();
+    });
+  })
+
+  it('Check the prepared Statement', function(done) {
+    exp.app.singleParam(3).then(function(res){
+      expect(res.id).toEqual(3);
+      done();
+    });
+  });
+
+  it('Check multiple param', function(done) {
+    exp.app.multiParam(4).then(function(res) {
+      expect(res.length).toEqual(2);
+      done();
+    });
+  });
+
+  it('checked Names param querry', function(done) {
+    exp.app.namedParam().then(function(res){
+      expect(res.length).toBeGreaterThan(1);
+      done();
+    })
+  })
+});
+
+describe('Task Section', function() {
+  xit('should chain querry', function(done) {
+    // it dosent work, no idea what "t" refer to. :/
+    exp.app.task().then(function(res) {
+      expect(res).toMatch("something");
+      done();
+    });
+  });
+
+  it('run a massive item', function(done) {
+    exp.app.massive().then(function(res) {
+      expect(res.total).toMatch(100);
+      done();
+    });
+  });
+});
+
+describe('Some Stre..a..m...ing', function() {
+  it('should stream a bit', function(done) {
+    exp.app.streamMe().then(function(res) {
+      expect(res).toBeGreaterThan(30);
+      done();
+    })
+  })
+});
+
+describe('Using JSON instead of Param String', function() {
+  it('should send Into the the DB', function(done){
+    exp.app.someJson().then(function(res){
+      expect(res).toMatch('success');
+      done();
+    });
+  });
 });
