@@ -35,4 +35,36 @@ Q.middleNumberCute = (n, m) => {
 // This is the winner's solution. Works on 11ms
 // Dosent work for number larger than 1Billion. Not sure why.
 Q.WinnerSolution = (n, m) => -/[13579]/.test(n += m) | n/2;
+
+// Reverse find the challenge. --> Found it, String "abcd" a*b + b*c + c*d
+// https://codefights.com/challenge/ZCYFuFbwzddBXXHgp/main
+// That work, now let's try shrinking it down
+Q.weirdSum = s => {
+  'use strict';
+  let numberStr = s.split('');
+  return recursion(0, ~~numberStr.pop(), numberStr);
+};
+
+recursion = (sum, prev, remaning) => {
+  'use strict';
+  if (remaning.length === 0) {
+    return sum;
+  }
+  let next = ~~remaning.pop();
+  return recursion(sum + next*prev, next, remaning);
+};
+
+// Attemp2 reduce.
+Q.weirdSum2 = s => {
+  'use strict';
+  let sum = 0;
+  s.split('').reduce((prev, curr) => {
+    sum += prev*curr;
+    return curr;
+  });
+  return sum;
+};
+
+
+
 exports.Q = Q;
