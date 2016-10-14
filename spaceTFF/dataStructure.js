@@ -27,9 +27,9 @@ data.parameters = () => {
   return Object.assign({},
     {
       persPerShip: 100,
-      engineMalfunction: 0.0,
-      refuilingDefect: 0.0,
-      landingFaillure: 0.0,
+      engineMalfunction: 0.1,
+      refuilingDefect: 0.02,
+      landingFaillure: 0.05,
       reusabilityOfShip: 5,
       improvement: 0.05,
       firstStageEngine: 42,

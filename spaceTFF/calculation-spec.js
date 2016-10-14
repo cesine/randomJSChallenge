@@ -116,13 +116,12 @@ sumObj = ( obj ) => {
    it('Should test Landing faillure year 1', () => {
      let yearToTest = dataStructure.blankYear();
      yearToTest.earthFleet.push(dataStructure.newShip());
-     yearToTest.martian = 100; //Starting with 100 already.
-     console.log("yearToTest Landing faillure:", yearToTest);
+     yearToTest.martian = 100; // Starting with 100 already.
+    //  console.log("yearToTest Landing faillure:", yearToTest);
 
      parameters.landingFaillure = 1; // Stack on top of the engine faillure.
 
      let resultOfYear0 = calc.calcOneYear(yearToTest, parameters);
-     console.log("Result of Landing faillure: ",resultOfYear0, yearToTest.earthFleet, parameters.persPerShip, yearToTest.martian, resultOfYear0.martian);
      let peopleLost = (parameters.persPerShip + yearToTest.martian) - (resultOfYear0.martian); // This dosent count the people leaving volontarely."Tourisum"
     //  if there is no defect all should land safely.
      expect(resultOfYear0.martian).toEqual(100);
@@ -133,4 +132,44 @@ sumObj = ( obj ) => {
      expect(resultOfYear0.totKilledIn.refueling).toEqual(0);
      expect(sumObj(resultOfYear0.totKilledIn)).toEqual(peopleLost);
    });
+
+   it('Test the return rate at 0-Danger', () => {
+     let yearToTest = dataStructure.blankYear();
+     yearToTest.earthFleet.push(dataStructure.newShip());
+     yearToTest.earthFleet.push(dataStructure.newShip());
+     yearToTest.marsFleet.push(dataStructure.newShip());
+     yearToTest.martian = 300; // Starting with 100% return but only 1 ship.
+     parameters.touristRatio = 1; // Should have 100 mars tourist returning.
+
+     let resultOfYear0 = calc.calcOneYear(yearToTest, parameters);
+     expect(resultOfYear0.martian).toEqual(400); // 200 arrive, 100 leave so 400 left there.
+   });
+
+   it('Test the return rate at 0-Danger different ratio.', () => {
+     let yearToTest = dataStructure.blankYear();
+     yearToTest.earthFleet.push(dataStructure.newShip());
+     yearToTest.marsFleet.push(dataStructure.newShip());
+     yearToTest.martian = 100; // Starting with 100 already.
+     parameters.touristRatio = 0.5; // Should have 50 martian tourist returning but 100 arriving.
+
+     let resultOfYear0 = calc.calcOneYear(yearToTest, parameters);
+     expect(resultOfYear0.martian).toEqual(150);
+   });
+
+   it('Test the return rate at 100%-Danger', () => {
+     let yearToTest = dataStructure.blankYear();
+     yearToTest.earthFleet.push(dataStructure.newShip());
+     yearToTest.earthFleet.push(dataStructure.newShip());
+     yearToTest.marsFleet.push(dataStructure.newShip());
+     yearToTest.martian = 325; // Starting with 100% return but only 1 ship.
+     parameters.touristRatio = 0.5; // Should have 50 mars tourist returning.
+     parameters.engineMalfunction = 1;
+
+     let resultOfYear0 = calc.calcOneYear(yearToTest, parameters);
+     expect(resultOfYear0.martian).toEqual(275); // 0 arrive (all crash), 50 leave so 250 left there.
+     expect(resultOfYear0.totKilledIn.takeOff).toEqual(250); // Earth + Mars Liftoff
+    //  console.log("Return danger: ",resultOfYear0.totKilledIn);
+
+   });
+
  });

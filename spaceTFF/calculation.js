@@ -43,7 +43,8 @@ calc.calcOneYear = (currentYear, parameters) => {
  firstStageEngine = parameters.firstStageEngine,
  orbitRefulling = parameters.orbitRefulling,
  itsEngine = parameters.itsEngine,
- touristRatio = parameters.touristRatio;
+ touristRatio = parameters.touristRatio,
+ reusabilityOfShip = parameters.reusabilityOfShip;
 
   // Steps: Way there
   // Launch from Earth to Orbit
@@ -97,38 +98,31 @@ calc.calcOneYear = (currentYear, parameters) => {
     }
     return failOrNot;
   });
+  currentYear.martian += currentYear.earthFleet.length * persPerShip; //Amount that survived the journey.
 
   let nbrMarsStart = currentYear.marsFleet.length; //No loss at refueling since it is done empty of people.
   // Depart of tourist from land.
+  currentYear.martian -= Math.round(currentYear.marsFleet.length * touristRatio * persPerShip);
   currentYear.marsFleet = currentYear.marsFleet.filter(() => {
-    let failOrNot = calc.shouldItFail(itsEngine, refuilingDefect);
-    if (!failOrNot) {death.takeOff +=  Math.round(persPerShipt * touristRatio);}
+    let failOrNot = calc.shouldItFail(itsEngine, engineMalfunction);
+    if (!failOrNot) {death.takeOff +=  Math.round(persPerShip * touristRatio);}
     return failOrNot;
   });
 
   // Decelerating on Earth
   currentYear.marsFleet = currentYear.marsFleet.filter(() => {
-    let failOrNot = calc.shouldItFail(itsEngine, refuilingDefect);
-    if (!failOrNot) {death.journey +=  Math.round(persPerShipt * touristRatio);}
+    let failOrNot = calc.shouldItFail(itsEngine, engineMalfunction);
+    if (!failOrNot) {death.journey +=  Math.round(persPerShip * touristRatio);}
     return failOrNot;
   });
 
   // Landing back on Earth.
   currentYear.marsFleet = currentYear.marsFleet.filter(() => {
     let failOrNot = calc.shouldItFail(1, landingFaillure);
-    if (!failOrNot) {death.landing +=  Math.round(persPerShipt * touristRatio);}
+    if (!failOrNot) {death.landing +=  Math.round(persPerShip * touristRatio);}
     return failOrNot;
   }); //Once landing per ship :)
 
-  let newArrival = currentYear.earthFleet.length * persPerShip;
-  let tourist = Math.round(currentYear.earthFleet.length * touristRatio);
-
-  // Maximum of 100 per ship
-  if (tourist / nbrMarsStart > persPerShip) {
-    // would only arrive if the return ratio is 100% or fail rate is SUPER high on refuling.
-    tourist = persPerShip * nbrMarsStart;
-  }
-  currentYear.martian += newArrival - tourist;
 
   // Adding 1 trip to all ship and retirering old one.
   currentYear.marsFleet = currentYear.marsFleet.map((obj)=>{
