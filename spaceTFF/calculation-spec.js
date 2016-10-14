@@ -28,13 +28,23 @@
  var  calc = require('./calculation');
  var dataStructure = require('./dataStructure'); //This return a modufiable object instead of having a copy. Waiting for Import const in ES6.
 
+sumObj = ( obj ) => {
+  return Object.keys( obj )
+          .reduce( function( sum, key ){
+            return sum + parseFloat( obj[key] );
+          }, 0 );
+};
+
  describe('validating the Calculation with different assumptions', () => {
-   var persPerShip, engineMalfunction, refuilingDefect, landingFaillure;
+   var parameters;
    beforeEach(() => {
-     persPerShip = 100;
-     engineMalfunction = 0.0; // Expectation that the engine have 1% of chance to malfunction & explode.
-     refuilingDefect = 0.0; // Expectation that a refuiling attemp failed and explode/cancel the mission.
-     landingFaillure = 0.0; // Stack on top of the engine faillure.
+     parameters = dataStructure.parameters(); // this will get the basic assomption about the model. Then we can change it according to the test.
+
+    //  By forcing each parameters at 0 by start we can check the impact of each one by one.
+     parameters.engineMalfunction = 0;
+     parameters.refuilingDefect = 0;
+     parameters.landingFaillure = 0;
+     parameters.touristRatio = 0;
    });
 
    it('Should return a random number', () => {
@@ -53,7 +63,7 @@
      let yearToTest = dataStructure.blankYear();
      yearToTest.earthFleet.push(dataStructure.newShip());
 
-     let resultOfYear0 = calc.calcOneYear(yearToTest, persPerShip, engineMalfunction, refuilingDefect, landingFaillure);
+     let resultOfYear0 = calc.calcOneYear(yearToTest, parameters);
     //  if there is no defect all should land safely.
     // console.log(resultOfYear0);
      expect(resultOfYear0.martian).toEqual(100);
@@ -70,9 +80,10 @@
      yearToTest.martian = 50; //Starting with 50 already.
     //  console.log("yearToTest Engine faillure:", yearToTest);
 
-     engineMalfunction = 1; // Expectation that the engine have 100% of chance to malfunction & explode.
+     parameters.engineMalfunction = 1; // Expectation that the engine have 100% of chance to malfunction & explode.
 
-     let resultOfYear0 = calc.calcOneYear(yearToTest, persPerShip, engineMalfunction, refuilingDefect, landingFaillure);
+     let resultOfYear0 = calc.calcOneYear(yearToTest, parameters);
+     let peopleLost = (parameters.persPerShip + yearToTest.martian) - (resultOfYear0.martian); // This dosent count the people leaving volontarely."Tourisum"
     // console.log(resultOfYear0);
      expect(resultOfYear0.martian).toEqual(50);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
@@ -80,6 +91,7 @@
      expect(resultOfYear0.totKilledIn.takeOff).toEqual(100);
      expect(resultOfYear0.totKilledIn.landing).toEqual(0);
      expect(resultOfYear0.totKilledIn.refueling).toEqual(0);
+     expect(sumObj(resultOfYear0.totKilledIn)).toEqual(peopleLost);
    });
 
    it('Should test refulling faillure year 1', () => {
@@ -88,26 +100,30 @@
      yearToTest.martian = 100; //Starting with 100 already.
     //  console.log("yearToTest Refulling faillure:", yearToTest);
 
-     refuilingDefect = 1; // Expectation that a refuiling attemp failed and explode/cancel the mission.
+     parameters.refuilingDefect = 1; // Expectation that a refuiling attemp failed and explode/cancel the mission.
 
-     let resultOfYear0 = calc.calcOneYear(yearToTest, persPerShip, engineMalfunction, refuilingDefect, landingFaillure);
+     let resultOfYear0 = calc.calcOneYear(yearToTest, parameters);
+     let peopleLost = (parameters.persPerShip + yearToTest.martian) - (resultOfYear0.martian); // This dosent count the people leaving volontarely."Tourisum"
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
      expect(resultOfYear0.totKilledIn.takeOff).toEqual(0);
      expect(resultOfYear0.totKilledIn.landing).toEqual(0);
      expect(resultOfYear0.totKilledIn.refueling).toEqual(100);
+     expect(sumObj(resultOfYear0.totKilledIn)).toEqual(peopleLost);
    });
 
    it('Should test Landing faillure year 1', () => {
      let yearToTest = dataStructure.blankYear();
      yearToTest.earthFleet.push(dataStructure.newShip());
      yearToTest.martian = 100; //Starting with 100 already.
-    //  console.log("yearToTest Landing faillure:", yearToTest);
+     console.log("yearToTest Landing faillure:", yearToTest);
 
-     landingFaillure = 1; // Stack on top of the engine faillure.
+     parameters.landingFaillure = 1; // Stack on top of the engine faillure.
 
-     let resultOfYear0 = calc.calcOneYear(yearToTest, persPerShip, engineMalfunction, refuilingDefect, landingFaillure);
+     let resultOfYear0 = calc.calcOneYear(yearToTest, parameters);
+     console.log("Result of Landing faillure: ",resultOfYear0, yearToTest.earthFleet, parameters.persPerShip, yearToTest.martian, resultOfYear0.martian);
+     let peopleLost = (parameters.persPerShip + yearToTest.martian) - (resultOfYear0.martian); // This dosent count the people leaving volontarely."Tourisum"
     //  if there is no defect all should land safely.
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
@@ -115,5 +131,6 @@
      expect(resultOfYear0.totKilledIn.takeOff).toEqual(0);
      expect(resultOfYear0.totKilledIn.landing).toEqual(100);
      expect(resultOfYear0.totKilledIn.refueling).toEqual(0);
+     expect(sumObj(resultOfYear0.totKilledIn)).toEqual(peopleLost);
    });
  });

@@ -14,12 +14,6 @@
 // var refuilingDefect = 0.00; // Expectation that a refuiling attemp failed and explode/cancel the mission.
 // var landingFaillure = 0.0; // Stack on top of the engine faillure.
 
-const reusabilityOfShip = 5;
-const improvement = 0.05; // improvement over the last time: ex 10% landing faillure, then 0.1*0.9 = 0.09 then 0.09*0.9 = 0.081 and so on every years.
-const firstStageEngine = 42;
-const itsEngine = 9;
-const touristRatio = 0.3; // Ratio of tourist that just arrived that will leave in the next flight out.
-const orbitRefulling = 4;
 const data = require('./dataStructure');
 
 // Object needed:
@@ -41,7 +35,15 @@ calc.launchToSpaceFromEarth = () => {
 
 };
 
-calc.calcOneYear = (currentYear, persPerShip, engineMalfunction, refuilingDefect, landingFaillure) => {
+calc.calcOneYear = (currentYear, parameters) => {
+ let persPerShip = parameters.persPerShip,
+ engineMalfunction = parameters.engineMalfunction,
+ refuilingDefect = parameters.refuilingDefect,
+ landingFaillure = parameters.landingFaillure,
+ firstStageEngine = parameters.firstStageEngine,
+ orbitRefulling = parameters.orbitRefulling,
+ itsEngine = parameters.itsEngine,
+ touristRatio = parameters.touristRatio;
 
   // Steps: Way there
   // Launch from Earth to Orbit
@@ -100,39 +102,33 @@ calc.calcOneYear = (currentYear, persPerShip, engineMalfunction, refuilingDefect
   // Depart of tourist from land.
   currentYear.marsFleet = currentYear.marsFleet.filter(() => {
     let failOrNot = calc.shouldItFail(itsEngine, refuilingDefect);
-    if (!failOrNot) {death.takeOff +=  persPerShip;}
+    if (!failOrNot) {death.takeOff +=  Math.round(persPerShipt * touristRatio);}
     return failOrNot;
   });
 
   // Decelerating on Earth
   currentYear.marsFleet = currentYear.marsFleet.filter(() => {
     let failOrNot = calc.shouldItFail(itsEngine, refuilingDefect);
-    if (!failOrNot) {death.journey +=  persPerShip;}
+    if (!failOrNot) {death.journey +=  Math.round(persPerShipt * touristRatio);}
     return failOrNot;
   });
 
   // Landing back on Earth.
   currentYear.marsFleet = currentYear.marsFleet.filter(() => {
     let failOrNot = calc.shouldItFail(1, landingFaillure);
-    if (!failOrNot) {death.landing +=  persPerShip;}
+    if (!failOrNot) {death.landing +=  Math.round(persPerShipt * touristRatio);}
     return failOrNot;
   }); //Once landing per ship :)
 
   let newArrival = currentYear.earthFleet.length * persPerShip;
   let tourist = Math.round(currentYear.earthFleet.length * touristRatio);
-  let nbrKilledOnTheWay = (nbrBefore - currentYear.earthFleet.length) * persPerShip;
-  let nbrKilledWayBack = Math.round((currentYear.marsFleet.length/nbrMarsStart) * tourist) || 0; //This is to prevent 0/0 when we start.
-  // console.log("newArrival: ", newArrival);
-  // console.log("tourist: ", tourist);
-  // console.log("nbrKilledOnTheWay: ", nbrKilledOnTheWay);
-  // console.log("nbrKilledWayBack: ", nbrKilledWayBack);
+
   // Maximum of 100 per ship
   if (tourist / nbrMarsStart > persPerShip) {
     // would only arrive if the return ratio is 100% or fail rate is SUPER high on refuling.
     tourist = persPerShip * nbrMarsStart;
   }
   currentYear.martian += newArrival - tourist;
-  currentYear.totKilledInJourney += nbrKilledOnTheWay + nbrKilledWayBack; // nbr of tourist ship back that failed are not full.
 
   // Adding 1 trip to all ship and retirering old one.
   currentYear.marsFleet = currentYear.marsFleet.map((obj)=>{
