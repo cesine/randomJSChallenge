@@ -22,13 +22,6 @@ const touristRatio = 0.3; // Ratio of tourist that just arrived that will leave 
 const orbitRefulling = 4;
 
 // Object needed:
-let newShip = {trip:0};
-let population = [{
-  martian: 0,
-  earthFleet: [{trip:0}],
-  marsFleet: [],
-  totKilledInJourney: 0
-}];
 const calc = {};
 
 calc.giveMeRandomNumber = () => {

@@ -26,8 +26,17 @@
  */
 
  var  calc = require('./calculation');
+ var dataStructure = require('./dataStructure'); //This return a modufiable object instead of having a copy. Waiting for Import const in ES6.
 
  describe('validating the Calculation with different assumptions', () => {
+   var persPerShip, engineMalfunction, refuilingDefect, landingFaillure;
+   beforeEach(() => {
+     persPerShip = 100;
+     engineMalfunction = 0.0; // Expectation that the engine have 1% of chance to malfunction & explode.
+     refuilingDefect = 0.0; // Expectation that a refuiling attemp failed and explode/cancel the mission.
+     landingFaillure = 0.0; // Stack on top of the engine faillure.
+   });
+
    it('Should return a random number', () => {
      expect(calc.giveMeRandomNumber()).toBeGreaterThan(0);
    });
@@ -41,20 +50,12 @@
    });
 
    it('Should test the No faillure year 1', () => {
-     let yearToTest = {
-       martian: 0,
-       earthFleet: [{trip:0}],
-       marsFleet: [],
-       totKilledInJourney: 0
-     };
-     let persPerShip = 100;
-     let engineMalfunction = 0.00; // Expectation that the engine have 1% of chance to malfunction & explode.
-     let refuilingDefect = 0.00; // Expectation that a refuiling attemp failed and explode/cancel the mission.
-     let landingFaillure = 0.0; // Stack on top of the engine faillure.
+     let yearToTest = dataStructure.blankYear();
+     yearToTest.earthFleet.push(dataStructure.newShip());
 
      let resultOfYear0 = calc.calcOneYear(yearToTest, persPerShip, engineMalfunction, refuilingDefect, landingFaillure);
     //  if there is no defect all should land safely.
-    console.log(resultOfYear0);
+    // console.log(resultOfYear0);
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(1);
@@ -62,41 +63,30 @@
    });
 
    it('Should test Engine faillure year 1', () => {
-     let yearToTest = {
-       martian: 100,
-       earthFleet: [{trip:0}],
-       marsFleet: [],
-       totKilledInJourney: 0
-     };
-     let persPerShip = 100;
-     let engineMalfunction = 1; // Expectation that the engine have 1% of chance to malfunction & explode.
-     let refuilingDefect = 0.0; // Expectation that a refuiling attemp failed and explode/cancel the mission.
-     let landingFaillure = 0.0; // Stack on top of the engine faillure.
+     let yearToTest = dataStructure.blankYear();
+     yearToTest.earthFleet.push(dataStructure.newShip());
+     yearToTest.martian = 50; //Starting with 50 already.
+    //  console.log("yearToTest Engine faillure:", yearToTest);
+
+     engineMalfunction = 1; // Expectation that the engine have 100% of chance to malfunction & explode.
 
      let resultOfYear0 = calc.calcOneYear(yearToTest, persPerShip, engineMalfunction, refuilingDefect, landingFaillure);
-    //  if there is no defect all should land safely.
-    console.log(resultOfYear0);
-     expect(resultOfYear0.martian).toEqual(100);
+    // console.log(resultOfYear0);
+     expect(resultOfYear0.martian).toEqual(50);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
      expect(resultOfYear0.totKilledInJourney).toEqual(100);
    });
 
    it('Should test refulling faillure year 1', () => {
-     let yearToTest = {
-       martian: 100,
-       earthFleet: [{trip:0}],
-       marsFleet: [],
-       totKilledInJourney: 0
-     };
-     let persPerShip = 100;
-     let engineMalfunction = 0; // Expectation that the engine have 1% of chance to malfunction & explode.
-     let refuilingDefect = 1; // Expectation that a refuiling attemp failed and explode/cancel the mission.
-     let landingFaillure = 0.0; // Stack on top of the engine faillure.
+     let yearToTest = dataStructure.blankYear();
+     yearToTest.earthFleet.push(dataStructure.newShip());
+     yearToTest.martian = 100; //Starting with 100 already.
+    //  console.log("yearToTest Refulling faillure:", yearToTest);
+
+     refuilingDefect = 1; // Expectation that a refuiling attemp failed and explode/cancel the mission.
 
      let resultOfYear0 = calc.calcOneYear(yearToTest, persPerShip, engineMalfunction, refuilingDefect, landingFaillure);
-    //  if there is no defect all should land safely.
-    console.log(resultOfYear0);
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
@@ -104,20 +94,15 @@
    });
 
    it('Should test Landing faillure year 1', () => {
-     let yearToTest = {
-       martian: 100,
-       earthFleet: [{trip:0}],
-       marsFleet: [],
-       totKilledInJourney: 0
-     };
-     let persPerShip = 100;
-     let engineMalfunction = 0; // Expectation that the engine have 1% of chance to malfunction & explode.
-     let refuilingDefect = 0; // Expectation that a refuiling attemp failed and explode/cancel the mission.
-     let landingFaillure = 1; // Stack on top of the engine faillure.
+     let yearToTest = dataStructure.blankYear();
+     yearToTest.earthFleet.push(dataStructure.newShip());
+     yearToTest.martian = 100; //Starting with 100 already.
+    //  console.log("yearToTest Landing faillure:", yearToTest);
+
+     landingFaillure = 1; // Stack on top of the engine faillure.
 
      let resultOfYear0 = calc.calcOneYear(yearToTest, persPerShip, engineMalfunction, refuilingDefect, landingFaillure);
     //  if there is no defect all should land safely.
-    console.log(resultOfYear0);
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
