@@ -59,7 +59,9 @@
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(1);
-     expect(resultOfYear0.totKilledInJourney).toEqual(0);
+     expect(resultOfYear0.totKilledIn.takeOff).toEqual(0);
+     expect(resultOfYear0.totKilledIn.landing).toEqual(0);
+     expect(resultOfYear0.totKilledIn.refueling).toEqual(0);
    });
 
    it('Should test Engine faillure year 1', () => {
@@ -75,7 +77,9 @@
      expect(resultOfYear0.martian).toEqual(50);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
-     expect(resultOfYear0.totKilledInJourney).toEqual(100);
+     expect(resultOfYear0.totKilledIn.takeOff).toEqual(100);
+     expect(resultOfYear0.totKilledIn.landing).toEqual(0);
+     expect(resultOfYear0.totKilledIn.refueling).toEqual(0);
    });
 
    it('Should test refulling faillure year 1', () => {
@@ -90,7 +94,9 @@
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
-     expect(resultOfYear0.totKilledInJourney).toEqual(100);
+     expect(resultOfYear0.totKilledIn.takeOff).toEqual(0);
+     expect(resultOfYear0.totKilledIn.landing).toEqual(0);
+     expect(resultOfYear0.totKilledIn.refueling).toEqual(100);
    });
 
    it('Should test Landing faillure year 1', () => {
@@ -106,6 +112,8 @@
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
-     expect(resultOfYear0.totKilledInJourney).toEqual(100);
+     expect(resultOfYear0.totKilledIn.takeOff).toEqual(0);
+     expect(resultOfYear0.totKilledIn.landing).toEqual(100);
+     expect(resultOfYear0.totKilledIn.refueling).toEqual(0);
    });
  });

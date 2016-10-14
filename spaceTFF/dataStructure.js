@@ -10,8 +10,17 @@ data.blankYear = () => {
    martian: 0,
    earthFleet: [],
    marsFleet: [],
-   totKilledInJourney: 0
+   totKilledIn: {}
  });
+};
+
+data.killedOption = () => {
+  return Object.assign({}, {
+    takeOff: 0,
+    journey: 0,
+    landing: 0,
+    refueling: 0
+  });
 };
 
 module.exports = data;
