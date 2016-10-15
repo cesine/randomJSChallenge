@@ -2,6 +2,15 @@
 
 var express = require('express');
 var app = express();
+var nunjucks = require('nunjucks');
+
+var _templates = process.env.NODE_PATH ? process.env.NODE_PATH + '/templates' : 'templates' ;
+nunjucks.configure(_templates, {
+    autoescape: true,
+    express: app
+});
+app.engine( 'html', nunjucks.render );
+app.set( 'view engine', 'html' );
 
 
 // Own Dependency
@@ -31,8 +40,9 @@ app.get('/', function (req, res) {
   // }
   param.probIncreaseProdOfIts = 0.3;
   param.itsIncreaseOf = 1;
-  let popGrowth = calc.iterateThat([initialCondition], param, 100, 1000000, 1);
-  res.json(popGrowth);
+  // let popGrowth = calc.iterateThat([initialCondition], param, 100, 1000000, 1);
+  // res.json(popGrowth);
+  res.render('index');
 });
 
 app.listen(port, function () {
