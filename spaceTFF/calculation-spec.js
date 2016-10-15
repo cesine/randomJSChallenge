@@ -169,7 +169,35 @@ sumObj = ( obj ) => {
      expect(resultOfYear0.martian).toEqual(275); // 0 arrive (all crash), 50 leave so 250 left there.
      expect(resultOfYear0.totKilledIn.takeOff).toEqual(250); // Earth + Mars Liftoff
     //  console.log("Return danger: ",resultOfYear0.totKilledIn);
-
    });
+
+   it('Test the iteration structure, no recursion', () => {
+     let startPoint = dataStructure.blankYear();
+     startPoint.earthFleet.push(dataStructure.newShip());
+
+     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 0, 100);
+    // 0 would return directely without any recursion.
+     expect(resultOfAllYear).toEqual([startPoint]);
+   });
+
+   it('Test the iteration structure, Max NbrPeople', () => {
+     let startPoint = dataStructure.blankYear();
+     startPoint.earthFleet.push(dataStructure.newShip());
+
+     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 50, 2000);
+     lastYear = resultOfAllYear[resultOfAllYear.length - 1];
+    // I said 50 iteration OR 2000 and after 8 I hit 2000 so I stop.
+     expect(lastYear.martian).toEqual(2000);
+   });
+
+   it('Test the iteration structure, MaxNbrLoop', () => {
+     let startPoint = dataStructure.blankYear();
+     startPoint.earthFleet.push(dataStructure.newShip());
+
+     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 100, 1000000);
+    // I said 50 iteration OR 2000 and after 8 I hit 2000 so I stop.
+     expect(resultOfAllYear.length).toEqual(100);
+   });
+
 
  });

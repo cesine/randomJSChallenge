@@ -125,22 +125,45 @@ calc.calcOneYear = (currentYear, parameters) => {
 
 
   // Adding 1 trip to all ship and retirering old one.
-  currentYear.marsFleet = currentYear.marsFleet.map((obj)=>{
-    if (obj.trip < reusabilityOfShip) {
-      obj.trip ++;
-      return obj;
+  let activeFleet = [];
+  for (var i = 0; i < currentYear.marsFleet.length; i++) {
+    currentYear.marsFleet[i].trip ++;
+    if (currentYear.marsFleet[i].trip < reusabilityOfShip) {
+      activeFleet.push(currentYear.marsFleet[i]);
     }
-  });
+
+  }
 
   // Noticed that Mars and Earth fleet are inversed. This is because What left from Earth is now on the surface of Mars and vice versa.
   let objToReturn = {
     martian: currentYear.martian,
-    earthFleet: currentYear.marsFleet,
+    earthFleet: activeFleet,
     marsFleet: currentYear.earthFleet,
     totKilledIn: death
   };
   // console.log(objToReturn);
   return objToReturn;
+};
+
+calc.iterateThat = (startingData, param, maxIter, maxNbr) => {
+  console.log("Iter", startingData.length - 1);
+  console.log("Iter", startingData[startingData.length - 1]);
+  if (!maxNbr || !maxNbr) {
+    // Only 0+ If you put negative nbr you deserve the stackoverflow ;).
+    console.log("missing arguments"); //I should really add a logger at this point.
+    return startingData;
+  }
+  // Note: Nbr of cycle is the array length (Not nbr of years because we launch each launch window.)
+  if (startingData.length >= maxIter || startingData[startingData.length - 1].martian >= maxNbr) {
+    // console.log("Stopped at martian #: ", startingData.length, maxIter, startingData[startingData.length - 1].martian, maxNbr);
+    return startingData;
+  }
+
+  startingData.push(calc.calcOneYear(startingData[startingData.length - 1], param));
+  startingData[startingData.length - 1].earthFleet.push(data.newShip());
+
+  return calc.iterateThat(startingData, param, maxIter, maxNbr);
+
 };
 
 module.exports = calc;
