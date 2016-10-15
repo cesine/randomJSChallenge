@@ -145,9 +145,16 @@ calc.calcOneYear = (currentYear, parameters) => {
   return objToReturn;
 };
 
-calc.iterateThat = (startingData, param, maxIter, maxNbr) => {
-  console.log("Iter", startingData.length - 1);
-  console.log("Iter", startingData[startingData.length - 1]);
+improveParam = (param) => {
+  let improvement = 1 - param.improvement;
+  param.engineMalfunction = param.engineMalfunction * improvement;
+  param.refuilingDefect = param.refuilingDefect * improvement;
+  param.landingFaillure = param.landingFaillure * improvement;
+  return param;
+};
+
+calc.iterateThat = (startingData, param, maxIter, maxNbr, shipProduction) => {
+  console.log("Iter", startingData.length - 1, startingData[startingData.length - 1].martian);
   if (!maxNbr || !maxNbr) {
     // Only 0+ If you put negative nbr you deserve the stackoverflow ;).
     console.log("missing arguments"); //I should really add a logger at this point.
@@ -160,9 +167,17 @@ calc.iterateThat = (startingData, param, maxIter, maxNbr) => {
   }
 
   startingData.push(calc.calcOneYear(startingData[startingData.length - 1], param));
-  startingData[startingData.length - 1].earthFleet.push(data.newShip());
 
-  return calc.iterateThat(startingData, param, maxIter, maxNbr);
+  if(calc.shouldItFail(1, 1 - param.probIncreaseProdOfIts)) {
+      shipProduction += param.itsIncreaseOf;
+  }
+  for (var i = 0; i < shipProduction; i++) {
+    startingData[startingData.length - 1].earthFleet.push(data.newShip());
+  }
+
+  // Add Improvement of technology.
+  param = improveParam(param);
+  return calc.iterateThat(startingData, param, maxIter, maxNbr, shipProduction);
 
 };
 

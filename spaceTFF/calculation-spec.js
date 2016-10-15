@@ -175,7 +175,7 @@ sumObj = ( obj ) => {
      let startPoint = dataStructure.blankYear();
      startPoint.earthFleet.push(dataStructure.newShip());
 
-     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 0, 100);
+     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 0, 100, 1);
     // 0 would return directely without any recursion.
      expect(resultOfAllYear).toEqual([startPoint]);
    });
@@ -184,7 +184,7 @@ sumObj = ( obj ) => {
      let startPoint = dataStructure.blankYear();
      startPoint.earthFleet.push(dataStructure.newShip());
 
-     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 50, 2000);
+     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 50, 2000, 1);
      lastYear = resultOfAllYear[resultOfAllYear.length - 1];
     // I said 50 iteration OR 2000 and after 8 I hit 2000 so I stop.
      expect(lastYear.martian).toEqual(2000);
@@ -194,9 +194,37 @@ sumObj = ( obj ) => {
      let startPoint = dataStructure.blankYear();
      startPoint.earthFleet.push(dataStructure.newShip());
 
-     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 100, 1000000);
+     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 100, 1000000, 1);
     // I said 50 iteration OR 2000 and after 8 I hit 2000 so I stop.
      expect(resultOfAllYear.length).toEqual(100);
+   });
+
+   it('test Ship increase with no faillure', () => {
+     parameters.probIncreaseProdOfIts = 1;
+     parameters.itsIncreaseOf = 10; //10 new ship per time with 100% success.
+     let startPoint = dataStructure.blankYear();
+
+     startPoint.earthFleet.push(dataStructure.newShip());
+
+     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 3, 10000, 1);
+     lastYear = resultOfAllYear[resultOfAllYear.length - 1];
+    //  Start with 1, then 1 return, we add 10 = 11 --> Mars should have 11 landed.
+     expect(lastYear.marsFleet.length).toEqual(11);
+
+   });
+
+   it('test no-Ship increase with no faillure', () => {
+     parameters.probIncreaseProdOfIts = 0;
+     parameters.itsIncreaseOf = 1; //1 new ship per time with 0% success. --> No new ship
+     let startPoint = dataStructure.blankYear();
+
+     startPoint.earthFleet.push(dataStructure.newShip());
+
+     let resultOfAllYear = calc.iterateThat([startPoint], parameters, 10, 10000, 1);
+     lastYear = resultOfAllYear[resultOfAllYear.length - 1];
+    // Should reach the max length of 5 year of service so = 5
+     expect(lastYear.marsFleet.length).toEqual(5);
+
    });
 
 
