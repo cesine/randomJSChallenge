@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon ./bin/www",
+    "run": "node ./bin/www",
     "test": "jasmine-node calculation-spec.js --verbose"
   },
   "author": "",

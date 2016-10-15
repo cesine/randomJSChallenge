@@ -17,9 +17,6 @@ app.set( 'view engine', 'html' );
 var calc = require('./calculation');
 var dataStructure = require('./dataStructure');
 
-// Fix Variable:
-var port = 1701;
-
 app.get('/', function (req, res) {
   "use strict";
   let initialCondition = dataStructure.blankYear();
@@ -40,11 +37,9 @@ app.get('/', function (req, res) {
   // }
   param.probIncreaseProdOfIts = 0.3;
   param.itsIncreaseOf = 1;
-  // let popGrowth = calc.iterateThat([initialCondition], param, 100, 1000000, 1);
-  // res.json(popGrowth);
+  let popGrowth = calc.iterateThat([initialCondition], param, 100, 1000000, 1);
+  var item = 'asd f';
   res.render('index');
 });
 
-app.listen(port, function () {
-  console.log('Server running on:', port);
-});
+module.exports = app;
