@@ -11,7 +11,7 @@ nunjucks.configure(_templates, {
 });
 app.engine( 'html', nunjucks.render );
 app.set( 'view engine', 'html' );
-
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
 
 // Own Dependency
 var calc = require('./calculation');
@@ -37,9 +37,9 @@ app.get('/', function (req, res) {
   // }
   param.probIncreaseProdOfIts = 0.3;
   param.itsIncreaseOf = 1;
-  let popGrowth = calc.iterateThat([initialCondition], param, 100, 1000000, 1);
-  var item = 'asd f';
-  res.render('index');
+  let popGrowth = calc.iterateThat([initialCondition], param, 7, 10000, 1);
+  // let popGrowth = [initialCondition];
+  res.render('index', {popGrowth: popGrowth});
 });
 
 module.exports = app;
