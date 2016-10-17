@@ -48,13 +48,17 @@ calc.calcOneYear = (currentYear, parameters) => {
 
   // Steps: Way there
   // Launch from Earth to Orbit
+  let shipLoss = 0;
   let death = data.killedOption();
   let nbrBefore = currentYear.earthFleet.length;
   currentYear.earthFleet = currentYear.earthFleet.filter(() => {
       // We currently dont care about the object itself, we just want to randomely check if it pass or fail
       // if it fail it is automatically removed from the list. so we can test the next risk.
       let failOrNot = calc.shouldItFail(firstStageEngine, engineMalfunction);
-      if (!failOrNot) {death.takeOff +=  persPerShip;}
+      if (!failOrNot) {
+        shipLoss++;
+        death.earthTakeOff +=  persPerShip;
+      }
       return failOrNot;
     }
   );
@@ -62,28 +66,40 @@ calc.calcOneYear = (currentYear, parameters) => {
   // Refuel in orbit (4x)
   currentYear.earthFleet = currentYear.earthFleet.filter(() => {
     let failOrNot = calc.shouldItFail(orbitRefulling, refuilingDefect);
-    if (!failOrNot) {death.refueling +=  persPerShip;}
+    if (!failOrNot) {
+      shipLoss++;
+      death.refueling +=  persPerShip;
+    }
     return failOrNot;
   });
 
   // Launch to Next planet
   currentYear.earthFleet = currentYear.earthFleet.filter(() => {
     let failOrNot = calc.shouldItFail(itsEngine, engineMalfunction);
-    if (!failOrNot) {death.journey +=  persPerShip;}
+    if (!failOrNot) {
+      shipLoss++;
+      death.journeyToMars +=  persPerShip;
+    }
     return failOrNot;
   });
 
   // Decelerate on arrival
   currentYear.earthFleet = currentYear.earthFleet.filter(() => {
     let failOrNot = calc.shouldItFail(itsEngine, engineMalfunction);
-    if (!failOrNot) {death.journey +=  persPerShip;}
+    if (!failOrNot) {
+      shipLoss++;
+      death.journeyToMars +=  persPerShip;
+    }
     return failOrNot;
   });
 
   // landing
   currentYear.earthFleet = currentYear.earthFleet.filter(() => {
     let failOrNot = calc.shouldItFail(1, landingFaillure);
-    if (!failOrNot) {death.landing +=  persPerShip;}
+    if (!failOrNot) {
+      shipLoss++;
+      death.landingMars +=  persPerShip;
+    }
     return failOrNot;
   }); //Once landing per ship :)
 
@@ -94,6 +110,7 @@ calc.calcOneYear = (currentYear, parameters) => {
     let failOrNot = calc.shouldItFail(1, refuilingDefect);
     if (!failOrNot) {
       // No casulty if fail, just lost of ship.
+      shipLoss++;
       // death.takeOff +=  0;
     }
     return failOrNot;
@@ -105,21 +122,30 @@ calc.calcOneYear = (currentYear, parameters) => {
   currentYear.martian -= Math.round(currentYear.marsFleet.length * touristRatio * persPerShip);
   currentYear.marsFleet = currentYear.marsFleet.filter(() => {
     let failOrNot = calc.shouldItFail(itsEngine, engineMalfunction);
-    if (!failOrNot) {death.takeOff +=  Math.round(persPerShip * touristRatio);}
+    if (!failOrNot) {
+      shipLoss++;
+      death.marsTakeOff +=  Math.round(persPerShip * touristRatio);
+    }
     return failOrNot;
   });
 
   // Decelerating on Earth
   currentYear.marsFleet = currentYear.marsFleet.filter(() => {
     let failOrNot = calc.shouldItFail(itsEngine, engineMalfunction);
-    if (!failOrNot) {death.journey +=  Math.round(persPerShip * touristRatio);}
+    if (!failOrNot) {
+      shipLoss++;
+      death.journeyToEarth +=  Math.round(persPerShip * touristRatio);
+    }
     return failOrNot;
   });
 
   // Landing back on Earth.
   currentYear.marsFleet = currentYear.marsFleet.filter(() => {
     let failOrNot = calc.shouldItFail(1, landingFaillure);
-    if (!failOrNot) {death.landing +=  Math.round(persPerShip * touristRatio);}
+    if (!failOrNot) {
+      shipLoss++;
+      death.landingEarth +=  Math.round(persPerShip * touristRatio);
+    }
     return failOrNot;
   }); //Once landing per ship :)
 
@@ -139,7 +165,9 @@ calc.calcOneYear = (currentYear, parameters) => {
     martian: currentYear.martian,
     earthFleet: activeFleet,
     marsFleet: currentYear.earthFleet,
-    totKilledIn: death
+    totKilledIn: death,
+    shipLoss: shipLoss,
+    cummulativeLife: sumObj(death)
   };
   // console.log(objToReturn);
   return objToReturn;
@@ -166,7 +194,12 @@ calc.iterateThat = (startingData, param, maxIter, maxNbr, shipProduction) => {
     return startingData;
   }
 
+  // Before we Push the next row:
+  const lastYearTotLoss =
+
   startingData.push(calc.calcOneYear(startingData[startingData.length - 1], param));
+  startingData[startingData.length - 1].cummulativeLife += startingData[startingData.length - 2].cummulativeLife;
+  // startingData[startingData.length - 1].shipLoss += startingData[startingData.length - 2].shipLoss;
 
   if(calc.shouldItFail(1, 1 - param.probIncreaseProdOfIts)) {
       shipProduction += param.itsIncreaseOf;
@@ -180,5 +213,13 @@ calc.iterateThat = (startingData, param, maxIter, maxNbr, shipProduction) => {
   return calc.iterateThat(startingData, param, maxIter, maxNbr, shipProduction);
 
 };
+
+sumObj = ( obj ) => {
+  return Object.keys( obj )
+          .reduce( function( sum, key ){
+            return sum + parseFloat( obj[key] );
+          }, 0 );
+};
+
 
 module.exports = calc;

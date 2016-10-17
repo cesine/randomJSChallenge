@@ -12,6 +12,7 @@ nunjucks.configure(_templates, {
 app.engine( 'html', nunjucks.render );
 app.set( 'view engine', 'html' );
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+app.use('/customcss', express.static(__dirname + '/customcss'));
 
 // Own Dependency
 var calc = require('./calculation');
@@ -37,7 +38,7 @@ app.get('/', function (req, res) {
   // }
   param.probIncreaseProdOfIts = 0.3;
   param.itsIncreaseOf = 1;
-  let popGrowth = calc.iterateThat([initialCondition], param, 7, 10000, 1);
+  let popGrowth = calc.iterateThat([initialCondition], param, 30, 10000, 1);
   // let popGrowth = [initialCondition];
   res.render('index', {popGrowth: popGrowth});
 });

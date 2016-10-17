@@ -3,38 +3,10 @@
 <head>
   <title>Mars journey</title>
   <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/customcss/index.css">
 </head>
 <body class="container">
         <h1>Population Growth</h1>
-        {% block display %} Not displayig :( {% endblock %}
+        {% include 'tabledisplay.html' ignore missing %}
         <br>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th> Trip </th>
-              <th> Mars Pop </th>
-              <th> Earth Fleet </th>
-              <th> Mars fleet </th>
-              <th> Death </th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for trip in popGrowth %}
-            <tr>
-              <td> {{ loop.index }} </td>
-              <td>{{ trip.martian }}</td>
-              <td>{{ trip.earthFleet.length }}</td>
-              <td>{{ trip.marsFleet.length }}</td>
-              <td>
-                <ul>
-                  {% if trip.totKilledIn.takeOff %} <li>TakeOff: {{ trip.totKilledIn.takeOff }}</li> {% endif %}
-                  {% if trip.totKilledIn.journey %} <li>Journey: {{ trip.totKilledIn.journey }}</li> {% endif %}
-                  {% if trip.totKilledIn.landing %} <li>Landing: {{ trip.totKilledIn.landing }}</li> {% endif %}
-                  {% if trip.totKilledIn.refueling %} <li>Refueling: {{ trip.totKilledIn.refueling }}</li> {% endif %}
-                </ul>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
 </body>

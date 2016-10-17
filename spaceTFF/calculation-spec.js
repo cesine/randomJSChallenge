@@ -69,8 +69,8 @@ sumObj = ( obj ) => {
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(1);
-     expect(resultOfYear0.totKilledIn.takeOff).toEqual(0);
-     expect(resultOfYear0.totKilledIn.landing).toEqual(0);
+     expect(resultOfYear0.totKilledIn.earthTakeOff).toEqual(0);
+     expect(resultOfYear0.totKilledIn.landingMars).toEqual(0);
      expect(resultOfYear0.totKilledIn.refueling).toEqual(0);
    });
 
@@ -88,8 +88,8 @@ sumObj = ( obj ) => {
      expect(resultOfYear0.martian).toEqual(50);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
-     expect(resultOfYear0.totKilledIn.takeOff).toEqual(100);
-     expect(resultOfYear0.totKilledIn.landing).toEqual(0);
+     expect(resultOfYear0.totKilledIn.earthTakeOff).toEqual(100);
+     expect(resultOfYear0.totKilledIn.landingMars).toEqual(0);
      expect(resultOfYear0.totKilledIn.refueling).toEqual(0);
      expect(sumObj(resultOfYear0.totKilledIn)).toEqual(peopleLost);
    });
@@ -107,8 +107,8 @@ sumObj = ( obj ) => {
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
-     expect(resultOfYear0.totKilledIn.takeOff).toEqual(0);
-     expect(resultOfYear0.totKilledIn.landing).toEqual(0);
+     expect(resultOfYear0.totKilledIn.earthTakeOff).toEqual(0);
+     expect(resultOfYear0.totKilledIn.landingMars).toEqual(0);
      expect(resultOfYear0.totKilledIn.refueling).toEqual(100);
      expect(sumObj(resultOfYear0.totKilledIn)).toEqual(peopleLost);
    });
@@ -127,8 +127,8 @@ sumObj = ( obj ) => {
      expect(resultOfYear0.martian).toEqual(100);
      expect(resultOfYear0.earthFleet.length).toEqual(0);
      expect(resultOfYear0.marsFleet.length).toEqual(0);
-     expect(resultOfYear0.totKilledIn.takeOff).toEqual(0);
-     expect(resultOfYear0.totKilledIn.landing).toEqual(100);
+     expect(resultOfYear0.totKilledIn.earthTakeOff).toEqual(0);
+     expect(resultOfYear0.totKilledIn.landingMars).toEqual(100);
      expect(resultOfYear0.totKilledIn.refueling).toEqual(0);
      expect(sumObj(resultOfYear0.totKilledIn)).toEqual(peopleLost);
    });
@@ -167,8 +167,9 @@ sumObj = ( obj ) => {
 
      let resultOfYear0 = calc.calcOneYear(yearToTest, parameters);
      expect(resultOfYear0.martian).toEqual(275); // 0 arrive (all crash), 50 leave so 250 left there.
-     expect(resultOfYear0.totKilledIn.takeOff).toEqual(250); // Earth + Mars Liftoff
-    //  console.log("Return danger: ",resultOfYear0.totKilledIn);
+     expect(resultOfYear0.totKilledIn.earthTakeOff).toEqual(200); // Earth + Mars Liftoff
+     expect(resultOfYear0.totKilledIn.marsTakeOff).toEqual(50); // Earth + Mars Liftoff
+     expect(resultOfYear0.cummulativeLife).toEqual(250); // Earth + Mars Liftoff
    });
 
    it('Test the iteration structure, no recursion', () => {

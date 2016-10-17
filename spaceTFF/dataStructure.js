@@ -10,15 +10,20 @@ data.blankYear = () => {
    martian: 0,
    earthFleet: [],
    marsFleet: [],
-   totKilledIn: {}
+   totKilledIn: {},
+   shipLoss: 0,
+   cummulativeLife: 0
  });
 };
 
 data.killedOption = () => {
   return Object.assign({}, {
-    takeOff: 0,
-    journey: 0,
-    landing: 0,
+    earthTakeOff: 0,
+    marsTakeOff: 0,
+    journeyToEarth: 0,
+    journeyToMars: 0,
+    landingEarth: 0,
+    landingMars: 0,
     refueling: 0
   });
 };
@@ -35,7 +40,7 @@ data.parameters = () => {
   // touristRatio: 0.3, Nbr of people who want to come back on each ship.
   // orbitRefulling: 4,
   // probIncreaseProdOfIts: 0, Chance to increase the production of ITS from 1 per cycle to "X"
-  // itsIncreaseOf: 1, if probIncreaseProdOfIts succede, we increase the last nbr by this one. 
+  // itsIncreaseOf: 1, if probIncreaseProdOfIts succede, we increase the last nbr by this one.
   return Object.assign({},
     {
       persPerShip: 100,
