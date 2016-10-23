@@ -18,7 +18,28 @@ app.use('/customcss', express.static(__dirname + '/customcss'));
 var calc = require('./calculation');
 var dataStructure = require('./dataStructure');
 
-app.get('/', function (req, res) {
+app.get('/param', (req, res) => {
+  res.json(dataStructure.parameters());
+});
+
+app.post('/results', (req, res) => {
+  let askedParam = req.body.param;
+  if (!askedParam) {
+    var err = new Error('Missing argument');
+    err.status = 400;
+    return next(err);
+  }
+
+  let iter = askedParam.years;
+  if (!iter || iter < 0 || iter > 1000) { iter = 50; }
+  let maxPop = askedParam.maxPop || 1000000;
+  if (!maxPop || maxPop < 1 || maxPop > 10000000) { maxPop = 1000000; }
+  let shipProduction = askedParam.shipProduction || 0;
+
+  res.json(calc.iterateThat([initialCondition], askedParam, iter, maxPop, shipProduction));
+});
+
+app.get('/', (req, res) => {
   "use strict";
   let initialCondition = dataStructure.blankYear();
   var param = dataStructure.parameters();
