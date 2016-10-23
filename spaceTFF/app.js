@@ -21,26 +21,30 @@ var dataStructure = require('./dataStructure');
 app.get('/', function (req, res) {
   "use strict";
   let initialCondition = dataStructure.blankYear();
-  let param = dataStructure.parameters();
-  // {
-  //   persPerShip: 100,
-  //   engineMalfunction: 0.1,
-  //   refuilingDefect: 0.02,
-  //   landingFaillure: 0.05,
-  //   reusabilityOfShip: 5,
-  //   improvement: 0.05,
-  //   firstStageEngine: 42,
-  //   itsEngine: 9,
-  //   touristRatio: 0.3,
-  //   orbitRefulling: 4,
-  //   probIncreaseProdOfIts: 0,
-  //   itsIncreaseOf: 1,
-  // }
-  param.probIncreaseProdOfIts = 0.3;
-  param.itsIncreaseOf = 1;
-  let popGrowth = calc.iterateThat([initialCondition], param, 30, 10000, 1);
-  // let popGrowth = [initialCondition];
-  res.render('index', {popGrowth: popGrowth});
+  var param = dataStructure.parameters();
+      param.probIncreaseProdOfIts = 0.3;
+      param.itsIncreaseOf = 1;
+        // {
+        //   persPerShip: 100,
+        //   engineMalfunction: 0.1,
+        //   refuilingDefect: 0.02,
+        //   landingFaillure: 0.05,
+        //   reusabilityOfShip: 5,
+        //   improvement: 0.05,
+        //   firstStageEngine: 42,
+        //   itsEngine: 9,
+        //   touristRatio: 0.3,
+        //   orbitRefulling: 4,
+        //   probIncreaseProdOfIts: 0,
+        //   itsIncreaseOf: 1,
+        // }
+
+  let popGrowth = calc.iterateThat([initialCondition], param, 10, 10000, 1);
+  res.render('index', {
+    popGrowth: popGrowth,
+    param: param,
+    initialCondition: [initialCondition]
+  });
 });
 
 module.exports = app;

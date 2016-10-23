@@ -15,8 +15,8 @@
       <div class="row">
         <div class="col-xs-1">{{ loop.index }}</div>
         <div class="col-xs-2">{{ trip.martian }}</div>
-        <div class="col-xs-2">{{ trip.earthFleet.length }}</div>
-        <div class="col-xs-2">{{ trip.marsFleet.length }}</div>
+        <div class="col-xs-2">{{ trip.earthFleet | length }}</div>
+        <div class="col-xs-2">{{ trip.marsFleet | length }}</div>
         <div class="col-xs-1">{{ trip.shipLoss }}</div>
         <div class="col-xs-2">
           <ul>
