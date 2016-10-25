@@ -3,6 +3,7 @@
 var express = require('express');
 var app = express();
 var nunjucks = require('nunjucks');
+var cors = require('cors');
 
 var _templates = process.env.NODE_PATH ? process.env.NODE_PATH + '/templates' : 'templates' ;
 nunjucks.configure(_templates, {
@@ -13,6 +14,7 @@ app.engine( 'html', nunjucks.render );
 app.set( 'view engine', 'html' );
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
 app.use('/customcss', express.static(__dirname + '/customcss'));
+app.use(cors());
 
 // Own Dependency
 var calc = require('./calculation');
