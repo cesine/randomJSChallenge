@@ -63,6 +63,8 @@ app.get('/', (req, res) => {
         //   orbitRefulling: 4,
         //   probIncreaseProdOfIts: 0,
         //   itsIncreaseOf: 1,
+        //   maxPop: 1000000,
+        //   years: 100
         // }
 
   let popGrowth = calc.iterateThat([initialCondition], param, 10, 10000, 1);

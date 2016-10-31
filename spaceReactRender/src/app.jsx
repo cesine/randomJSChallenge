@@ -2,6 +2,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import styles from './index.scss'
 import React from 'react'
 
+// modules
+import TableDisplay from './tableDisplay.jsx'
+
 function getGrowth(param, callback) {
 console.log("fetching param");
   fetch('http://localhost:1701/results',{
@@ -46,7 +49,7 @@ export default class App extends React.Component {
       itsIncreaseOf: this.props.param.itsIncreaseOf,
       maxPop: 10000,
       years: 1000,
-      resultOfgrowth: {}
+      resultOfgrowth: []
     };
     this.changeNumberValue = this.changeNumberValue.bind(this);
     this.getGrowthProjection = this.getGrowthProjection.bind(this);
@@ -62,11 +65,11 @@ export default class App extends React.Component {
       this.setState({resultOfgrowth: data});
     }
     updateThisState = updateThisState.bind(this);
-    this.state.resultOfgrowth = {};
+    this.state.resultOfgrowth = [];
     getGrowth(this.state, updateThisState);
   }
   render () {
-    const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf} = this.state;
+    const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf, resultOfgrowth} = this.state;
     return (
       <div className='container'>
         <div>Param here: {persPerShip}, {engineMalfunction}</div>
@@ -248,6 +251,7 @@ export default class App extends React.Component {
           probIncreaseProdOfIts: {probIncreaseProdOfIts}
           itsIncreaseOf: {itsIncreaseOf}
         <p><a className='btn btn-primary btn-lg' onClick={this.getGrowthProjection}>Get the Data!</a></p>
+        {resultOfgrowth.length > 0 && <TableDisplay resultOfgrowth={resultOfgrowth}></TableDisplay>}
       </div>
     )
   }
