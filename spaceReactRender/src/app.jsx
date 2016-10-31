@@ -2,6 +2,32 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import styles from './index.scss'
 import React from 'react'
 
+function getGrowth(param, callback) {
+console.log("fetching param");
+  fetch('http://localhost:1701/results',{
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({param:param})
+  })
+  .then(function(res) {
+    // This return the header call of the function, not the data.
+    return res.json();
+  })
+  .then(function(data){
+    console.log('Received Data:', data);
+    if (data) {
+      callback(data);
+    }
+  })
+  .catch(function(ex) {
+    // Fail to fetch so keep using the default value.
+      window.console.log('parsing failed', ex);
+    })
+}
+
 export default class App extends React.Component {
   constructor (props) {
     super(props);
@@ -18,9 +44,12 @@ export default class App extends React.Component {
       orbitRefulling: this.props.param.orbitRefulling,
       probIncreaseProdOfIts: this.props.param.probIncreaseProdOfIts,
       itsIncreaseOf: this.props.param.itsIncreaseOf,
+      maxPop: 10000,
+      years: 1000,
       resultOfgrowth: {}
     };
     this.changeNumberValue = this.changeNumberValue.bind(this);
+    this.getGrowthProjection = this.getGrowthProjection.bind(this);
   }
   changeNumberValue (key, event) {
     // This set the value of the proper Key. Note, Key is the second argument after "this"!?! and event is something else that arrive magically.
@@ -28,8 +57,16 @@ export default class App extends React.Component {
     // console.log('event:', event, event.target.value);
     this.setState({[key]: parseFloat(event.target.value)});
   }
+  getGrowthProjection() {
+    var updateThisState = function (data) {
+      this.setState({resultOfgrowth: data});
+    }
+    updateThisState = updateThisState.bind(this);
+    this.state.resultOfgrowth = {};
+    getGrowth(this.state, updateThisState);
+  }
   render () {
-    var {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf} = this.state;
+    const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf} = this.state;
     return (
       <div className='container'>
         <div>Param here: {persPerShip}, {engineMalfunction}</div>
@@ -210,7 +247,7 @@ export default class App extends React.Component {
           orbitRefulling: {orbitRefulling}
           probIncreaseProdOfIts: {probIncreaseProdOfIts}
           itsIncreaseOf: {itsIncreaseOf}
-        <p><a className='btn btn-primary btn-lg' >Enjoy!</a></p>
+        <p><a className='btn btn-primary btn-lg' onClick={this.getGrowthProjection}>Get the Data!</a></p>
       </div>
     )
   }

@@ -1,9 +1,12 @@
 /*jshint esversion: 6 */
 
 var express = require('express');
-var app = express();
+var bodyParser = require('body-parser');
 var nunjucks = require('nunjucks');
 var cors = require('cors');
+
+var app = express();
+app.use(bodyParser.json());
 
 var _templates = process.env.NODE_PATH ? process.env.NODE_PATH + '/templates' : 'templates' ;
 nunjucks.configure(_templates, {
@@ -36,9 +39,9 @@ app.post('/results', (req, res) => {
   if (!iter || iter < 0 || iter > 1000) { iter = 50; }
   let maxPop = askedParam.maxPop || 1000000;
   if (!maxPop || maxPop < 1 || maxPop > 10000000) { maxPop = 1000000; }
-  let shipProduction = askedParam.shipProduction || 0;
-
-  res.json(calc.iterateThat([initialCondition], askedParam, iter, maxPop, shipProduction));
+  
+  let initialCondition = dataStructure.blankYear();
+  res.json(calc.iterateThat([initialCondition], askedParam, iter, maxPop, 1));
 });
 
 app.get('/', (req, res) => {

@@ -55,6 +55,8 @@ data.parameters = () => {
       orbitRefulling: 4,
       probIncreaseProdOfIts: 0,
       itsIncreaseOf: 1,
+      maxPop: 1000000,
+      years: 100
     }
   );
 };
