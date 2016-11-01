@@ -53,6 +53,7 @@ export default class App extends React.Component {
     };
     this.changeNumberValue = this.changeNumberValue.bind(this);
     this.getGrowthProjection = this.getGrowthProjection.bind(this);
+    this.updateThisState = this.updateThisState.bind(this);
   }
   changeNumberValue (key, event) {
     // This set the value of the proper Key. Note, Key is the second argument after "this"!?! and event is something else that arrive magically.
@@ -60,13 +61,15 @@ export default class App extends React.Component {
     // console.log('event:', event, event.target.value);
     this.setState({[key]: parseFloat(event.target.value)});
   }
+  updateThisState(data) {
+    this.setState({
+      resultOfgrowth: data
+    });
+    console.log("after the setState.");
+  }
   getGrowthProjection() {
-    var updateThisState = function (data) {
-      this.setState({resultOfgrowth: data});
-    }
-    updateThisState = updateThisState.bind(this);
     this.state.resultOfgrowth = [];
-    getGrowth(this.state, updateThisState);
+    getGrowth(this.state, this.updateThisState);
   }
   render () {
     const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf, resultOfgrowth} = this.state;
