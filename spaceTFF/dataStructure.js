@@ -53,7 +53,7 @@ data.parameters = () => {
       itsEngine: 9,
       touristRatio: 0.3,
       orbitRefulling: 4,
-      probIncreaseProdOfIts: 0,
+      probIncreaseProdOfIts: 0.2,
       itsIncreaseOf: 1,
       maxPop: 1000000,
       years: 100

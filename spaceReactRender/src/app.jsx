@@ -4,6 +4,7 @@ import React from 'react'
 
 // modules
 import TableDisplay from './tableDisplay.jsx'
+import HelpComponentList from './helpComponent.jsx'
 
 function getGrowth(param, callback) {
 console.log("fetching param");
@@ -50,7 +51,22 @@ export default class App extends React.Component {
       random:0.1,
       maxPop: 10000,
       years: 1000,
-      resultOfgrowth: []
+      resultOfgrowth: [],
+      shipConfigurationHelp: ['Person per ship: Number of person that fit in each ship.',
+      'Reusability of ship: Number of trip a ship can do before being recycled',
+      'First Stage Engine: Number of Engine that lift the first stage',
+      'ITS Engine: Number of engine inside the Interplanettery Transport System',
+      'Tourist Ratio: Number of people that return in each ship (when available) (tourist)',
+      'Orbit Refulling: Number of refuelling in orbit needed'],
+      riskListHelp: ['TakeOff (Each engine)',
+      'Refueling (each time)',
+      'Journey to mars (Each engine)',
+      'Decelarating on arrival (Each engine)',
+      'Landing on mars',
+      'Refueling --> No loss of life, just ship',
+      'TakeOff/Journey (Each engine)',
+      'Decelarating on arrival (Each engine)',
+      'Landing on earth']
     };
     this.changeNumberValue = this.changeNumberValue.bind(this);
     this.getGrowthProjection = this.getGrowthProjection.bind(this);
@@ -76,13 +92,14 @@ export default class App extends React.Component {
   }
   render () {
     const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf, resultOfgrowth, maxPop, years} = this.state;
+    const {shipConfigurationHelp, riskListHelp} = this.state;
     return (
       <div className='container'>
 
         <div className={`row col-xs-12 bg-info ${styles.splitSection}`}> Faillure type </div>
         <div className='row'>
           <div className='col-md-6'>
-            <div className='form-group'>
+            <div className='form-group' data-toggle="tooltip" data-placement="bottom" title="Chance that 1 engine have a critical defect.">
                 <label className='col-sm-6 control-label'>Engine Malfunction</label>
                 <div className='col-sm-6'>
                   <input type='number' className='form-control'
@@ -92,7 +109,7 @@ export default class App extends React.Component {
                   onChange={this.changeNumberValue.bind(this, 'engineMalfunction')} />
                 </div>
             </div>
-            <div className='form-group'>
+            <div className='form-group' data-toggle="tooltip" data-placement="bottom" title="Chance of refueling critical event.">
                 <label className='col-sm-6 control-label'>Refuiling Defect</label>
                 <div className='col-sm-6'>
                   <input type='number' className='form-control'
@@ -115,7 +132,7 @@ export default class App extends React.Component {
           </div>
 
           <div className='col-md-6'>
-            <div className='form-group'>
+            <div className='form-group' data-toggle="tooltip" data-placement="bottom" title="Improvement on the defect.">
                 <label className='col-sm-6 control-label'>Improvement</label>
                 <div className='col-sm-6'>
                   <input type='number' className='form-control'
@@ -128,10 +145,11 @@ export default class App extends React.Component {
               </div>
           </div>
         </div>
-        <div className='row col-xs-12'>
+        <div>
           <p>
-          % of change of faillure on each component,
-          ex: If we have 42 engines to Launch the first stage and 1% chance of defect then a dice is roll for each engine to see if it will fail catastrophically or not.
+            % of change of faillure on each component,
+            ex: If we have 42 engines to Launch the first stage and 1% chance of defect then a dice is roll for each engine to see if it will fail catastrophically or not.
+            Improvement ratio is reducing the fail rate ex: First launch = 10% defect, 2e launch = 10% * (1 - improvement)
           </p>
         </div>
 
@@ -219,14 +237,7 @@ export default class App extends React.Component {
           </div>
         </div>
         <div className='row col-xs-12'>
-          <ul>
-            <li>Person per ship: Number of person that fit in each ship.</li>
-            <li>Reusability of ship: Number of trip a ship can do before being recycled</li>
-            <li>First Stage Engine: Number of Engine that lift the first stage</li>
-            <li>ITS Engine: Number of engine inside the Interplanettery Transport System</li>
-            <li>Tourist Ratio: Number of people that return in each ship (when available) (tourist)</li>
-            <li>Orbit Refulling: Number of refuelling in orbit needed</li>
-          </ul>
+          <HelpComponentList msgArray={shipConfigurationHelp}></HelpComponentList>
         </div>
 
         <div className={`row col-xs-12 bg-info ${styles.splitSection}`}> Production increase </div>
@@ -245,8 +256,8 @@ export default class App extends React.Component {
               </div>
           </div>
           <div className='col-md-6'>
-            <div className='form-group'>
-                <label className='col-sm-6 control-label'>ITS Increase Of</label>
+            <div className='form-group' data-toggle="tooltip" data-placement="bottom" title="# of Internation Transport Vehicule.">
+                <label className='col-sm-6 control-label'>ITS Increase</label>
                 <div className='col-sm-6'>
                   <input type='number' className='form-control'
                     step='1'
@@ -292,18 +303,8 @@ export default class App extends React.Component {
             </div>
         </div>
         <div className='row col-xs-12'>
-        <h4>Risk list:</h4>
-        <ul>
-          <li>TakeOff (Each engine)</li>
-          <li>Refueling (each time)</li>
-          <li>Journey to mars (Each engine)</li>
-          <li>Decelarating on arrival (Each engine)</li>
-          <li>Landing on mars</li>
-          <li>Refueling --> No loss of life, just ship</li>
-          <li>TakeOff/Journey (Each engine)</li>
-          <li>Decelarating on arrival (Each engine)</li>
-          <li>Landing on earth</li>
-        </ul>
+          <h4>Risk list:</h4>
+          <HelpComponentList msgArray={riskListHelp}></HelpComponentList>
         </div>
 
         <div className={`row ${styles.submit_btn}`}>
