@@ -80,165 +80,164 @@ export default class App extends React.Component {
 
         <div className='row'>
 
-          <div className='col-sm-6'>
+          <div className='col-md-6'>
             <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'># engineMalfunction</div>
-                <input type='number' className='form-control'
+                <label className='col-sm-6 control-label'># Engine Malfunction</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
                   step='0.01'
                   min='0'
                   value={engineMalfunction}
                   onChange={this.changeNumberValue.bind(this, 'engineMalfunction')} />
-              </div>
+                </div>
             </div>
             <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>refuilingDefect</div>
-                <input type='number' className='form-control'
-                  step='0.01'
-                  min='0'
-                  value={this.state.refuilingDefect}
-                  onChange={this.changeNumberValue.bind(this, 'refuilingDefect')} />
-              </div>
+                <label className='col-sm-6 control-label'>Refuiling Defect</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    step='0.01'
+                    min='0'
+                    value={this.state.refuilingDefect}
+                    onChange={this.changeNumberValue.bind(this, 'refuilingDefect')} />
+                </div>
             </div>
             <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>landingFaillure</div>
-                <input type='number' className='form-control'
-                  step='0.01'
-                  min='0'
-                  value={this.state.landingFaillure}
-                  onChange={this.changeNumberValue.bind(this, 'landingFaillure')} />
-              </div>
+                <label className='col-sm-6 control-label'>Landing Faillure</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    step='0.01'
+                    min='0'
+                    value={this.state.landingFaillure}
+                    onChange={this.changeNumberValue.bind(this, 'landingFaillure')} />
+                </div>
             </div>
           </div>
 
-          <div className='col-sm-6'>
+          <div className='col-md-6'>
             <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>improvement</div>
-                <input type='number' className='form-control'
-                  step='0.01'
-                  min='0'
-                  max='1'
-                  value={this.state.improvement}
-                  onChange={this.changeNumberValue.bind(this, 'improvement')} />
+                <label className='col-sm-6 control-label'>Improvement</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    step='0.01'
+                    min='0'
+                    max='1'
+                    value={this.state.improvement}
+                    onChange={this.changeNumberValue.bind(this, 'improvement')} />
+                </div>
               </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div className='row'>
-          <div className='col-sm-6'>
-            <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'># person per ship</div>
-                <input type='number' className='form-control'
-                  min='0'
-                  value={persPerShip}
-                  onChange={this.changeNumberValue.bind(this, 'persPerShip')} />
-              </div>
-            </div>
-          </div>
-          <div className='col-sm-6'>
-            <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>reusabilityOfShip</div>
-                <input type='number' className='form-control'
-                  step='1'
-                  min='0'
-                  max='50'
-                  value={this.state.reusabilityOfShip}
-                  onChange={this.changeNumberValue.bind(this, 'reusabilityOfShip')} />
-              </div>
-            </div>
           </div>
         </div>
 
         <div className='row'>
+          <div className='col-md-6'>
+            <div className='form-group'>
+                <label className='col-sm-6 control-label'>Person per ship</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    min='0'
+                    value={persPerShip}
+                    onChange={this.changeNumberValue.bind(this, 'persPerShip')} />
+                </div>
+              </div>
+          </div>
           <div className='col-sm-6'>
             <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>firstStageEngine</div>
+                <label className='col-xs-6 control-label'>Reusability of ship</label>
+                <div className='col-xs-6'>
+                  <input type='number' className='form-control'
+                    step='1'
+                    min='0'
+                    max='50'
+                    value={this.state.reusabilityOfShip}
+                    onChange={this.changeNumberValue.bind(this, 'reusabilityOfShip')} />
+                  </div>
+              </div>
+            </div>
+        </div>
+
+        <div className='row'>
+          <div className='col-md-6'>
+            <div className='form-group'>
+                <label className='col-sm-6 control-label'>First Stage Engine</label>
+                <div className='col-sm-6'>
                 <input type='number' className='form-control'
                   min='0'
                   step='1'
                   value={firstStageEngine}
                   onChange={this.changeNumberValue.bind(this, 'firstStageEngine')} />
+                  </div>
               </div>
-            </div>
           </div>
           <div className='col-sm-6'>
             <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>itsEngine</div>
+                <label className='col-sm-6 control-label'>ITS Engine</label>
+                <div className='col-sm-6'>
                 <input type='number' className='form-control'
                   min='0'
                   step='1'
                   value={this.state.itsEngine}
                   onChange={this.changeNumberValue.bind(this, 'itsEngine')} />
+                  </div>
               </div>
             </div>
+        </div>
+
+        <div className='row'>
+          <div className='col-md-6'>
+            <div className='form-group'>
+                <label className='col-sm-6 control-label'>Tourist Ratio</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    min='0'
+                    step='0.01'
+                    max='1'
+                    value={touristRatio}
+                    onChange={this.changeNumberValue.bind(this, 'touristRatio')} />
+                  </div>
+              </div>
+          </div>
+          <div className='col-sm-6'>
+            <div className='form-group'>
+                <label className='col-sm-6 control-label'>Orbit Refulling</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    step='1'
+                    min='0'
+                    max='50'
+                    value={this.state.orbitRefulling}
+                    onChange={this.changeNumberValue.bind(this, 'orbitRefulling')} />
+                  </div>
+              </div>
           </div>
         </div>
 
         <div className='row'>
-          <div className='col-sm-6'>
+          <div className='col-md-6'>
             <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>touristRatio</div>
-                <input type='number' className='form-control'
-                  min='0'
-                  step='0.01'
-                  max='1'
-                  value={touristRatio}
-                  onChange={this.changeNumberValue.bind(this, 'touristRatio')} />
+                <label className='col-sm-6 control-label'>Increase Production of ITS</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    min='0'
+                    step='0.01'
+                    max='1'
+                    value={probIncreaseProdOfIts}
+                    onChange={this.changeNumberValue.bind(this, 'probIncreaseProdOfIts')} />
+                  </div>
               </div>
-            </div>
           </div>
           <div className='col-sm-6'>
             <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>orbitRefulling</div>
-                <input type='number' className='form-control'
-                  step='1'
-                  min='0'
-                  max='50'
-                  value={this.state.orbitRefulling}
-                  onChange={this.changeNumberValue.bind(this, 'orbitRefulling')} />
+                <label className='col-sm-6 control-label'>ITS Increase Of</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    step='1'
+                    min='0'
+                    max='50'
+                    value={this.state.itsIncreaseOf}
+                    onChange={this.changeNumberValue.bind(this, 'itsIncreaseOf')} />
+                  </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className='row'>
-          <div className='col-sm-6'>
-            <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>probIncreaseProdOfIts</div>
-                <input type='number' className='form-control'
-                  min='0'
-                  step='0.01'
-                  max='1'
-                  value={probIncreaseProdOfIts}
-                  onChange={this.changeNumberValue.bind(this, 'probIncreaseProdOfIts')} />
-              </div>
-            </div>
-          </div>
-          <div className='col-sm-6'>
-            <div className='form-group'>
-              <div className='input-group'>
-                <div className='input-group-addon'>itsIncreaseOf</div>
-                <input type='number' className='form-control'
-                  step='1'
-                  min='0'
-                  max='50'
-                  value={this.state.itsIncreaseOf}
-                  onChange={this.changeNumberValue.bind(this, 'itsIncreaseOf')} />
-              </div>
-            </div>
-          </div>
         </div>
 
 
