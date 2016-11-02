@@ -47,6 +47,7 @@ export default class App extends React.Component {
       orbitRefulling: this.props.param.orbitRefulling,
       probIncreaseProdOfIts: this.props.param.probIncreaseProdOfIts,
       itsIncreaseOf: this.props.param.itsIncreaseOf,
+      random:0.1,
       maxPop: 10000,
       years: 1000,
       resultOfgrowth: []
@@ -62,9 +63,11 @@ export default class App extends React.Component {
     this.setState({[key]: parseFloat(event.target.value)});
   }
   updateThisState(data) {
-    this.setState({
-      resultOfgrowth: data
-    });
+    this.setState({ random: Math.random() });
+    // This is because resultOfgrowth is a deepNestedObject and react dosent catch the change. so I kinda force it like that instead of using this.forceUpdate() or using an extra library "immutable"
+    // http://stackoverflow.com/questions/30626030/can-you-force-a-react-component-to-rerender-without-calling-setstate
+    this.setState({ resultOfgrowth: data });
+
     console.log("after the setState.");
   }
   getGrowthProjection() {
@@ -72,17 +75,15 @@ export default class App extends React.Component {
     getGrowth(this.state, this.updateThisState);
   }
   render () {
-    const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf, resultOfgrowth} = this.state;
+    const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf, resultOfgrowth, maxPop, years} = this.state;
     return (
       <div className='container'>
-        <div>Param here: {persPerShip}, {engineMalfunction}</div>
-        <div>  persPerShip: {persPerShip}</div>
 
+        <div className={`row col-xs-12 bg-info ${styles.splitSection}`}> Faillure type </div>
         <div className='row'>
-
           <div className='col-md-6'>
             <div className='form-group'>
-                <label className='col-sm-6 control-label'># Engine Malfunction</label>
+                <label className='col-sm-6 control-label'>Engine Malfunction</label>
                 <div className='col-sm-6'>
                   <input type='number' className='form-control'
                   step='0.01'
@@ -127,7 +128,14 @@ export default class App extends React.Component {
               </div>
           </div>
         </div>
+        <div className='row col-xs-12'>
+          <p>
+          % of change of faillure on each component,
+          ex: If we have 42 engines to Launch the first stage and 1% chance of defect then a dice is roll for each engine to see if it will fail catastrophically or not.
+          </p>
+        </div>
 
+        <div className={`row col-xs-12 bg-info ${styles.splitSection}`}> Ship configuration </div>
         <div className='row'>
           <div className='col-md-6'>
             <div className='form-group'>
@@ -140,10 +148,10 @@ export default class App extends React.Component {
                 </div>
               </div>
           </div>
-          <div className='col-sm-6'>
+          <div className='col-md-6'>
             <div className='form-group'>
-                <label className='col-xs-6 control-label'>Reusability of ship</label>
-                <div className='col-xs-6'>
+                <label className='col-sm-6 control-label'>Reusability of ship</label>
+                <div className='col-sm-6'>
                   <input type='number' className='form-control'
                     step='1'
                     min='0'
@@ -168,7 +176,7 @@ export default class App extends React.Component {
                   </div>
               </div>
           </div>
-          <div className='col-sm-6'>
+          <div className='col-md-6'>
             <div className='form-group'>
                 <label className='col-sm-6 control-label'>ITS Engine</label>
                 <div className='col-sm-6'>
@@ -196,7 +204,7 @@ export default class App extends React.Component {
                   </div>
               </div>
           </div>
-          <div className='col-sm-6'>
+          <div className='col-md-6'>
             <div className='form-group'>
                 <label className='col-sm-6 control-label'>Orbit Refulling</label>
                 <div className='col-sm-6'>
@@ -210,11 +218,22 @@ export default class App extends React.Component {
               </div>
           </div>
         </div>
+        <div className='row col-xs-12'>
+          <ul>
+            <li>Person per ship: Number of person that fit in each ship.</li>
+            <li>Reusability of ship: Number of trip a ship can do before being recycled</li>
+            <li>First Stage Engine: Number of Engine that lift the first stage</li>
+            <li>ITS Engine: Number of engine inside the Interplanettery Transport System</li>
+            <li>Tourist Ratio: Number of people that return in each ship (when available) (tourist)</li>
+            <li>Orbit Refulling: Number of refuelling in orbit needed</li>
+          </ul>
+        </div>
 
+        <div className={`row col-xs-12 bg-info ${styles.splitSection}`}> Production increase </div>
         <div className='row'>
           <div className='col-md-6'>
             <div className='form-group'>
-                <label className='col-sm-6 control-label'>Increase Production of ITS</label>
+                <label className='col-sm-6 control-label'>Chance of increase</label>
                 <div className='col-sm-6'>
                   <input type='number' className='form-control'
                     min='0'
@@ -225,7 +244,7 @@ export default class App extends React.Component {
                   </div>
               </div>
           </div>
-          <div className='col-sm-6'>
+          <div className='col-md-6'>
             <div className='form-group'>
                 <label className='col-sm-6 control-label'>ITS Increase Of</label>
                 <div className='col-sm-6'>
@@ -239,20 +258,57 @@ export default class App extends React.Component {
               </div>
             </div>
         </div>
+        <div className='row col-xs-12'>
+          <p>Chance of increase: Chance that this round we increase the ship production by a factor of "ITS Increase"</p>
+        </div>
 
+        <div className={`row col-xs-12 bg-warning ${styles.splitSection}`}> Run parameters </div>
+        <div className='row'>
+          <div className='col-md-6'>
+            <div className='form-group'>
+                <label className='col-sm-6 control-label'>Population to reach</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    min='100'
+                    step='100'
+                    max='5000000'
+                    value={maxPop}
+                    onChange={this.changeNumberValue.bind(this, 'maxPop')} />
+                  </div>
+              </div>
+          </div>
+          <div className='col-md-6'>
+            <div className='form-group'>
+                <label className='col-sm-6 control-label'>Max number of run</label>
+                <div className='col-sm-6'>
+                  <input type='number' className='form-control'
+                    step='1'
+                    min='1'
+                    max='1000'
+                    value={this.state.years}
+                    onChange={this.changeNumberValue.bind(this, 'years')} />
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div className='row col-xs-12'>
+        <h4>Risk list:</h4>
+        <ul>
+          <li>TakeOff (Each engine)</li>
+          <li>Refueling (each time)</li>
+          <li>Journey to mars (Each engine)</li>
+          <li>Decelarating on arrival (Each engine)</li>
+          <li>Landing on mars</li>
+          <li>Refueling --> No loss of life, just ship</li>
+          <li>TakeOff/Journey (Each engine)</li>
+          <li>Decelarating on arrival (Each engine)</li>
+          <li>Landing on earth</li>
+        </ul>
+        </div>
 
-          engineMalfunction: {engineMalfunction}
-          refuilingDefect: {refuilingDefect}
-          landingFaillure: {landingFaillure}
-          reusabilityOfShip: {reusabilityOfShip}
-          improvement: {improvement}
-          firstStageEngine: {firstStageEngine}
-          itsEngine: {itsEngine}
-          touristRatio: {touristRatio}
-          orbitRefulling: {orbitRefulling}
-          probIncreaseProdOfIts: {probIncreaseProdOfIts}
-          itsIncreaseOf: {itsIncreaseOf}
-        <p><a className='btn btn-primary btn-lg' onClick={this.getGrowthProjection}>Get the Data!</a></p>
+        <div className={`row ${styles.submit_btn}`}>
+          <button className={`btn btn-lg btn-success`} onClick={this.getGrowthProjection}>Get the Data!</button>
+        </div>
         {resultOfgrowth.length > 0 && <TableDisplay resultOfgrowth={resultOfgrowth}></TableDisplay>}
       </div>
     )
