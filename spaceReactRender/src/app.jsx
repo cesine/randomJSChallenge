@@ -5,6 +5,7 @@ import React from 'react'
 // modules
 import TableDisplay from './tableDisplay.jsx'
 import HelpComponentList from './helpComponent.jsx'
+import GraphSection from './graphSection.jsx'
 
 function getGrowth(param, callback) {
 console.log("fetching param");
@@ -52,6 +53,7 @@ export default class App extends React.Component {
       maxPop: 10000,
       years: 1000,
       resultOfgrowth: [],
+      savedBackup: [],
       shipConfigurationHelp: ['Person per ship: Number of person that fit in each ship.',
       'Reusability of ship: Number of trip a ship can do before being recycled',
       'First Stage Engine: Number of Engine that lift the first stage',
@@ -91,7 +93,7 @@ export default class App extends React.Component {
     getGrowth(this.state, this.updateThisState);
   }
   render () {
-    const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf, resultOfgrowth, maxPop, years} = this.state;
+    const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf, resultOfgrowth, maxPop, years, savedBackup} = this.state;
     const {shipConfigurationHelp, riskListHelp} = this.state;
     return (
       <div className='container'>
@@ -311,6 +313,7 @@ export default class App extends React.Component {
           <button className={`btn btn-lg btn-success`} onClick={this.getGrowthProjection}>Get the Data!</button>
         </div>
         {resultOfgrowth.length > 0 && <TableDisplay resultOfgrowth={resultOfgrowth}></TableDisplay>}
+        {resultOfgrowth.length > 0 && <GraphSection resultOfgrowth={resultOfgrowth} savedBackup={savedBackup}></GraphSection>}
       </div>
     )
   }
