@@ -2,6 +2,7 @@ import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import GraphBar from './graphBar.jsx'
+import styles from './index.scss'
 
 export default class GraphSection extends React.Component {
   constructor (props) {
@@ -34,12 +35,20 @@ export default class GraphSection extends React.Component {
         </ul>
 
         <h3>Population Growth</h3>
+        {displayGraph == 'growthVsDeath' && <div className='row'>
+            <div className='col-xs-2'>Years</div>
+            <div className='col-xs-10'>Data</div>
+        </div>}
         {displayGraph == 'growthVsDeath' && resultOfgrowth.map((item, index)=> {
-          return (<div key={index}>
+          return (<div key={index} className='row'>
+            <div className={`col-xs-1 ${styles.vcenter}`}>
+              <div>{Math.round(index*22/12)}</div>
+            </div>
+            <div className={`col-xs-11 ${styles.vcenter}`}>
               <GraphBar nbr={item.martian} max={maximumWidthRatio} color='rgba(0, 0, 255, 0.7)' textColor='white'></GraphBar>
               <GraphBar nbr={item.cummulativeLife} max={maximumWidthRatio} color='#ec581f' textColor='black'></GraphBar>
             </div>
-            );
+          </div>);
         })}
         <div>
 
