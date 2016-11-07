@@ -33,11 +33,20 @@ export default class BarGraph extends React.Component {
     this.setState({checked});
   }
   render() {
-    let maxMartian = this.props.resultOfgrowth[this.props.resultOfgrowth.length - 1].martian;
-    let maximumWidthRatio = 500/maxMartian;
-    let graphSeparator = maxMartian/5;
+    let maxMartian = this.state.checked.Population ? this.props.resultOfgrowth[this.props.resultOfgrowth.length - 1].martian : 0;
+    let maxDeath = this.state.checked.Death ? this.props.resultOfgrowth[this.props.resultOfgrowth.length - 1].cummulativeLife : 0;
+    let maxMartianBckup = 0, maxDeathBckup = 0;
+    if (this.props.savedBackup.length > 0) {
+      maxMartianBckup = this.state.checked.SavedPopulation ? this.props.savedBackup[this.props.savedBackup.length - 1].martian : 0;
+      maxDeathBckup = this.state.checked.SavedDeath ? this.props.savedBackup[this.props.savedBackup.length - 1].cummulativeLife : 0;
+    }
+    // Strangely the "Math.max([maxMartian, maxDeath, maxMartianBckup, maxDeathBckup])" dosent work.
+    let maxPop = Math.max(Math.max(maxMartian, maxDeath), Math.max(maxMartianBckup, maxDeathBckup));
+    console.log('maxPop:', maxPop);
+    let maximumWidthRatio = 500/maxPop;
+    let graphSeparator = maxPop/5;
     if (graphSeparator > 1000) {
-      graphSeparator = Math.round(maxMartian/5/1000)*1000;
+      graphSeparator = Math.round(maxPop/5/1000)*1000;
     }
     const {resultOfgrowth, checked, savedBackup} = this.state;
     const popColor = 'rgba(0, 196, 255, 0.55)';
@@ -47,26 +56,36 @@ export default class BarGraph extends React.Component {
     // console.log('BckupTransmitted:', savedBackup);
     return (<div>
         <div className='row'>
-          <div className='col-sm-3' style={{'backgroundColor': popColor}}>Population: <input
-            type="checkbox"
-            value="Population"
-            onChange={this.handleChange}
-            defaultChecked={true} /></div>
-          <div className='col-sm-3' style={{'backgroundColor': deathColor}}>Death: <input
-            type="checkbox"
-            value="Death"
-            onChange={this.handleChange}
-            defaultChecked={true} /></div>
-          {savedBackup.length > 0 && <div className='col-sm-3' style={{'backgroundColor': savedPopColor}}>Saved Population: <input
-            type="checkbox"
-            value="SavedPopulation"
-            onChange={this.handleChange}
-            defaultChecked={true} /></div>}
-          {savedBackup.length > 0 && <div className='col-sm-3' style={{'backgroundColor': savedDeathColor}}>Saved Death: <input
-            type="checkbox"
-            value="SavedDeath"
-            onChange={this.handleChange}
-            defaultChecked={true} /></div>}
+          <div className='col-sm-3'>
+            <div><strong>Current Run</strong></div>
+            <div style={{'backgroundColor': popColor}}>Population: <input
+              type="checkbox"
+              value="Population"
+              onChange={this.handleChange}
+              defaultChecked={true} />
+            </div>
+            <div style={{'backgroundColor': deathColor}}>Death: <input
+              type="checkbox"
+              value="Death"
+              onChange={this.handleChange}
+              defaultChecked={true} />
+            </div>
+          </div>
+          {savedBackup.length > 0 && <div className='col-sm-3'>
+            <div><strong>Backup</strong></div>
+            <div style={{'backgroundColor': savedPopColor}}>Population: <input
+              type="checkbox"
+              value="SavedPopulation"
+              onChange={this.handleChange}
+              defaultChecked={true} />
+            </div>
+            <div style={{'backgroundColor': savedDeathColor}}>Death: <input
+              type="checkbox"
+              value="SavedDeath"
+              onChange={this.handleChange}
+              defaultChecked={true} />
+            </div>
+          </div>}
         </div>
         <h3>Population Growth</h3>
         <div className={styles.graph_header}>
