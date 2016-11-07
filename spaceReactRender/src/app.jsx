@@ -73,6 +73,7 @@ export default class App extends React.Component {
     this.changeNumberValue = this.changeNumberValue.bind(this);
     this.getGrowthProjection = this.getGrowthProjection.bind(this);
     this.updateThisState = this.updateThisState.bind(this);
+    this.saveThisBackup = this.saveThisBackup.bind(this);
   }
   changeNumberValue (key, event) {
     // This set the value of the proper Key. Note, Key is the second argument after "this"!?! and event is something else that arrive magically.
@@ -85,12 +86,15 @@ export default class App extends React.Component {
     // This is because resultOfgrowth is a deepNestedObject and react dosent catch the change. so I kinda force it like that instead of using this.forceUpdate() or using an extra library "immutable"
     // http://stackoverflow.com/questions/30626030/can-you-force-a-react-component-to-rerender-without-calling-setstate
     this.setState({ resultOfgrowth: data });
-
-    console.log("after the setState.");
   }
   getGrowthProjection() {
     this.state.resultOfgrowth = [];
     getGrowth(this.state, this.updateThisState);
+  }
+  saveThisBackup() {
+    const backup = Object.assign([], this.state.resultOfgrowth);
+    this.setState({ random: Math.random() });
+    this.setState({ savedBackup: backup });
   }
   render () {
     const {persPerShip, engineMalfunction, refuilingDefect, landingFaillure, reusabilityOfShip, improvement, firstStageEngine, itsEngine, touristRatio, orbitRefulling, probIncreaseProdOfIts, itsIncreaseOf, resultOfgrowth, maxPop, years, savedBackup} = this.state;
@@ -311,7 +315,9 @@ export default class App extends React.Component {
 
         <div className={`row ${styles.submit_btn}`}>
           <button className={`btn btn-lg btn-success`} onClick={this.getGrowthProjection}>Get the Data!</button>
+          <button className={`btn btn-lg btn-warning`} onClick={this.saveThisBackup}>Save a backup</button>
         </div>
+
         {resultOfgrowth.length > 0 && <TableDisplay resultOfgrowth={resultOfgrowth}></TableDisplay>}
         {resultOfgrowth.length > 0 && <GraphSection resultOfgrowth={resultOfgrowth} savedBackup={savedBackup}></GraphSection>}
       </div>

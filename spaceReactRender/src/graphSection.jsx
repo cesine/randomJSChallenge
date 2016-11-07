@@ -19,20 +19,18 @@ export default class GraphSection extends React.Component {
     this.setState({displayGraph:'growthVsDeath'});
   }
   render() {
-    const {display, resultOfgrowth, displayGraph} = this.state;
+    const {display, resultOfgrowth, displayGraph, savedBackup} = this.state;
     return (
       <div>
-        <span>{display}</span>
         Graph that could be fun:
         <ul>
           <li onClick={this.growthVsDeath}>Population Growth vs Death occurence</li>
-          <li>Total death</li>
           <li>Nbr ship lost over time</li>
           <li>Pie Shart / bar of type of defect over time.</li>
           <li>Comparing Current run vs previous run</li>
         </ul>
 
-        {displayGraph == 'growthVsDeath' && <BarGraph resultOfgrowth={resultOfgrowth}></BarGraph>}
+        {displayGraph == 'growthVsDeath' && <BarGraph resultOfgrowth={resultOfgrowth} savedBackup={savedBackup}></BarGraph>}
       </div>
     )
   }

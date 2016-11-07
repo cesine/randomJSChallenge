@@ -10,9 +10,12 @@ export default class BarGraph extends React.Component {
     super(props);
     this.state = {
       resultOfgrowth: this.props.resultOfgrowth,
+      savedBackup: this.props.savedBackup,
       checked: {
         Population: true,
-        Death: true
+        SavedPopulation: true,
+        Death: true,
+        SavedDeath: true
       }
     }
     this.handleChange = this.handleChange.bind(this);
@@ -36,9 +39,12 @@ export default class BarGraph extends React.Component {
     if (graphSeparator > 1000) {
       graphSeparator = Math.round(maxMartian/5/1000)*1000;
     }
-    const {resultOfgrowth, checked} = this.state;
+    const {resultOfgrowth, checked, savedBackup} = this.state;
     const popColor = 'rgba(0, 196, 255, 0.55)';
     const deathColor = '#ec581f';
+    const savedPopColor = 'rgba(0, 255, 78, 0.76)';
+    const savedDeathColor = 'rgb(236, 163, 31)';
+    // console.log('BckupTransmitted:', savedBackup);
     return (<div>
         <div className='row'>
           <div className='col-sm-3' style={{'backgroundColor': popColor}}>Population: <input
@@ -51,6 +57,16 @@ export default class BarGraph extends React.Component {
             value="Death"
             onChange={this.handleChange}
             defaultChecked={true} /></div>
+          {savedBackup.length > 0 && <div className='col-sm-3' style={{'backgroundColor': savedPopColor}}>Saved Population: <input
+            type="checkbox"
+            value="SavedPopulation"
+            onChange={this.handleChange}
+            defaultChecked={true} /></div>}
+          {savedBackup.length > 0 && <div className='col-sm-3' style={{'backgroundColor': savedDeathColor}}>Saved Death: <input
+            type="checkbox"
+            value="SavedDeath"
+            onChange={this.handleChange}
+            defaultChecked={true} /></div>}
         </div>
         <h3>Population Growth</h3>
         <div className={styles.graph_header}>
@@ -65,8 +81,10 @@ export default class BarGraph extends React.Component {
               </div>
               <div className={`col-xs-11 ${styles.vcenter}`}>
                 <div style={{'backgroundSize': graphSeparator*maximumWidthRatio + 'px', 'backgroundImage': 'linear-gradient(to right, grey 1px, transparent 1px)'}}>
-                  {checked.Population &&<GraphBar nbr={item.martian} max={maximumWidthRatio} color={popColor} textColor='black'></GraphBar>}
-                  {checked.Death &&<GraphBar nbr={item.cummulativeLife} max={maximumWidthRatio} color={deathColor} textColor='black'></GraphBar>}
+                  {checked.Population && <GraphBar nbr={item.martian} max={maximumWidthRatio} color={popColor} textColor='black'></GraphBar>}
+                  {checked.Death && <GraphBar nbr={item.cummulativeLife} max={maximumWidthRatio} color={deathColor} textColor='black'></GraphBar>}
+                  {savedBackup.length > 0 && checked.SavedPopulation && savedBackup[index] && <GraphBar nbr={savedBackup[index].martian} max={maximumWidthRatio} color={savedPopColor} textColor='black'></GraphBar>}
+                  {savedBackup.length > 0 && checked.SavedDeath && savedBackup[index] && <GraphBar nbr={savedBackup[index].cummulativeLife} max={maximumWidthRatio} color={savedDeathColor} textColor='black'></GraphBar>}
                 </div>
               </div>
             </div>);
