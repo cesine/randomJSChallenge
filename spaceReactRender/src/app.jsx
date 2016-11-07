@@ -272,7 +272,7 @@ export default class App extends React.Component {
             </div>
         </div>
         <div className='row col-xs-12'>
-          <p>Chance of increase: Chance that this round we increase the ship production by a factor of "ITS Increase"</p>
+          <p>Chance of increase: Chance that this round we increase the ship production by a total of "ITS Increase"</p>
         </div>
 
         <div className={`row col-xs-12 bg-warning ${styles.splitSection}`}> Run parameters </div>
