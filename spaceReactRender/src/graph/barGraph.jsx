@@ -44,9 +44,9 @@ export default class BarGraph extends React.Component {
     let maxPop = Math.max(Math.max(maxMartian, maxDeath), Math.max(maxMartianBckup, maxDeathBckup));
     console.log('maxPop:', maxPop);
     let maximumWidthRatio = 500/maxPop;
-    let graphSeparator = maxPop/5;
+    let graphSeparator = Math.round(maxPop/5/100)*100; //Round to the hundrer by basic.
     if (graphSeparator > 1000) {
-      graphSeparator = Math.round(maxPop/5/1000)*1000;
+      graphSeparator = Math.round(maxPop/5/1000)*1000; //if large number round to the thousant.
     }
     const {resultOfgrowth, checked, savedBackup} = this.state;
     const popColor = 'rgba(0, 196, 255, 0.55)';

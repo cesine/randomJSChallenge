@@ -5,6 +5,7 @@ import graphBar from './graphBar.scss'
 
 export default class GraphBar extends React.Component {
   // This is the BAR of the BarGraph
+  // When The graphSeparator change we change the Grid system so we need to force a redraw.
   constructor (props) {
     super(props);
     this.state = {

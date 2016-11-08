@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import styles from './index.scss'
 import BarGraph from './graph/barGraph.jsx'
+import PieChart from './graph/pieChart.jsx'
 
 export default class GraphSection extends React.Component {
   constructor (props) {
@@ -31,6 +32,7 @@ export default class GraphSection extends React.Component {
         </ul>
 
         {displayGraph == 'growthVsDeath' && <BarGraph resultOfgrowth={resultOfgrowth} savedBackup={savedBackup}></BarGraph>}
+        <PieChart></PieChart>
       </div>
     )
   }
