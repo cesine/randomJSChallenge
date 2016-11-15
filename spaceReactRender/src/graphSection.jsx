@@ -52,7 +52,7 @@ export default class GraphSection extends React.Component {
       return add2Objects(previousObj, currentObj);
     })
 
-    console.log('Total Killed in', totKilledIn);
+    // console.log('Total Killed in', totKilledIn);
     // Going trough all key of the Object and pushing them into a Array to feed to the BarGraph with percentage.
     for (let key in totKilledIn) {
       if (totKilledIn.hasOwnProperty(key)) {
@@ -65,7 +65,7 @@ export default class GraphSection extends React.Component {
     for (let key in totKilledIn) {
       if (totKilledIn.hasOwnProperty(key)) {
         // If something is lower than 1% Group them after.
-        if (totKilledIn[key] / total < 0.1) {
+        if (totKilledIn[key] / total < 0.05) {
           otherTotal += totKilledIn[key];
         } else {
           arrToreturn.push({
@@ -84,7 +84,7 @@ export default class GraphSection extends React.Component {
         value: otherTotal
       })
     }
-    console.log('arrToreturn: ', arrToreturn);
+    // console.log('arrToreturn: ', arrToreturn);
     // calculating the Percentage of each Pieces
     return arrToreturn;
   }

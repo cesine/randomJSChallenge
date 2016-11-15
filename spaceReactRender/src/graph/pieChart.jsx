@@ -2,25 +2,6 @@ import React from 'react'
 
 import styles from './pieGraph.scss'
 
-var rawData = [
-    {
-        percentage: 0.45,
-        label: 'Thing 1'
-
-    },
-    {
-        percentage: 0.21,
-        label: "Thing Two"
-    },
-    {
-        percentage: 0.11,
-        label: "Another Thing"
-    },
-    {
-        percentage: 0.23,
-        label: "Pineapple"
-    }
-];
 // Started inpiration from: https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/
 // But Selected in SVG: https://danielpataki.com/svg-pie-chart-javascript/
   export default class PieChart extends React.Component {
@@ -65,8 +46,7 @@ var rawData = [
         if( a <= 180 ) {
             X = l + x;
             arcSweep = 0;
-        }
-        else {
+        } else {
             X = l - x;
             arcSweep = 1;
         }
@@ -94,7 +74,7 @@ var rawData = [
       <h1>PIE CHART</h1>
         <svg style={{width: 230+'px', 'height': 230+'px'}}>
           {sectors.map((item, index) => {
-            return (<path key={index} fill={item.color} d={`M${radius},${radius} L${radius},0 A${radius},${radius} 1 0,1 ${item.X}, ${item.Y} z`} transform={`rotate(${item.R}, ${radius}, ${radius})`}></path>)
+            return (<path key={index} fill={item.color} d={`M${radius},${radius} L${radius},0 A${radius},${radius} 0 ${item.arcSweep},1 ${item.X}, ${item.Y} z`} transform={`rotate(${item.R}, ${radius}, ${radius})`}></path>)
           })}
         </svg>
       </div>)
