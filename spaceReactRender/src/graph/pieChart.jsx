@@ -1,6 +1,7 @@
 import React from 'react'
 
 import styles from './pieGraph.scss'
+import GraphBar from './graphBar.jsx'
 
 // Started inpiration from: https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/
 // But Selected in SVG: https://danielpataki.com/svg-pie-chart-javascript/
@@ -56,6 +57,7 @@ import styles from './pieGraph.scss'
             label: item.label,
             color: colors[key],
             arcSweep: arcSweep,
+            value: item.value,
             L: l,
             X: X,
             Y: Y,
@@ -68,15 +70,37 @@ import styles from './pieGraph.scss'
 
     return sectors
   }
+  arrayMaxValue(arrayOfValue) {
+    // console.log('Evaluating the Max of: ',arrayOfValue);
+    var maximum = arrayOfValue.reduce((previous, current) => {
+      if(previous === undefined) {previous = {}; previous.value = 0}
+      // console.log('comparaison:', previous.value, current.value);
+      if (previous.value < current.value) {
+        // console.log('returning Current value', current.value);
+        return {value:current.value};
+      } else {
+        return {value:previous.value};
+      }
+    });
+    console.log('maximum: ',maximum);
+    return maximum.value;
+  }
   render() {
     const {size, sectors, radius} = this.state;
-    return (<div>
-      <h1>PIE CHART</h1>
-        <svg style={{width: 230+'px', 'height': 230+'px'}}>
+    const maximum = 500 / this.arrayMaxValue(sectors);
+    return (<div className='row'>
+        <div id='PieChart' className="col-sm-6">
+          <svg style={{width: 230+'px', 'height': 230+'px'}}>
+            {sectors.map((item, index) => {
+              return (<path key={index} fill={item.color} d={`M${radius},${radius} L${radius},0 A${radius},${radius} 0 ${item.arcSweep},1 ${item.X}, ${item.Y} z`} transform={`rotate(${item.R}, ${radius}, ${radius})`}></path>)
+            })}
+          </svg>
+        </div>
+        <div className='col-sm-6'>
           {sectors.map((item, index) => {
-            return (<path key={index} fill={item.color} d={`M${radius},${radius} L${radius},0 A${radius},${radius} 0 ${item.arcSweep},1 ${item.X}, ${item.Y} z`} transform={`rotate(${item.R}, ${radius}, ${radius})`}></path>)
+            return(<div key={index}><GraphBar nbr={item.value} max={maximum} color={item.color} textColor='black'></GraphBar></div>)
           })}
-        </svg>
+        </div>
       </div>)
   }
 }
