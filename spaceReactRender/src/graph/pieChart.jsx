@@ -95,11 +95,17 @@ import GraphBar from './graphBar.jsx'
             {sectors.map((item, index) => {
               return (<path key={index} fill={item.color} d={`M${radius},${radius} L${radius},0 A${radius},${radius} 0 ${item.arcSweep},1 ${item.X}, ${item.Y} z`} transform={`rotate(${item.R}, ${radius}, ${radius})`}></path>)
             })}
+            <circle cx={radius} cy={radius} r={radius*0.6} fill="#42495B"></circle>
           </svg>
         </div>
         <div className='col-sm-6'>
           {sectors.map((item, index) => {
-            return(<div key={index}><GraphBar nbr={item.value} max={maximum} color={item.color} textColor='black'></GraphBar></div>)
+            return(<div key={index} className='row'>
+                <div className='col-xs-4'>{item.label}</div>
+                <div className='col-xs-8'>
+                  <GraphBar nbr={item.value} max={maximum} color={item.color} textColor='black'></GraphBar>
+                </div>
+              </div>)
           })}
         </div>
       </div>)
