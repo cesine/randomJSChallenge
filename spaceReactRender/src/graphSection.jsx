@@ -5,6 +5,20 @@ import styles from './index.scss'
 import BarGraph from './graph/barGraph.jsx'
 import PieChart from './graph/pieChart.jsx'
 
+
+let add2Objects = (previousObj, currentObj) => {
+  for (var key in currentObj) {
+    if (currentObj.hasOwnProperty(key)) {
+      if (previousObj === undefined) {previousObj = {};}
+      if (!previousObj.hasOwnProperty(key) || previousObj[key] === undefined) {
+        previousObj[key] = 0;
+      }
+      previousObj[key] += currentObj[key];
+    }
+  }
+  return previousObj;
+};
+
 export default class GraphSection extends React.Component {
   constructor (props) {
     super(props);
@@ -24,26 +38,55 @@ export default class GraphSection extends React.Component {
   pieChart() {
     this.setState({displayGraph:'pieChart'});
   }
-  deathRatio(item) {
-    return [
-        {
-            percentage: 0.45,
-            label: 'Thing 1'
+  deathRatio(data) {
+    let arrToreturn = [];
+    let total = 0;
 
-        },
-        {
-            percentage: 0.21,
-            label: "Thing Two"
-        },
-        {
-            percentage: 0.11,
-            label: "Another Thing"
-        },
-        {
-            percentage: 0.23,
-            label: "Pineapple"
+    let totKilledIn = data.map((item) => {
+      // We check each section to see if there is any death at that time if so we make a aray of them
+      if (item.totKilledIn && Object.keys(item.totKilledIn).length > 0) {
+        return item.totKilledIn;
+      }
+    }).reduce((previousObj, currentObj) =>{
+      // We combine and sum all data to have 1 object with the sum of each defect
+      return add2Objects(previousObj, currentObj);
+    })
+
+    console.log('Total Killed in', totKilledIn);
+    // Going trough all key of the Object and pushing them into a Array to feed to the BarGraph with percentage.
+    for (let key in totKilledIn) {
+      if (totKilledIn.hasOwnProperty(key)) {
+        // Summing everything so we can add up to 100% after.
+        total += totKilledIn[key];
+      }
+    }
+
+    var otherTotal = 0;
+    for (let key in totKilledIn) {
+      if (totKilledIn.hasOwnProperty(key)) {
+        // If something is lower than 1% Group them after.
+        if (totKilledIn[key] / total < 0.1) {
+          otherTotal += totKilledIn[key];
+        } else {
+          arrToreturn.push({
+            percentage: totKilledIn[key] / total * 100,
+            label: key,
+            value: totKilledIn[key]
+          })
         }
-    ];
+      }
+    }
+    // Adding the missing value in Other
+    if (otherTotal) {
+      arrToreturn.push({
+        percentage: otherTotal / total * 100,
+        label: 'Other',
+        value: otherTotal
+      })
+    }
+    console.log('arrToreturn: ', arrToreturn);
+    // calculating the Percentage of each Pieces
+    return arrToreturn;
   }
   render() {
     const {display, resultOfgrowth, displayGraph, savedBackup, deathRatio} = this.state;
