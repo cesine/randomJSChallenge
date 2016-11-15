@@ -30,7 +30,7 @@ import GraphBar from './graphBar.jsx'
     var arcSweep = 0;
 
     data.map( function(item, key ) {
-        a = 360 * item.percentage;
+        a = 360 * item.percentage/100;
         var aCalc = ( a > 180 ) ? 360 - a : a;
         aRad = aCalc * Math.PI / 180;
         z = Math.sqrt( 2*l*l - ( 2*l*l*Math.cos(aRad) ) );
@@ -67,8 +67,9 @@ import GraphBar from './graphBar.jsx'
         R = R + a;
     })
 
-
-    return sectors
+    // console.log("Drawing " + sectors.length + " pieces");
+    // console.table(sectors);
+    return sectors;
   }
   arrayMaxValue(arrayOfValue) {
     // console.log('Evaluating the Max of: ',arrayOfValue);
