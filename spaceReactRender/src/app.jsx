@@ -109,7 +109,7 @@ export default class App extends React.Component {
                 <label className='col-sm-6 control-label'>Engine Malfunction</label>
                 <div className='col-sm-6'>
                   <input type='number' className='form-control'
-                  step='0.01'
+                  step='0.001'
                   min='0'
                   value={engineMalfunction}
                   onChange={this.changeNumberValue.bind(this, 'engineMalfunction')} />

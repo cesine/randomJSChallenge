@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import styles from './index.scss'
 import BarGraph from './graph/barGraph.jsx'
 import PieChart from './graph/pieChart.jsx'
-
+import GenericDotGraph from './graph/genericDotGraph.jsx'
 
 let add2Objects = (previousObj, currentObj) => {
   for (var key in currentObj) {
@@ -111,7 +111,7 @@ export default class GraphSection extends React.Component {
 
         {displayGraph == 'growthVsDeath' && <BarGraph resultOfgrowth={resultOfgrowth} savedBackup={savedBackup}></BarGraph>}
         {displayGraph == 'pieChart' && <PieChart deathRatio={deathRatio}></PieChart>}
-        {displayGraph == 'shipLoss' && <div>{shipLossArray.length}</div>}
+        {displayGraph == 'shipLoss' && <GenericDotGraph shipLossArray={shipLossArray}></GenericDotGraph>}
       </div>
     )
   }
