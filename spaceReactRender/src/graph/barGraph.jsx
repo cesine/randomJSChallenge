@@ -72,7 +72,7 @@ export default class BarGraph extends React.Component {
             </div>
           </div>
           {savedBackup.length > 0 && <div className='col-sm-3'>
-            <div><strong>Backup</strong></div>
+            <div><strong>Previous Run</strong></div>
             <div style={{'backgroundColor': savedPopColor}}>Population: <input
               type="checkbox"
               value="SavedPopulation"

@@ -95,9 +95,9 @@ export default class GraphSection extends React.Component {
         Graph that could be fun:
         <ul>
           <li onClick={this.growthVsDeath}>Population Growth vs Death occurence</li>
-          <li onClick={this.pieChart}>Nbr ship lost over time</li>
-          <li>Pie Shart / bar of type of defect over time.</li>
-          <li>Comparing Current run vs previous run</li>
+          <li onClick={this.pieChart}>Type of death with ratio</li>
+          <li>Number of ship loss over time</li>
+          <li>Ship production increase over time</li>
         </ul>
 
         {displayGraph == 'growthVsDeath' && <BarGraph resultOfgrowth={resultOfgrowth} savedBackup={savedBackup}></BarGraph>}
