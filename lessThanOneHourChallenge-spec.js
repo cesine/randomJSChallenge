@@ -26,33 +26,32 @@
 
 // ToRun: jasmine-node X-spec.js --verbose
 
-var allQ = require('./lessThanOneHourChallenge');
+const allQ = require('./lessThanOneHourChallenge');
+const expect = require('expect.js');
 
-describe('Less than 1h challenge', function() {
-	it('Shoudl summ all number: ', function(){
-		expect(allQ.Q.sumFor([1,2,3,4,5])).toEqual(15);
-		expect(allQ.Q.sumLoop([1,2,3,4,6])).toEqual(16);
-		expect(allQ.Q.sumRecur([1,2,3,4,7])).toEqual(17);
-	});
+describe('Less than 1h challenge', () => {
+  it('Shoudl summ all number: ', () => {
+    expect(allQ.Q.sumFor([1, 2, 3, 4, 5])).toEqual(15);
+    expect(allQ.Q.sumLoop([1, 2, 3, 4, 6])).toEqual(16);
+    expect(allQ.Q.sumRecur([1, 2, 3, 4, 7])).toEqual(17);
+  });
 
-	it('should merge both list', function() {
-		expect(allQ.Q.mergeBothList(['a', 'b', 'c'],[1, 2, 3])).toEqual(['a', 1, 'b', 2, 'c', 3]);
-	});
+  it('should merge both list', () => {
+    expect(allQ.Q.mergeBothList(['a', 'b', 'c'], [1, 2, 3])).toEqual(['a', 1, 'b', 2, 'c', 3]);
+  });
 
-	it('should get a list of all first N Fibonacci number', function() {
-		expect(allQ.Q.fibo(10)).toEqual([0, 1, 1, 2, 3, 5, 8, 13, 21, 34]);
-		expect(allQ.Q.fiboLoop(10)).toEqual([0, 1, 1, 2, 3, 5, 8, 13, 21, 34]);
-	});
+  it('should get a list of all first N Fibonacci number', () => {
+    expect(allQ.Q.fibo(10)).toEqual([0, 1, 1, 2, 3, 5, 8, 13, 21, 34]);
+    expect(allQ.Q.fiboLoop(10)).toEqual([0, 1, 1, 2, 3, 5, 8, 13, 21, 34]);
+  });
 
-	it('should Give me the largest number', function() {
-		expect(allQ.Q.largestNumberFromArray([50, 2, 1, 9])).toEqual(95021);
-		// expect(allQ.Q.largestNumberFromArray([420, 42, 423])).toEqual(42342420); This case dosent work. Expected 42342042 to equal 42342420.
-	});
+  it('should Give me the largest number', () => {
+    expect(allQ.Q.largestNumberFromArray([50, 2, 1, 9])).toEqual(95021);
+    // expect(allQ.Q.largestNumberFromArray([420, 42, 423])).toEqual(42342420); This case dosent work. Expected 42342042 to equal 42342420.
+  });
 
-	it('should give me all possible way of making 100 out of 1 to 9', function() {
-		expect(allQ.Q.giveMeAllPossible100()).toContain('1+2+34–5+67–8+9');
-
-		
-	})
+  it('should give me all possible way of making 100 out of 1 to 9', () => {
+    expect(allQ.Q.giveMeAllPossible100()).toContain('1+2+34–5+67–8+9');
+  });
 });
 

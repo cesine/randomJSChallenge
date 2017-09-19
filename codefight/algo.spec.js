@@ -1,3 +1,4 @@
+const expect = require('expect.js');
 /*
  ======== A Handy Little Jasmine Reference ========
  inspired by  https://github.com/pivotal/jasmine/wiki/Matchers
@@ -24,27 +25,28 @@
  this.addMatchers({});
  */
 
- var all = require('./algo');
-describe('test the middleNumber challenge', function(){
-  it('should pass test 1', function() {
+const all = require('./algo');
+
+describe('test the middleNumber challenge', () => {
+  it('should pass test 1', () => {
     expect(all.Q.middleNumberCute(273, 415)).toEqual(344);
   });
-  it('should pass test 2', function() {
+  it('should pass test 2', () => {
     expect(all.Q.middleNumberCute(263, 416)).toEqual(-1);
   });
-  it('should pass test 3', function() {
+  it('should pass test 3', () => {
     expect(all.Q.middleNumberCute(66, 22)).toEqual(44);
   });
-  it('should pass test 4', function() {
+  it('should pass test 4', () => {
     expect(all.Q.middleNumberCute(23, 77)).toEqual(-1);
   });
-  it('should pass test 5 Big', function() {
+  it('should pass test 5 Big', () => {
     expect(all.Q.middleNumberCute(222222222222222, 222222222222222)).toEqual(222222222222222);
   });
 });
 
-describe('Reverse test, find the pattern', function() {
-  it('should pass test1', function() {
+describe('Reverse test, find the pattern', () => {
+  it('should pass test1', () => {
     // Found it!!!
     // 12   -> 2 -> 1*2
     // 23   -> 6 -> 2*3
@@ -59,7 +61,7 @@ describe('Reverse test, find the pattern', function() {
     expect(all.Q.weirdSum('217493666116294100136179036362199902423986170794769')).toEqual(1014);
   });
 
-  it('should pass test2, rethought', function() {
+  it('should pass test2, rethought', () => {
     // Found it!!!
     // 12   -> 2 -> 1*2
     // 23   -> 6 -> 2*3

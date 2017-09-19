@@ -25,86 +25,86 @@ this.addMatchers({});
 */
 
 // import {SimpleSelect} from './app';
-var exp = require('./app');
+const exp = require('./app');
 
-describe('Testing the basic', function() {
-  it('Should do a simple Select', function(done) {
+describe('Testing the basic', () => {
+  it('Should do a simple Select', (done) => {
     expect(exp).toBeDefined();
     expect(exp.app).toBeDefined();
     expect(exp.app.SimpleSelect).toBeDefined();
-    exp.app.SimpleSelect().then(function(res){
+    exp.app.SimpleSelect().then((res) => {
       expect(res.length).toBeGreaterThan(2);
       done();
-    })
-  })
+    });
+  });
 
-  it('should do a simple insert', function(done) {
-    exp.app.simpleInsert().then(function(res) {
+  it('should do a simple insert', (done) => {
+    exp.app.simpleInsert().then((res) => {
       // console.log(res);
       expect(res.id).toBeDefined();
       done();
     });
-  })
+  });
 
-  it('should call a function', function(done) {
-    exp.app.functionCall().then(function(res) {
+  it('should call a function', (done) => {
+    exp.app.functionCall().then((res) => {
       // console.log(res);
       expect(res[0].id).toEqual(1);
       done();
     });
-  })
+  });
 
-  it('Check the prepared Statement', function(done) {
-    exp.app.singleParam(3).then(function(res){
+  it('Check the prepared Statement', (done) => {
+    exp.app.singleParam(3).then((res) => {
       expect(res.id).toEqual(3);
       done();
     });
   });
 
-  it('Check multiple param', function(done) {
-    exp.app.multiParam(4).then(function(res) {
+  it('Check multiple param', (done) => {
+    exp.app.multiParam(4).then((res) => {
       expect(res.length).toEqual(2);
       done();
     });
   });
 
-  it('checked Names param querry', function(done) {
-    exp.app.namedParam().then(function(res){
+  it('checked Names param querry', (done) => {
+    exp.app.namedParam().then((res) => {
       expect(res.length).toBeGreaterThan(1);
       done();
-    })
-  })
+    });
+  });
 });
 
-describe('Task Section', function() {
-  xit('should chain querry', function(done) {
+describe('Task Section', () => {
+  xit('should chain querry', (done) => {
     // it dosent work, no idea what "t" refer to. :/
-    exp.app.task().then(function(res) {
-      expect(res).toMatch("something");
+    exp.app.task().then((res) => {
+      expect(res).toMatch('something');
       done();
     });
   });
 
-  it('run a massive item', function(done) {
-    exp.app.massive().then(function(res) {
+  it('run a massive item', (done) => {
+    exp.app.massive().then((res) => {
       expect(res.total).toMatch(100);
       done();
     });
   });
 });
 
-describe('Some Stre..a..m...ing', function() {
-  it('should stream a bit', function(done) {
-    exp.app.streamMe().then(function(res) {
+describe('Some Stre..a..m...ing', () => {
+  it('should stream a bit', (done) => {
+    exp.app.streamMe().then((res) => {
       expect(res).toBeGreaterThan(30);
       done();
-    })
-  })
+    });
+  });
 });
 
-describe('Using JSON instead of Param String', function() {
-  it('should send Into the the DB', function(done){
-    exp.app.someJson().then(function(res){
+describe('Using JSON instead of Param String', () => {
+  it('should send Into the the DB', (done) => {
+    exp.app.someJson().then((res) => {
       expect(res).toMatch('success');
       done();
     });

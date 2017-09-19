@@ -1,20 +1,19 @@
-// This is from: https://github.com/bulkan/async-you 
+// This is from: https://github.com/bulkan/async-you
 // Design to try/play with the Async Library
 
-var http = require('http'), 
-async = require('async'),
-fs = require('fs');
+let http = require('http'),
+  async = require('async'),
+  fs = require('fs');
 
 function gettingSomeWaterfall() {
+  // var fetchServer = "http://localhost:3131";
+  const fileTORead = process.argv[2];
+  const body = '';
+  // console.log(fetchServer);
 
-	// var fetchServer = "http://localhost:3131";
-	var fileTORead = process.argv[2];
-	var body = '';
-	// console.log(fetchServer);
-
-	async.waterfall([
-	  function(callToPassArgToNextFnct){
-	    fs.readFile(fileTORead, function(err, data){
+  async.waterfall([
+	  function (callToPassArgToNextFnct) {
+	    fs.readFile(fileTORead, (err, data) => {
 	      if (err) {
 	      	return done(err, null);
 	      }
@@ -22,221 +21,203 @@ function gettingSomeWaterfall() {
 	    });
 	  },
 
-	  function(data2, callToPassArgToNextFnct){
-	    var body = '';
-	    http.get(data2.toString().trimRight(), function(res){
-	      res.on('data', function(chunk){
+	  function (data2, callToPassArgToNextFnct) {
+	    let body = '';
+	    http.get(data2.toString().trimRight(), (res) => {
+	      res.on('data', (chunk) => {
 	        body += chunk.toString();
 	      });
 
-	      res.on('end', function(chunk){
+	      res.on('end', (chunk) => {
 	        callToPassArgToNextFnct(null, body);
 	      });
-	    }).on('error', function(e){
+	    }).on('error', (e) => {
 	      callToPassArgToNextFnct(e);
 	    });
-	  }
-	], function done(err, result){
+	  },
+  ], (err, result) => {
 	  // if (err) {return console.error(err)};
 	  console.log(result);
-	});
-
-} //gettingSomeWaterfall(); // WATERFALL Exercise 1 of 7
-
+  });
+} // gettingSomeWaterfall(); // WATERFALL Exercise 1 of 7
 
 
-function makeSomeSeriesHappen () {
-	async.series({
-		requestOne: function(arvgToPassToNext){
-			fetchSomeUrl(process.argv[2], arvgToPassToNext);
-		},
-		requestTwo: function(arvgToPassToNext){
-			fetchSomeUrl(process.argv[3], arvgToPassToNext);
-		}
-	}, function(err, result) {
-		if (err) {return console.error("ERROR: ", err);}
-		console.log(result);
-	});
+function makeSomeSeriesHappen() {
+  async.series({
+    requestOne(arvgToPassToNext) {
+      fetchSomeUrl(process.argv[2], arvgToPassToNext);
+    },
+    requestTwo(arvgToPassToNext) {
+      fetchSomeUrl(process.argv[3], arvgToPassToNext);
+    },
+  }, (err, result) => {
+    if (err) { return console.error('ERROR: ', err); }
+    console.log(result);
+  });
 
-	function fetchSomeUrl (url, arvgToPassToNext) {
-		var body = '';
-		http.get(url, function(res) {
-				res.on('data', function(chunk) {
-					body += chunk.toString();
-				});
-				res.on('end', function(chunk) {
-					arvgToPassToNext(null, body);
-				});
-			}).on('error', function(err){
-				arvgToPassToNext(err);
-			});
-	} 
-
-
-} //makeSomeSeriesHappen(); // SERIES OBJECT Exercise 2 of 7
+  function fetchSomeUrl(url, arvgToPassToNext) {
+    let body = '';
+    http.get(url, (res) => {
+      res.on('data', (chunk) => {
+        body += chunk.toString();
+      });
+      res.on('end', (chunk) => {
+        arvgToPassToNext(null, body);
+      });
+    }).on('error', (err) => {
+      arvgToPassToNext(err);
+    });
+  }
+} // makeSomeSeriesHappen(); // SERIES OBJECT Exercise 2 of 7
 
 
 function gettingSomeOfEach() {
-	var arrayToCheck = [process.argv[2], process.argv[3]];
+  const arrayToCheck = [process.argv[2], process.argv[3]];
 
-	async.each(arrayToCheck, function(url, resolve) {
-		var body = '';
-		http.get(url, function(res) {
-			res.on('data', function(chunk){
-				body += chunk.toString();
-			});
-			res.on('end', function() {
-				resolve(null, body);
-			});
-		}).on('error', function(err){
-			resolve(err);
-		});
-	}, function (err) {
-		if (err) {return console.log(err);}
-	});
+  async.each(arrayToCheck, (url, resolve) => {
+    let body = '';
+    http.get(url, (res) => {
+      res.on('data', (chunk) => {
+        body += chunk.toString();
+      });
+      res.on('end', () => {
+        resolve(null, body);
+      });
+    }).on('error', (err) => {
+      resolve(err);
+    });
+  }, (err) => {
+    if (err) { return console.log(err); }
+  });
+} // gettingSomeOfEach(); //EACH Exercise 3 of 7
 
+function mapMeSomething() {
+  const arrayToCheck = [process.argv[2], process.argv[3]];
 
-} //gettingSomeOfEach(); //EACH Exercise 3 of 7
-
-function mapMeSomething () {
-	var arrayToCheck = [process.argv[2], process.argv[3]];
-
-	async.map(arrayToCheck, function(url, resolve) {
-		var body = '';
-		http.get(url, function(res) {
-			res.on('data', function(chunk){
-				body += chunk.toString();
-			});
-			res.on('end', function() {
-				resolve(null, body);
-			});
-		}).on('error', function(err){
-			resolve(err);
-		});
-	}, function (err, result) {
-		if (err) {return console.error(err);}
-		console.log(result);
-	});
-
-
-} //mapMeSomething(); // MAP Exercise 4 of 7
+  async.map(arrayToCheck, (url, resolve) => {
+    let body = '';
+    http.get(url, (res) => {
+      res.on('data', (chunk) => {
+        body += chunk.toString();
+      });
+      res.on('end', () => {
+        resolve(null, body);
+      });
+    }).on('error', (err) => {
+      resolve(err);
+    });
+  }, (err, result) => {
+    if (err) { return console.error(err); }
+    console.log(result);
+  });
+} // mapMeSomething(); // MAP Exercise 4 of 7
 
 function timeMeSomething() {
-	var url = process.argv[2];
-	var port = process.argv[3];
-	var optsPush = {
-		hostname: url,
-		path: '/users/create',
-		method: 'POST',
-		port: port
-	};
+  const url = process.argv[2];
+  const port = process.argv[3];
+  const optsPush = {
+    hostname: url,
+    path: '/users/create',
+    method: 'POST',
+    port,
+  };
 
-	var optsGet = {
-		hostname: url,
-		path: '/users/',
-		method: 'GET',
-		port: port
-	};
+  const optsGet = {
+    hostname: url,
+    path: '/users/',
+    method: 'GET',
+    port,
+  };
 
-	// console.log(opts);
+  // console.log(opts);
 
-	async.times(5, function(nbr, callNext) {
-		nbr ++;
-		var body = '', item = '';
-		var req = http.request(optsPush, function(res) {
-			res.on('data', function(chunk) {body += chunk;});
-			res.on('end', function(err) {
-				return body;
-			});
-		});
-		req.write(JSON.stringify({"user_id": nbr}));
-		req.on('error', function(err) {
-			console.log("error inside the POST!!!");
-		});
-		req.end(function(){callNext(null, nbr); });
-	}, function(err, users){
-		var body = '', item = '';
-		var req = http.request(optsGet, function(res) {
-			res.on('data', function(chunk) {body += chunk;});
-			res.on('end', function(err) {
-				console.log(body);
-			});
-		});
-		req.write('GET');
-		req.on('error', function(err) {
-			console.log("Error inside the GET!!!", err);
-		});
-		req.end(function(){});
-	});
-
-} //timeMeSomething(); // TIMES Exercise 5 of 7
+  async.times(5, (nbr, callNext) => {
+    nbr++;
+    let body = '',
+      item = '';
+    const req = http.request(optsPush, (res) => {
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', err => body);
+    });
+    req.write(JSON.stringify({ user_id: nbr }));
+    req.on('error', (err) => {
+      console.log('error inside the POST!!!');
+    });
+    req.end(() => { callNext(null, nbr); });
+  }, (err, users) => {
+    let body = '',
+      item = '';
+    const req = http.request(optsGet, (res) => {
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', (err) => {
+        console.log(body);
+      });
+    });
+    req.write('GET');
+    req.on('error', (err) => {
+      console.log('Error inside the GET!!!', err);
+    });
+    req.end(() => {});
+  });
+} // timeMeSomething(); // TIMES Exercise 5 of 7
 
 function reduceSomethingIfYouAreNice() {
-
 // reduce(coll, memo, iteratee, [callback])
 
-	var url = process.argv[2];
-	// console.log(url);
-	var arrayToFetch = ['one', 'two', 'three'];
-	async.reduce(arrayToFetch, 0, function(lastState, item, sendNext){
-		var body = '';
-		http.get(url + "?number=" +item, function(res){
-			res.on('data', function(chunk) {body += chunk; });
-			res.on('end', function(chunk) {
-				sendNext(null, lastState + parseFloat(body));
-			});
-			res.on('error', function(err) {console.log("FUCK THIS Err:", err); });
-		}).on('error', function(err) {console.log("FUCK THIS Err:", err); });
-	}, function(err, result) {
-		if (err) {console.log(err);}
-		console.log(result);
-	});
-
-} reduceSomethingIfYouAreNice(); //REDUCE Exercise 6 of 7
+  const url = process.argv[2];
+  // console.log(url);
+  const arrayToFetch = ['one', 'two', 'three'];
+  async.reduce(arrayToFetch, 0, (lastState, item, sendNext) => {
+    let body = '';
+    http.get(`${url}?number=${item}`, (res) => {
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', (chunk) => {
+        sendNext(null, lastState + parseFloat(body));
+      });
+      res.on('error', (err) => { console.log('FUCK THIS Err:', err); });
+    }).on('error', (err) => { console.log('FUCK THIS Err:', err); });
+  }, (err, result) => {
+    if (err) { console.log(err); }
+    console.log(result);
+  });
+} reduceSomethingIfYouAreNice(); // REDUCE Exercise 6 of 7
 
 function lastOneIsNotAWish() {
-	var url = process.argv[2];
-	var target = 'meerkat';
-	var currentStr = '';
-	var iter = 1;
+  const url = process.argv[2];
+  const target = 'meerkat';
+  let currentStr = '';
+  let iter = 1;
 
 
-	var testFnct = function () {
-		if (currentStr.indexOf(target) > -1) {
-			return false;
-		} else {
-			return true;
-		}
-	};
+  const testFnct = function () {
+    if (currentStr.indexOf(target) > -1) {
+      return false;
+    }
+    return true;
+  };
 
-	var operationFnct = function (callback) {
-		var body = '';
-		http.get(url, function(res) {
-			res.on('data', function(chunk) {body += chunk.toString();});
-			res.on('end', function() {
-				iter ++;
-				currentStr = body;
-				callback(null, body);
-			});
-			res.on('error', function(err) {
-			console.log("MOTHERFUCKER OF ERROR: ",err);
-		});
-		}).on('error', function(err) {
-			callback(err);
-		});
-	};
+  const operationFnct = function (callback) {
+    let body = '';
+    http.get(url, (res) => {
+      res.on('data', (chunk) => { body += chunk.toString(); });
+      res.on('end', () => {
+        iter++;
+        currentStr = body;
+        callback(null, body);
+      });
+      res.on('error', (err) => {
+        console.log('MOTHERFUCKER OF ERROR: ', err);
+      });
+    }).on('error', (err) => {
+      callback(err);
+    });
+  };
 
-	var logsIter = function(err, someData) {
-		if (err) {console.error("TOTALErr: ",err);}
-		console.log(iter);
-	};
+  const logsIter = function (err, someData) {
+    if (err) { console.error('TOTALErr: ', err); }
+    console.log(iter);
+  };
 
-	async.whilst(testFnct, operationFnct, logsIter);
-
-} //lastOneIsNotAWish();  //WHILST Exercise 7 of 7 --> Their soltion dosent work eather but whathever, the principle is there. 
-
-
-
-
-
+  async.whilst(testFnct, operationFnct, logsIter);
+} // lastOneIsNotAWish();  //WHILST Exercise 7 of 7 --> Their soltion dosent work eather but whathever, the principle is there.
 

@@ -25,36 +25,34 @@
  */
 
 // ToRun: jasmine-node redditRandomQ-spec.js --verbose
-var allQ = require('./redditRandomQ');
+const allQ = require('./redditRandomQ');
+const expect = require('expect.js');
 
-describe('Reddit random question Testing', function() {
-	it('Should test the Pascal Triangle', function() {
-		expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(1)).toEqual([[1]]);
-		expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(2)).toEqual([[1],[1,1]]);
-		expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(3)).toEqual([[1],[1,1],[1,2,1]]);
-		expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(4)).toEqual([[1],[1,1],[1,2,1],[1,3,3,1]]);
-		expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(7)).toEqual([[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1],[1,5,10,10,5,1],[1,6,15,20,15,6,1]]);
-	});
+describe('Reddit random question Testing', () => {
+  it('Should test the Pascal Triangle', () => {
+    expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(1)).toEqual([[1]]);
+    expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(2)).toEqual([[1], [1, 1]]);
+    expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(3)).toEqual([[1], [1, 1], [1, 2, 1]]);
+    expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(4)).toEqual([[1], [1, 1], [1, 2, 1], [1, 3, 3, 1]]);
+    expect(allQ.Q.returnAllRowOfPascalBeforeNLoop(7)).toEqual([[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1], [1, 5, 10, 10, 5, 1], [1, 6, 15, 20, 15, 6, 1]]);
+  });
 
-	it('Should return me the Row of the Triangle only', function() {
-		expect(allQ.Q.returnRowOfPascalBeforeNMath(1)).toEqual([1]);
-		expect(allQ.Q.returnRowOfPascalBeforeNMath(2)).toEqual([1,1]);
-		expect(allQ.Q.returnRowOfPascalBeforeNMath(3)).toEqual([1,2,1]);
-		expect(allQ.Q.returnRowOfPascalBeforeNMath(4)).toEqual([1,3,3,1]);
-		expect(allQ.Q.returnRowOfPascalBeforeNMath(7)).toEqual([1,6,15,20,15,6,1]);
-	});
+  it('Should return me the Row of the Triangle only', () => {
+    expect(allQ.Q.returnRowOfPascalBeforeNMath(1)).toEqual([1]);
+    expect(allQ.Q.returnRowOfPascalBeforeNMath(2)).toEqual([1, 1]);
+    expect(allQ.Q.returnRowOfPascalBeforeNMath(3)).toEqual([1, 2, 1]);
+    expect(allQ.Q.returnRowOfPascalBeforeNMath(4)).toEqual([1, 3, 3, 1]);
+    expect(allQ.Q.returnRowOfPascalBeforeNMath(7)).toEqual([1, 6, 15, 20, 15, 6, 1]);
+  });
 
-	it('Should give the most repeated string in the array', function() {
-		expect(allQ.Q.theMostFrequentStringInArray(['asdf', 'this poney is evil', 'asdf', 'asdf', 'This is not real'])).toEqual("asdf");
-	});
+  it('Should give the most repeated string in the array', () => {
+    expect(allQ.Q.theMostFrequentStringInArray(['asdf', 'this poney is evil', 'asdf', 'asdf', 'This is not real'])).toEqual('asdf');
+  });
 
-	it('Should tell me is the word is present in order in the array of array', function() {
-		var arrayToCheck = [['A','G','H','N'], ['U','L','O','A'], ['N','M','L','K'], ['L','B','V','M']];
-		expect(allQ.Q.findWordInArray('ALL', arrayToCheck)).toBeFalsy();
-		expect(allQ.Q.findWordInArray('LOAN', arrayToCheck)).toBeTruthy();
-	});
+  it('Should tell me is the word is present in order in the array of array', () => {
+    const arrayToCheck = [['A', 'G', 'H', 'N'], ['U', 'L', 'O', 'A'], ['N', 'M', 'L', 'K'], ['L', 'B', 'V', 'M']];
+    expect(allQ.Q.findWordInArray('ALL', arrayToCheck)).toBeFalsy();
+    expect(allQ.Q.findWordInArray('LOAN', arrayToCheck)).toBeTruthy();
+  });
 });
-
-
-
 

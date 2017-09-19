@@ -1,5 +1,5 @@
 
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 // https://codefights.com/challenge/2c7Jcq5H2FM9RbQ77/main
 // Given two numbers n and m, find their digital average.
 // The digital average can be calculated only if all digits in their sum are even. To obtain the digital average, each digit of this sum should be divided by 2.
@@ -9,62 +9,59 @@
 // middleNumber(n, m) = 344.
 // n + m = 688. 6 / 2 = 3, and 8 / 2 = 4. Thus, the answer is 344.
 
-var Q = {};
+const Q = {};
 
 Q.middleNumber = (n, m) => {
   // This work in 10ms and with big number. But it was mainly to play with split. It is not a Viable function.
-  'use strict';
-  let sum = (n+m).toString();
-  let total = sum.split('').map(obj => {return ~~obj / 2;}).join('');
+
+
+  const sum = (n + m).toString();
+  const total = sum.split('').map(obj => ~~obj / 2).join('');
   if (total != parseInt(total)) { return -1; } // The ~~ would not work for number larger than 1Billion.
   return parseInt(total);
 };
 
 Q.middleNumberCute = (n, m) => {
   // This work in 10ms and with big number.
-  'use strict';
-  let sum = (n+m);
-  if(/[13579]/.test(sum)) {
+
+
+  const sum = (n + m);
+  if (/[13579]/.test(sum)) {
     return -1;
-  } else {
-    // Only return if the Sum is ALL Pair number.
-    return sum / 2;
   }
+  // Only return if the Sum is ALL Pair number.
+  return sum / 2;
 };
 
 // This is the winner's solution. Works on 11ms
 // Dosent work for number larger than 1Billion. Not sure why.
-Q.WinnerSolution = (n, m) => -/[13579]/.test(n += m) | n/2;
+Q.WinnerSolution = (n, m) => -/[13579]/.test(n += m) | n / 2;
 
 // Reverse find the challenge. --> Found it, String "abcd" a*b + b*c + c*d
 // https://codefights.com/challenge/ZCYFuFbwzddBXXHgp/main
 // That work, now let's try shrinking it down
-Q.weirdSum = s => {
-  'use strict';
-  let numberStr = s.split('');
+Q.weirdSum = (s) => {
+  const numberStr = s.split('');
   return recursion(0, ~~numberStr.pop(), numberStr);
 };
 
 recursion = (sum, prev, remaning) => {
-  'use strict';
   if (remaning.length === 0) {
     return sum;
   }
-  let next = ~~remaning.pop();
-  return recursion(sum + next*prev, next, remaning);
+  const next = ~~remaning.pop();
+  return recursion(sum + next * prev, next, remaning);
 };
 
 // Attemp2 reduce.
-Q.weirdSum2 = s => {
-  'use strict';
+Q.weirdSum2 = (s) => {
   let sum = 0;
   s.split('').reduce((prev, curr) => {
-    sum += prev*curr;
+    sum += prev * curr;
     return curr;
   });
   return sum;
 };
-
 
 
 exports.Q = Q;
