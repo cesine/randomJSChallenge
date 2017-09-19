@@ -55,7 +55,7 @@ Q.mergeBothList = function (arr1, arr2) {
 
 // Prob 3, Find Fibo Number Nth.
 Q.fibo = function (upToNbr, arrToPushTo) {
-  if (arrToPushTo == undefined) {
+  if (arrToPushTo === undefined) {
     var arrToPushTo = [0, 1];
   }
   const len = arrToPushTo.length;
