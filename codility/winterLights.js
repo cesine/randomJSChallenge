@@ -64,8 +64,18 @@ const countAllInSubChain = (chain, nbr) => [...chain].map((item, index) => {
   return isChainSymetrical([...chain].splice(index, nbr));
 }).reduce((a, b) => a + b, 0);
 
+const countAllSymetricSubChain = (chainString) => {
+  const chain = chainString.split('').map(item => parseInt(item, 10));
+  let base = chain.length;
+  for (let i = 1; i < chain.length; i++) {
+    base += countAllInSubChain(chain, i + 1);
+  }
+  return base;
+};
+
 module.exports = {
   countAllInSubChain,
   isChainSymetrical,
+  countAllSymetricSubChain,
 };
 // function solution(S);
