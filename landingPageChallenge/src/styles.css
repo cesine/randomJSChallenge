@@ -1,0 +1,91 @@
+.wrapper, html, body {
+    height:100%;
+    margin:0;
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: center;
+}
+
+.header-container {
+  flex: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-self: stretch;
+  background-color: #e8be02;
+}
+.header-container div.nav-bar {
+  align-self: stretch;
+  height: 48px;
+  background-color: #4F4D53
+}
+.header-container div.header-band {
+  align-content: center;
+  flex: auto;
+  text-align: center;
+}
+
+.content-container {
+  text-align: center;
+}
+
+.footer-container {
+  flex-flow: column;
+  align-self: stretch;
+}
+
+.footer-container div.footer-band {
+  flex: auto;
+  align-self: flex-end;
+  height: 12px;
+  background-color: #E8BE02
+}
+
+.footer-container div.footer {
+  flex: auto;
+  flex-direction: row;
+  height: 320px;
+  background-color: #4F4D53;
+  justify-content: space-around;
+  display: flex;
+}
+
+.team-box {
+  flex: auto; /* More control if we want to*/
+}
+
+h1 {
+  font-family: 'Roboto';
+  font-weight: 900;
+  color: #4F4D53;
+  font-size: 100px;
+}
+h2 {
+  font-family: 'Roboto';
+  font-weight: 900;
+  color: #E8BE02;
+  font-size: 64px;
+}
+
+h3 {
+  font-family: 'Roboto';
+  font-weight: 900;
+  color: #E8BE02;
+  font-size: 20px;
+}
+
+h4 {
+  font-family: 'Roboto';
+  font-weight: 400;
+  color: #FFFFFF;
+  font-size: 14px;
+}
+
+p {
+  font-family: 'Roboto';
+  font-weight: 400;
+  color: #4F4D53;
+  font-size: 20px;
+}

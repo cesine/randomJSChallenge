@@ -6,6 +6,7 @@
   "dependencies": {
     "bl": "^1.1.2",
     "es6-promise": "^3.2.1",
+    "node-static": "^0.7.10",
     "q-fs": "^0.1.36",
     "q-io": "^1.13.2",
     "scope-chains-closures": "^1.0.4",
