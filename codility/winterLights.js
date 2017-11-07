@@ -28,11 +28,8 @@
 // expected worst-case space complexity is O(1) (not counting the storage required for input arguments).
 
 // How I would do it???
-const breakAllInSubChain = (chain) => {
-  // extract all item of 1,2,3,4... chain.length
-  // We can skip the Chain legth of 1 since it is by default symetrical.
-  const tmp = [...chain];
-};
+// extract all item of 1,2,3,4... chain.length
+// We can skip the Chain legth of 1 since it is by default symetrical.
 
 const isChainSymetrical = (chain) => {
   // if chain is odd then we are allowed 1 odd number.
@@ -45,10 +42,10 @@ const isChainSymetrical = (chain) => {
   if (chain.length % 2 === 0) {
     for (let i = 0; i < sumOfLight.length; i++) {
       if (sumOfLight[i] && sumOfLight[i] % 2 !== 0) {
-        return false;
+        return 0;
       }
     }
-    return true;
+    return 1;
   }
   let nbrOfOdd = 0; // we need exactly 1
   for (let i = 0; i < sumOfLight.length; i++) {
@@ -56,11 +53,19 @@ const isChainSymetrical = (chain) => {
       nbrOfOdd++;
     }
   }
-  if (nbrOfOdd === 1) { return true; }
-  return false;
+  if (nbrOfOdd === 1) { return 1; }
+  return 0;
 };
+
+const countAllInSubChain = (chain, nbr) => [...chain].map((item, index) => {
+  if (index + nbr > chain.length) {
+    return 0;
+  }
+  return isChainSymetrical([...chain].splice(index, nbr));
+}).reduce((a, b) => a + b, 0);
+
 module.exports = {
-  breakAllInSubChain,
+  countAllInSubChain,
   isChainSymetrical,
 };
 // function solution(S);
