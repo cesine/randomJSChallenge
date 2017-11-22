@@ -1,7 +1,7 @@
 const expect = require('expect.js');
 const { isChainSymetrical, countAllInSubChain, countAllSymetricSubChain } = require('../codility/winterLights');
 
-describe.only('testing the winterLights challenge', () => {
+describe('testing the winterLights challenge', () => {
   it('test the isChainSymetrical', () => {
     expect(isChainSymetrical([6])).to.be(1);
     expect(isChainSymetrical([0])).to.be(1);
@@ -22,5 +22,7 @@ describe.only('testing the winterLights challenge', () => {
 
   it('test the full flow', () => {
     expect(countAllSymetricSubChain('02002')).to.be(11);
+    // Well it work for small/medium number, but if I go big it is a double Factorial
+    // I got 20% on their benmark because I did not think about optimizing for massive number.
   });
 });
