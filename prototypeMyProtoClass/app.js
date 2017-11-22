@@ -21,6 +21,9 @@ class Polygon {
     this.height = height;
     this.width = width;
   }
+  static notRelatedToAnything(a) {
+    return a;
+  }
 }
 
 class Square extends Polygon {
@@ -69,9 +72,31 @@ B.prototype = Object.create(A.prototype, {
 B.prototype.constructor = B;
 // End of B shall inherit from A, wet dream of Class lover. Code should be easy to read and debug, and class extension are not.
 
+class Cat {
+  constructor(name) {
+    this.name = name;
+    this.power = 'stealth';
+  }
+  speak() {
+    return `${this.name} is speaking`;
+  }
+}
+
+class Lion extends Cat {
+  constructor(name) {
+    super('Dumest cat ever');
+    this.name = name;
+  }
+  speak() {
+    const initially = super.speak();
+    return `${initially}, but now Roaring`;
+  }
+}
+
 module.exports = {
   one,
   Graph,
   Square,
   B,
+  Lion,
 };
