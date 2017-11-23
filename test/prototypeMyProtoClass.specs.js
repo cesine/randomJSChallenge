@@ -5,6 +5,7 @@ const {
   Square,
   B,
   Lion,
+  Programmer,
 } = require('../prototypeMyProtoClass/app');
 
 describe.only('For all those class lover', () => {
@@ -54,5 +55,12 @@ describe.only('For all those class lover', () => {
   it('test the extend and build over too much abstraction', () => {
     const l = new Lion('Fuzzy');
     expect(l.speak()).to.be('Fuzzy is speaking, but now Roaring');
+  });
+
+  it('test my knoledge the day after', () => {
+    const bob = new Programmer('Bob', 'Javascript');
+    expect(bob.name).to.be('Bob');
+    expect(bob.expertise).to.be('Bob is ok with Javascript');
+    expect(bob.tendency()).to.be('Bob is Asociable');
   });
 });

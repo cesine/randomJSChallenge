@@ -93,10 +93,35 @@ class Lion extends Cat {
   }
 }
 
+class Person {
+  constructor(name) {
+    this.name = name;
+    this.personality = 'Asociable';
+  }
+  tendency() {
+    return this.personality;
+  }
+}
+
+class Programmer extends Person {
+  constructor(name, language) {
+    super(name);
+    this.language = language;
+  }
+  get expertise() {
+    return `${this.name} is ok with ${this.language}`;
+  }
+  tendency() {
+    const personality = super.tendency();
+    return `${this.name} is ${personality}`;
+  }
+}
+
 module.exports = {
   one,
   Graph,
   Square,
   B,
   Lion,
+  Programmer,
 };
