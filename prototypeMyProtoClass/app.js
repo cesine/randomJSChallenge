@@ -117,6 +117,9 @@ class Programmer extends Person {
   }
 }
 
+// Same but in a Functional way with Hiher functions with closure.
+const makeProgrammerTendency = personality => name => `${name} is ${personality}`;
+
 module.exports = {
   one,
   Graph,
@@ -124,4 +127,5 @@ module.exports = {
   B,
   Lion,
   Programmer,
+  makeProgrammerTendency,
 };

@@ -6,6 +6,7 @@ const {
   B,
   Lion,
   Programmer,
+  makeProgrammerTendency,
 } = require('../prototypeMyProtoClass/app');
 
 describe.only('For all those class lover', () => {
@@ -62,5 +63,10 @@ describe.only('For all those class lover', () => {
     expect(bob.name).to.be('Bob');
     expect(bob.expertise).to.be('Bob is ok with Javascript');
     expect(bob.tendency()).to.be('Bob is Asociable');
+  });
+
+  it('Functional way without class', () => {
+    const personTendency = makeProgrammerTendency('Asociable');
+    expect(personTendency('Bob')).to.be('Bob is Asociable');
   });
 });
