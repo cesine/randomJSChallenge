@@ -1,5 +1,7 @@
 const expect = require('expect.js');
-const { findTwoThatSumToTarget, isRootToLeafSumMatch } = require('../leetcode/easy');
+const { findTwoThatSumToTarget, isRootToLeafSumMatch } = require('../leetCode/easy');
+
+const { isValidBST } = require('../leetCode/medium');
 
 const generateList = (nbr) => {
   const tmp = [];
@@ -9,8 +11,8 @@ const generateList = (nbr) => {
   return tmp;
 }
 
-describe('LeetCode testing', () => {
-  describe.only('Easy testing', () => {
+describe.only('LeetCode testing', () => {
+  describe('Easy testing', () => {
     it('Should find 2 item that sum to match a value', () => {
       // 4 test take 13ms
       expect(findTwoThatSumToTarget(9, [2, 7, 11, 15])).to.eql([0,1]);
@@ -73,5 +75,44 @@ describe('LeetCode testing', () => {
 
       });
     })
+  })
+  describe('Medium testing', () => {
+    describe('test Binary tree', () => {
+      it('Base case', () => {
+        const validTree = {
+          value: 5,
+          left: { value: 1 },
+          right: { value: 6 }
+        }
+        expect(isValidBST(validTree)).to.eql(true);
+        const inValidTree = {
+          value: 5,
+          left: { value: 6 },
+          right: { value: 6 }
+        }
+        expect(isValidBST(inValidTree)).to.eql(false);
+      });
+
+      it('test more complex tree', () => {
+        //     5
+        //    / \
+        //   1   6
+        //      / \
+        //     3   4
+        let tree = {
+          value: 5,
+          left: { value: 1 },
+          right: {
+            value: 6,
+            left:  { value: 3 },
+            right: { value: 4 },
+          }
+        };
+        expect(isValidBST(tree)).to.eql(false);
+        // making it right.
+        tree.right.right.value = 7;
+        expect(isValidBST(tree)).to.eql(true);
+      });
+    });
   })
 })
