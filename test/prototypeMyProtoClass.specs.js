@@ -9,7 +9,7 @@ const {
   makeProgrammerTendency,
 } = require('../prototypeMyProtoClass/app');
 
-describe.only('For all those class lover', () => {
+describe('For all those class lover', () => {
   it('test one', () => {
     expect(one.m()).to.be(3);
   });
