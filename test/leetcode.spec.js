@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const { findTwoThatSumToTarget } = require('../leetcode/easy');
+const { findTwoThatSumToTarget, isRootToLeafSumMatch } = require('../leetcode/easy');
 
 const generateList = (nbr) => {
   const tmp = [];
@@ -19,5 +19,59 @@ describe('LeetCode testing', () => {
       expect(findTwoThatSumToTarget(200, generateList(100))).to.eql('No two sum solution');
       expect(findTwoThatSumToTarget(10000, generateList(1000))).to.eql('No two sum solution');
     });
+
+    describe('BinaryPathSum', () => {
+      it('Test the base logic', () => {
+        const tree = { value: 5 }
+        expect(isRootToLeafSumMatch(tree, 5)).to.eql(true);
+      });
+
+      it('Should check if tree traversing sum match value', () => {
+        //       5
+        //      / \
+        //     4   8
+        //    /   / \
+        //   11  13  4
+        //  /  \      \
+        // 7    2      1
+        const tree = {
+          value: 5,
+          children: [
+            {
+              value: 4,
+              children: [
+                {
+                  value: 11,
+                  children: [
+                    { value: 7 },
+                    { value: 2 }
+                  ]
+                }
+              ]
+            },
+            {
+              value: 8,
+              children: [
+                { value: 13 },
+                {
+                  value: 4,
+                  children: [
+                    { value: 1 }
+                  ]
+                }
+              ]
+            }
+          ]
+        };
+
+        expect(isRootToLeafSumMatch(tree, 22)).to.eql(true);
+        expect(isRootToLeafSumMatch(tree, 5+4+11+7)).to.eql(true);
+        expect(isRootToLeafSumMatch(tree, 5+8+13)).to.eql(true);
+        expect(isRootToLeafSumMatch(tree, 5+8+4+1)).to.eql(true);
+        expect(isRootToLeafSumMatch(tree, 4)).to.eql(false); // exit early
+        expect(isRootToLeafSumMatch(tree, 50)).to.eql(false); // never get there
+
+      });
+    })
   })
 })
