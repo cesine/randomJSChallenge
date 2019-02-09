@@ -280,6 +280,38 @@ describe('LeetCode testing', () => {
         const sum = walkPoolsUsingBoxes(singleHoleof1);
         expect(sum).to.eql(1);
       });
+      it('test walk medium pool single pool', () => {
+        const singleHoleof1 = [
+          [1,3,3,3],
+          [4,5,5,5],
+          [2,6,2,6],
+          [2,2,5,1]
+        ];
+        const sum = walkPoolsUsingBoxes(singleHoleof1);
+        expect(sum).to.eql(3);
+      });
+
+      it('test walk medium pool', () => {
+        const singleHoleof1 = [
+          [1,3,3,3],
+          [4,1,5,5],
+          [2,6,2,6],
+          [2,2,5,1]
+        ];
+        const sum = walkPoolsUsingBoxes(singleHoleof1);
+        expect(sum).to.eql(5);
+      });
+
+      it('test walk medium n x m pool', () => {
+        const singleHoleof1 = [
+          [1,3,3,3,3,1],
+          [4,1,5,5,5,4],
+          [2,6,2,6,7,2],
+          [2,2,5,1,3,2]
+        ];
+        const sum = walkPoolsUsingBoxes(singleHoleof1);
+        expect(sum).to.eql(5);
+      });
     });
   })
 })

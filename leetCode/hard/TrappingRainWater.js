@@ -126,13 +126,20 @@ const walkPools = function(matrix) {
 
 
 const walkPoolsUsingBoxes = function(matrix) {
-  const box = {};
-  box.center = matrix[1][1];
-  box.top = matrix[0][1];
-  box.left = matrix[1][0];
-  box.right = matrix[1][2];
-  box.bottom = matrix[2][1];
-  return findPoolFromBox(box).maxHeight;
+  let totalFilled = 0;
+  for (var v = 1; v < matrix.length - 1; v++) {
+    for (var h = 1; h < matrix[0].length - 1; h++) {
+      const box = {
+        center: matrix[v][h],
+        top: matrix[v - 1][h],
+        left: matrix[v][h -1],
+        right: matrix[v][h + 1],
+        bottom: matrix[v + 1][h],
+      };
+      totalFilled += findPoolFromBox(box).maxHeight;
+    }
+  }
+ return totalFilled;
 }
 
 module.exports = {
