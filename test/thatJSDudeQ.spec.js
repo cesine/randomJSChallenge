@@ -83,13 +83,13 @@ describe('Question of 0', () => {
 describe('Testing Multiple Multiplication', () => {
   it('should return the sum of Function', () => {
     // javascript console.log(mul(2)(3)(4)); // output : 24 console.log(mul(4)(3)(4)); // output : 48
-    expect(Qmul.mul(2)(3)(4)).to.eql(24);
-    expect(Qmul.mul(4)(3)(4)).to.eql(48);
+    expect(Qmul.mul(2)(3)(4)()).to.eql(24);
+    expect(Qmul.mul(4)(3)(4)()).to.eql(48);
   });
 
   it('should return the sum of Function', () => {
     // javascript console.log(mul(2)(3)(4)); // output : 24 console.log(mul(4)(3)(4)); // output : 48
-    expect(Qmul.recuMult(2)(3)(4)).to.eql(24);
-    expect(Qmul.recuMult(4)(3)(4)).to.eql(48);
+    expect(Qmul.recuMult(2)(3)(4)()).to.eql(24);
+    expect(Qmul.recuMult(4)(3)(4)()).to.eql(48);
   });
 });

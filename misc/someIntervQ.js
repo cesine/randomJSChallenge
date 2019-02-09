@@ -216,27 +216,27 @@ const findTheMissingtwo = function (arrToCheck) {
 // any character.
 // Option Recursive or Loop.
 
-const isMatch = function (strToMatch, testStr) {
+let isMatch = function (strToMatch, testStr) {
   // edge cases: * ** *****
   // Step 1 remove all duplicate of ** in the regEx;
   if (!testStr) {
     if (!strToMatch) {
-      console.log('We hit the last car and the last Test.');
+      // console.log('We hit the last car and the last Test.');
       return true;
     }
-    console.log('We hit the last Test but still have a string');
+    // console.log('We hit the last Test but still have a string');
     return false;
   }
 
   testStr = cleanTestStr(testStr); // This should be remove outside since it need to be done only once.
   if (testStr === '*') {
-    console.log('Then there is only * in the string so return true');
+    // console.log('Then there is only * in the string so return true');
     return true;
   }
 
 
   if (!strToMatch) {
-    console.log('Meaning we passed trough ALL the string length and found nothing.');
+    // console.log('Meaning we passed trough ALL the string length and found nothing.');
     return false;
   }
   const splitTestChunk = testStr.split('*');
@@ -246,23 +246,24 @@ const isMatch = function (strToMatch, testStr) {
     // This will give me all string that I have to check.
     // meaning I have "abcabcabcabcd", "abcabcabcd", "abcabcd", "abcd" for a target of "abc"
     for (let i = 0; i < allSubstrToCheck.length; i++) {
-      console.log(`strToCheck: ${allSubstrToCheck[i]}`, `with target: ${testStr.substring(1)}`);
+      // console.log(`strToCheck: ${allSubstrToCheck[i]}`, `with target: ${testStr.substring(1)}`);
       if (isMatch(allSubstrToCheck[i], testStr.substring(1)) === true) {
         // We found a match deep down in one of them.
-        console.log('We found a Match!!! It should stop here!', allSubstrToCheck[i], testStr.substring(1));
+        // console.log('We found a Match!!! It should stop here!', allSubstrToCheck[i], testStr.substring(1));
         return true;
       }
     }
+    return false;
   } else {
     const chunk0 = splitTestChunk[0];
     // "*abc*cde became abc*cde"
     // match the first one abc with the string then go deeper
     if (strToMatch.indexOf(chunk0) === 0) {
       const chunkLen = chunk0.length;
-      console.log('testing anther loop with:', strToMatch.substring(chunkLen), testStr.substring(chunkLen));
+      // console.log('testing anther loop with:', strToMatch.substring(chunkLen), testStr.substring(chunkLen));
       return isMatch(strToMatch.substring(chunkLen), testStr.substring(chunkLen));
     }
-    console.log('There is no wild card and the first car dosent match');
+    // console.log('There is no wild card and the first car dosent match');
 
     return false;
   }

@@ -555,22 +555,14 @@ Q18.countNbrOfZeroUpToN = function (nbrToReach) {
 // javascript console.log(mul(2)(3)(4)); // output : 24 console.log(mul(4)(3)(4)); // output : 48
 const Qmul = {};
 
-Qmul.recuMult = function (x) {
-  // This dosent work. Not sure how to fire function recursively...
-  console.log('this is X: ', x);
-  if (x) {
-    return 1;
-  }
-  return x * function (y) { Qmul.mul(y); };
+Qmul.recuMult = function (x, sum = 1) {
+  console.log('this is X: ', x, sum);
+  if (!x) { return sum; }
+
+  return (y) => Qmul.recuMult(y, x * sum);
 };
 
-Qmul.mul = function (x) {
-  return function (y) {
-    return function (z) {
-      return x * y * z;
-    };
-  };
-};
+Qmul.mul = x => y => z => x * y * z;
 
 module.exports = {
   reverseMapThisSentense,
