@@ -3,6 +3,10 @@ const { findTwoThatSumToTarget, isRootToLeafSumMatch } = require('../leetCode/ea
 
 const { isValidBST } = require('../leetCode/medium');
 
+const {
+  findPool,
+} = require ('../leetCode/hard');
+
 const generateList = (nbr) => {
   const tmp = [];
   for (var i = 0; i < nbr + 1; i++) {
@@ -114,5 +118,67 @@ describe('LeetCode testing', () => {
         expect(isValidBST(tree)).to.eql(true);
       });
     });
+  })
+  describe('Hard testing', () => {
+    describe('Trapping rain water', () => {
+      it('test localize pool', () => {
+        const singleHoleof1 = [
+          [1,3,3],
+          [4,2,5],
+          [2,6,3]
+        ];
+        expect(findPool(singleHoleof1).maxHeight).to.eql(1);
+      });
+      it('test deeper localize pool', () => {
+        const singleHoleof1 = [
+          [1,10,3],
+          [9,1,5],
+          [2,6,3]
+        ];
+        expect(findPool(singleHoleof1).maxHeight).to.eql(4);
+      });
+
+      it('test localize Hill', () => {
+        const singleHoleof1 = [
+          [1,10,3],
+          [9,11,5],
+          [2,6,3]
+        ];
+        expect(findPool(singleHoleof1).maxHeight).to.eql(0);
+        expect(findPool(singleHoleof1).leakSide.length).to.eql(4);
+      });
+
+      it('test localize valley', () => {
+        const singleHoleof1 = [
+          [1,10,3],
+          [9,5,5],
+          [2,6,3]
+        ];
+        expect(findPool(singleHoleof1).maxHeight).to.eql(0);
+        expect(findPool(singleHoleof1).leakSide).to.eql([[1,2]]);
+      });
+
+      it('test filled neibohor pool', () => {
+        // Here pool right is filled to 7;
+        const singleHoleof1 = [
+          [1,10,3],
+          [9,5,5],
+          [2,6,3]
+        ];
+        const newPool = findPool(singleHoleof1, {right: 7});
+        expect(newPool.maxHeight).to.eql(1);
+      });
+
+      it('test localize Hill with filler that still leak', () => {
+        const singleHoleof1 = [
+          [1,10,3],
+          [9,8,5],
+          [2,7,3]
+        ];
+        const newPool = findPool(singleHoleof1, {right: 10, bottom: 10});
+        expect(newPool.maxHeight).to.eql(1);
+        expect(newPool.leakSide.length).to.eql(0);
+      });
+    })
   })
 })
