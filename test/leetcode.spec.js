@@ -5,6 +5,9 @@ const { isValidBST } = require('../leetCode/medium');
 
 const {
   findPool,
+  findPoolFromBox,
+  walkPools,
+  walkPoolsUsingBoxes,
 } = require ('../leetCode/hard');
 
 const generateList = (nbr) => {
@@ -145,7 +148,7 @@ describe('LeetCode testing', () => {
           [2,6,3]
         ];
         expect(findPool(singleHoleof1).maxHeight).to.eql(0);
-        expect(findPool(singleHoleof1).leakSide.length).to.eql(4);
+        expect(findPool(singleHoleof1).leakSides.length).to.eql(4);
       });
 
       it('test localize valley', () => {
@@ -155,7 +158,7 @@ describe('LeetCode testing', () => {
           [2,6,3]
         ];
         expect(findPool(singleHoleof1).maxHeight).to.eql(0);
-        expect(findPool(singleHoleof1).leakSide).to.eql([[1,2]]);
+        expect(findPool(singleHoleof1).leakSides).to.eql([[1,2]]);
       });
 
       it('test filled neibohor pool', () => {
@@ -177,8 +180,106 @@ describe('LeetCode testing', () => {
         ];
         const newPool = findPool(singleHoleof1, {right: 10, bottom: 10});
         expect(newPool.maxHeight).to.eql(1);
-        expect(newPool.leakSide.length).to.eql(0);
+        expect(newPool.leakSides.length).to.eql(0);
       });
     })
+
+    describe('Trapping rain water in a box', () => {
+      it('test localize pool', () => {
+        const singleHoleof1 = {
+          center: 2,
+          top: 3,
+          right: 5,
+          left: 4,
+          bottom: 6,
+        };
+        expect(findPoolFromBox(singleHoleof1).maxHeight).to.eql(1);
+      });
+      it('test deeper localize pool', () => {
+        const singleHoleof1 = {
+          center: 1,
+          top: 10,
+          right: 9,
+          left: 5,
+          bottom: 6,
+        };
+        expect(findPoolFromBox(singleHoleof1).maxHeight).to.eql(4);
+      });
+
+      it('test localize Hill', () => {
+        const singleHoleof1 = {
+          center: 11,
+          top: 10,
+          right: 9,
+          left: 5,
+          bottom: 6,
+        };
+        expect(findPoolFromBox(singleHoleof1).maxHeight).to.eql(0);
+        expect(findPoolFromBox(singleHoleof1).leakSides.length).to.eql(4);
+      });
+
+      it('test localize valley', () => {
+        const singleHoleof1 = {
+          center: 5,
+          top: 10,
+          right: 9,
+          left: 5,
+          bottom: 6,
+        };
+        expect(findPoolFromBox(singleHoleof1).maxHeight).to.eql(0);
+        expect(findPoolFromBox(singleHoleof1).leakSides).to.eql(['left']);
+      });
+
+      it('test filled neibohor pool', () => {
+        // Here pool right is filled to 7;
+        const singleHoleof1 = {
+          center: 5,
+          top: 10,
+          right: 5,
+          left: 9,
+          bottom: 6,
+        };
+        const newPool = findPoolFromBox(singleHoleof1, {right: 7});
+        expect(newPool.maxHeight).to.eql(1);
+      });
+
+      it('test localize Hill with filler that still leak', () => {
+        const singleHoleof1 =
+        {
+          center: 8,
+          top: 10,
+          right: 5,
+          left: 9,
+          bottom: 7,
+        };
+        const newPool = findPoolFromBox(singleHoleof1, {right: 10, bottom: 10});
+        expect(newPool.maxHeight).to.eql(1);
+        expect(newPool.leakSides.length).to.eql(0);
+      });
+    })
+
+    describe('Walking pools', () => {
+      it('test walk pool', () => {
+        const singleHoleof1 = [
+          [1,3,3],
+          [4,2,5],
+          [2,6,3]
+        ];
+        const sum = walkPools(singleHoleof1);
+        expect(sum).to.eql(1);
+      });
+    });
+
+    describe('Walking pools using boxes', () => {
+      it('test walk pool', () => {
+        const singleHoleof1 = [
+          [1,3,3],
+          [4,2,5],
+          [2,6,3]
+        ];
+        const sum = walkPoolsUsingBoxes(singleHoleof1);
+        expect(sum).to.eql(1);
+      });
+    });
   })
 })
