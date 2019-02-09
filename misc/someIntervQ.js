@@ -1,17 +1,16 @@
 // Some interview question I found on GlassDoor for that precice cie.
 
-const Q = {};
 // Q1 Make a function to solve a Suduko.
-Q.solveThisSudoku = function (initialSudoku, previousPossibility) {
+const solveThisSudoku = function (initialSudoku, previousPossibility) {
   // Step1 Split each in col-row-block for easy validation.????
   const rowMatrix = initialSudoku;
-  const colMatrix = Q.transposeHorisontal(rowMatrix);
+  const colMatrix = transposeHorisontal(rowMatrix);
   // console.log("COLL D.but: ", colMatrix);
   const boxMatrix = [];
   const blockInsideMatrix = [[0, 0], [0, 3], [0, 6], [3, 0], [3, 3], [3, 6], [6, 0], [6, 3], [6, 6]];
   for (let i = 0; i < blockInsideMatrix.length; i++) {
     // console.log("Calling extractBlockOf3by3 with: ", blockInsideMatrix[i], i);
-    boxMatrix.push(Q.extractBlockOf3by3(rowMatrix, blockInsideMatrix[i][0], blockInsideMatrix[i][1]));
+    boxMatrix.push(extractBlockOf3by3(rowMatrix, blockInsideMatrix[i][0], blockInsideMatrix[i][1]));
   }
 
   // Step1 Checkif the sudoku match the Rules.
@@ -29,9 +28,9 @@ Q.solveThisSudoku = function (initialSudoku, previousPossibility) {
   }
 
   // Step2: extract all possible number for each Row and columns.
-  const rowPossibility = Q.returnRemaningPossibility(rowMatrix);
-  const colPossibility = Q.returnRemaningPossibility(colMatrix);
-  const boxPossibility = Q.returnRemaningPossibility(boxMatrix);
+  const rowPossibility = returnRemaningPossibility(rowMatrix);
+  const colPossibility = returnRemaningPossibility(colMatrix);
+  const boxPossibility = returnRemaningPossibility(boxMatrix);
   const allPossibility = rowPossibility.join('').length + colPossibility.join('').length + boxPossibility.join('').length;
   // console.log("Row possiblity: ",rowPossibility);
   // console.log("Col possiblity: ",colPossibility);
@@ -53,7 +52,7 @@ Q.solveThisSudoku = function (initialSudoku, previousPossibility) {
       if (rowMatrix[row][col] === undefined) {
         const box = (Math.floor(row / 3)) * 3 + Math.floor(col / 3);
 
-        const cellPos = Q.returnitemPresentInAllarray(rowPossibility[row], colPossibility[col], boxPossibility[box]);
+        const cellPos = returnitemPresentInAllarray(rowPossibility[row], colPossibility[col], boxPossibility[box]);
         if (cellPos.length === 1) {
           console.log(`Found: ${cellPos[0]}`, `at B:${box} R: ${row} C: ${col}`, rowPossibility[row], colPossibility[col], boxPossibility[box]);
           rowMatrix[row][col] = cellPos[0];
@@ -63,10 +62,10 @@ Q.solveThisSudoku = function (initialSudoku, previousPossibility) {
     }
   }
   // Make another loop to find other unique possibility
-  return Q.solveThisSudoku(rowMatrix, allPossibility);
+  return solveThisSudoku(rowMatrix, allPossibility);
 };
 
-Q.returnitemPresentInAllarray = function (arr1, arr2, arr3) {
+const returnitemPresentInAllarray = function (arr1, arr2, arr3) {
   const oneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return oneToNine.filter((obj) => {
     if (arr1.indexOf(obj) > -1 && arr2.indexOf(obj) > -1 && arr3.indexOf(obj) > -1) {
@@ -75,7 +74,7 @@ Q.returnitemPresentInAllarray = function (arr1, arr2, arr3) {
   });
 };
 
-Q.returnRemaningPossibility = function (matrix) {
+const returnRemaningPossibility = function (matrix) {
   possibility = [];
   for (let row = 0; row < matrix.length; row++) {
     possibility[row] = returnAllremaningPossibility(matrix[row]);
@@ -97,7 +96,7 @@ function makeLetWorkInES5(arrayToCopy) {
   return arrayToCopy.map(obj => obj);
 }
 
-Q.transposeHorisontal = function (arr) {
+const transposeHorisontal = function (arr) {
   if (!arr) { return false; }
 
   const transpodedArr = [];
@@ -119,14 +118,14 @@ function validateSudoku(sudokuToCheck) {
 
   // Check each Row block
   for (let row = 0; row < sudokuToCheck.length; row++) {
-    if (Q.validateAllNbrInArr(sudokuToCheck[row]) === false) {
+    if (validateAllNbrInArr(sudokuToCheck[row]) === false) {
       return false;
     }
   }
   return true;
 }
 
-Q.validateAllNbrInArr = function (arr) {
+const validateAllNbrInArr = function (arr) {
   const notLinkArray = makeLetWorkInES5(arr);
   const sortedArr = notLinkArray.sort(); // Work only for 1 to 9, after I need to specify a function otherwise 1,10,2 will happen.
   for (let i = 0; i <= sortedArr.length; i++) {
@@ -138,7 +137,7 @@ Q.validateAllNbrInArr = function (arr) {
   return true;
 };
 
-Q.extractBlockOf3by3 = function (arr, rowOffset, colOffset) {
+const extractBlockOf3by3 = function (arr, rowOffset, colOffset) {
   // console.log("Array of: ", arr, rowOffset, colOffset);
   const subMatrix = [];
   for (let row = rowOffset; row < rowOffset + 3; row++) {
@@ -150,7 +149,7 @@ Q.extractBlockOf3by3 = function (arr, rowOffset, colOffset) {
 };
 
 // Q2 Return the number of unique integers in an array
-Q.returnNumOfUniqueIntegers = function (arrToCheck) {
+const returnNumOfUniqueIntegers = function (arrToCheck) {
   const arrToReturn = [];
   const len = arrToCheck.length;
  	if (arrToCheck) {
@@ -165,7 +164,7 @@ Q.returnNumOfUniqueIntegers = function (arrToCheck) {
 };
 
 // Q3 Return the two largest unique numbers within an array
-Q.returnLargest2Nbr = function (arrToCheck) {
+const returnLargest2Nbr = function (arrToCheck) {
   let max = arrToCheck[0];
   let lastMax = arrToCheck[1];
   const len = arrToCheck.length;
@@ -187,12 +186,12 @@ Q.returnLargest2Nbr = function (arrToCheck) {
 };
 
 // Q4 Reverse a string in place
-Q.reverseStrInPlace = function (strToReverse) {
+const reverseStrInPlace = function (strToReverse) {
   return strToReverse.split('').reverse().join('');
 };
 
 // Q5 2 number missing in a n number string.
-Q.findTheMissingtwo = function (arrToCheck) {
+const findTheMissingtwo = function (arrToCheck) {
   // fixing it with a loop
   const len = arrToCheck.length;
   missing = [];
@@ -217,7 +216,7 @@ Q.findTheMissingtwo = function (arrToCheck) {
 // any character.
 // Option Recursive or Loop.
 
-Q.isMatch = function (strToMatch, testStr) {
+const isMatch = function (strToMatch, testStr) {
   // edge cases: * ** *****
   // Step 1 remove all duplicate of ** in the regEx;
   if (!testStr) {
@@ -229,7 +228,7 @@ Q.isMatch = function (strToMatch, testStr) {
     return false;
   }
 
-  testStr = Q.cleanTestStr(testStr); // This should be remove outside since it need to be done only once.
+  testStr = cleanTestStr(testStr); // This should be remove outside since it need to be done only once.
   if (testStr === '*') {
     console.log('Then there is only * in the string so return true');
     return true;
@@ -243,12 +242,12 @@ Q.isMatch = function (strToMatch, testStr) {
   const splitTestChunk = testStr.split('*');
   if (testStr[0] === '*') {
     const chunk1 = splitTestChunk[1]; // In the case where we start with *
-    const allSubstrToCheck = Q.splitinSubStrWithMatch(strToMatch, chunk1);
+    const allSubstrToCheck = splitinSubStrWithMatch(strToMatch, chunk1);
     // This will give me all string that I have to check.
     // meaning I have "abcabcabcabcd", "abcabcabcd", "abcabcd", "abcd" for a target of "abc"
     for (let i = 0; i < allSubstrToCheck.length; i++) {
       console.log(`strToCheck: ${allSubstrToCheck[i]}`, `with target: ${testStr.substring(1)}`);
-      if (Q.isMatch(allSubstrToCheck[i], testStr.substring(1)) === true) {
+      if (isMatch(allSubstrToCheck[i], testStr.substring(1)) === true) {
         // We found a match deep down in one of them.
         console.log('We found a Match!!! It should stop here!', allSubstrToCheck[i], testStr.substring(1));
         return true;
@@ -261,7 +260,7 @@ Q.isMatch = function (strToMatch, testStr) {
     if (strToMatch.indexOf(chunk0) === 0) {
       const chunkLen = chunk0.length;
       console.log('testing anther loop with:', strToMatch.substring(chunkLen), testStr.substring(chunkLen));
-      return Q.isMatch(strToMatch.substring(chunkLen), testStr.substring(chunkLen));
+      return isMatch(strToMatch.substring(chunkLen), testStr.substring(chunkLen));
     }
     console.log('There is no wild card and the first car dosent match');
 
@@ -269,7 +268,7 @@ Q.isMatch = function (strToMatch, testStr) {
   }
 };
 
-Q.splitinSubStrWithMatch = function (strToSplit, withWhat) {
+const splitinSubStrWithMatch = function (strToSplit, withWhat) {
   const arrOfStrToSendBack = [];
   let remaningStr = strToSplit;
 
@@ -278,7 +277,6 @@ Q.splitinSubStrWithMatch = function (strToSplit, withWhat) {
   while (remaningStr && nextIndex > -1) {
     // aabbaaccddaa --> aabbaaccddaa
     remaningStr = remaningStr.substring(nextIndex);
-    // console.log("current String to Push:", remaningStr, nextIndex);
     arrOfStrToSendBack.push(remaningStr);
     // This is after the last car, what can I get
     nextIndex = remaningStr.indexOf(withWhat, 1);
@@ -286,30 +284,41 @@ Q.splitinSubStrWithMatch = function (strToSplit, withWhat) {
   return arrOfStrToSendBack;
 };
 
-Q.splitinSubStrRecuWithMatch = function (totalArray, strToSplit, withWhat) {
+const splitinSubStrRecuWithMatch = function (totalArray, strToSplit, withWhat) {
   totalArray = totalArray || [];
-  // console.log(totalArray, strToSplit);
   if (!strToSplit || strToSplit.indexOf(withWhat, 1) === -1) {
     totalArray.push(strToSplit); // This dosent make sense but what the hell.
     return totalArray;
   }
   strToSplit = strToSplit.substring(strToSplit.indexOf(withWhat));
   totalArray.push(strToSplit);
-  return Q.splitinSubStrRecuWithMatch(totalArray, strToSplit.substring(strToSplit.indexOf(withWhat, 1)), withWhat);
+  return splitinSubStrRecuWithMatch(totalArray, strToSplit.substring(strToSplit.indexOf(withWhat, 1)), withWhat);
 };
 
 
-Q.cleanTestStr = function (testStr) {
+const cleanTestStr = function (testStr) {
   return testStr.split('').reduce((previous, current) => {
-    // console.log("Prev: ",previous, current);
     if (previous.endsWith('*') && current === '*') {
       // duplicate of **, or ***, or ab***cd
-      // console.log("NOT Writing it!");
       return previous;
     }
     return `${previous}${current}`;
   });
 };
 
-
-exports.Q = Q;
+module.exports = {
+  solveThisSudoku,
+  returnitemPresentInAllarray,
+  returnRemaningPossibility,
+  transposeHorisontal,
+  validateAllNbrInArr,
+  extractBlockOf3by3,
+  returnNumOfUniqueIntegers,
+  returnLargest2Nbr,
+  reverseStrInPlace,
+  findTheMissingtwo,
+  isMatch,
+  splitinSubStrWithMatch,
+  splitinSubStrRecuWithMatch,
+  cleanTestStr,
+}

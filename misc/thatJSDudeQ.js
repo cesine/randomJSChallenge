@@ -354,7 +354,7 @@ function testQ8() {
 
 // 9. reverse words
 // Question: How would you reverse words in a sentence? --> Without using the simple split and reverse :)
-function reverseMapThisSentense(strToReverse) {
+const reverseMapThisSentense = function(strToReverse) {
   const arrayOfWord = strToReverse.split(' ');
   const arrToReturn = [];
   arrayOfWord.map((str) => {
@@ -363,16 +363,13 @@ function reverseMapThisSentense(strToReverse) {
   return arrToReturn.join(' ');
 }
 
-function reverseRecuThisSentense(strToReverse) {
+const reverseRecuThisSentense = function(strToReverse) {
   const nextSpace = strToReverse.indexOf(' ');
   if (nextSpace < 0) {
     return strToReverse;
   }
   return `${reverseRecuThisSentense(strToReverse.substr(nextSpace + 1))} ${strToReverse.substr(0, nextSpace)}`;
 }
-
-exports.reverseMapThisSentense = reverseMapThisSentense;
-exports.reverseRecuThisSentense = reverseRecuThisSentense;
 
 // 10. reverse in place
 // Question: If you have a string like "I am the good boy". How can you generate "I ma eht doog yob"? Please note that the words are in place but reverse.
@@ -394,7 +391,6 @@ Q10.reverseRecuInPlace = function (strToModify) {
   // make the recursion
   return `${reverseStr(reverseWord)} ${Q10.reverseRecuInPlace(strToModify.substr(nextSpace + 1))}`;
 };
-exports.Q10 = Q10;
 
 
 // 11. First non repeating char
@@ -431,8 +427,6 @@ Q11.giveMeFirstNonRepeatChar = function (strToInvestigate) {
   // No unique car
   return false;
 };
-
-exports.Q11 = Q11;
 
 
 // 15. missing number
@@ -478,8 +472,6 @@ Q15.doItMathStyle = function (arrayToCheck) {
   // console.log("sum Of the array: ",sumOfTheArray, expectedSum);
   return expectedSum - sumOfTheArray;
 };
-
-exports.Q15 = Q15;
 
 
 // 16. Sum of two
@@ -539,8 +531,6 @@ Q16.isTheSumBySoustraction = function (nbrToAddTo, arrayToCheck) {
   return false;
 };
 
-exports.Q16 = Q16;
-
 // 18. Counting Zeros
 // Question: Count Total number of zeros from 1 upto n?
 // Answer: If n = 50. number of 0 would be 11 (0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100). Please note that 100 has two 0. This one looks simple but little tricky
@@ -559,8 +549,6 @@ Q18.countNbrOfZeroUpToN = function (nbrToReach) {
   }
   return nbrOfZ;
 };
-
-exports.Q18 = Q18;
 
 
 // Write a mul function which will produce the following outputs when invoked:
@@ -584,5 +572,13 @@ Qmul.mul = function (x) {
   };
 };
 
-exports.Qmul = Qmul;
-
+module.exports = {
+  reverseMapThisSentense,
+  reverseRecuThisSentense,
+  Q10,
+  Q11,
+  Q15,
+  Q16,
+  Q18,
+  Qmul,
+};

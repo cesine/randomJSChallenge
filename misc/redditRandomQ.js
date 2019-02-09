@@ -1,7 +1,7 @@
 const Q = {};
 
 // Define a function that returns n lines of Pascal’s Triangle.
-Q.returnAllRowOfPascalBeforeNLoop = function (nbrToReach) {
+const returnAllRowOfPascalBeforeNLoop = function (nbrToReach) {
   const arrToReturn = [[1], [1, 1]];
   if (nbrToReach <= 1) {
     return [[1]];
@@ -36,7 +36,7 @@ function factorialMeThis(nbr) {
   return factorialMeThis(nbr - 1) * nbr;
 }
 
-Q.returnRowOfPascalBeforeNMath = function (rowNbr) {
+const returnRowOfPascalBeforeNMath = function (rowNbr) {
   const arrToReturn = [];
   rowNbr--;
   for (let i = 0; i <= rowNbr; i++) {
@@ -45,7 +45,7 @@ Q.returnRowOfPascalBeforeNMath = function (rowNbr) {
   return arrToReturn;
 };
 
-Q.theMostFrequentStringInArray = function (arrOfStr) {
+const theMostFrequentStringInArray = function (arrOfStr) {
   // step1: find all string
   const fullSentense = arrOfStr.join(',');
   let	maximumFound = 0;
@@ -77,7 +77,7 @@ Q.theMostFrequentStringInArray = function (arrOfStr) {
 // ['N','M','L','K'],
 // ['L','B','V','M']]
 
-Q.findWordInArray = function (wordToCheck, arrOfArr) {
+const findWordInArray = function (wordToCheck, arrOfArr) {
   // Here we assume the type is good.
   if (wordToCheck && arrOfArr) {
     const concatArray = arrOfArr.toString().replace(/,/g, '');
@@ -91,6 +91,9 @@ Q.findWordInArray = function (wordToCheck, arrOfArr) {
   return false;
 };
 
-
-exports.Q = Q;
-
+module.exports = {
+  returnAllRowOfPascalBeforeNLoop,
+  returnRowOfPascalBeforeNMath,
+  theMostFrequentStringInArray,
+  findWordInArray,
+}

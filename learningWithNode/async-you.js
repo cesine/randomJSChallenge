@@ -9,7 +9,6 @@ function gettingSomeWaterfall() {
   // var fetchServer = "http://localhost:3131";
   const fileTORead = process.argv[2];
   const body = '';
-  // console.log(fetchServer);
 
   async.waterfall([
 	  function (callToPassArgToNextFnct) {
@@ -36,7 +35,6 @@ function gettingSomeWaterfall() {
 	    });
 	  },
   ], (err, result) => {
-	  // if (err) {return console.error(err)};
 	  console.log(result);
   });
 } // gettingSomeWaterfall(); // WATERFALL Exercise 1 of 7
@@ -52,7 +50,6 @@ function makeSomeSeriesHappen() {
     },
   }, (err, result) => {
     if (err) { return console.error('ERROR: ', err); }
-    console.log(result);
   });
 
   function fetchSomeUrl(url, arvgToPassToNext) {
@@ -174,8 +171,8 @@ function reduceSomethingIfYouAreNice() {
       res.on('end', (chunk) => {
         sendNext(null, lastState + parseFloat(body));
       });
-      res.on('error', (err) => { console.log('FUCK THIS Err:', err); });
-    }).on('error', (err) => { console.log('FUCK THIS Err:', err); });
+      res.on('error', console.log);
+    }).on('error', console.log);
   }, (err, result) => {
     if (err) { console.log(err); }
     console.log(result);
@@ -205,9 +202,7 @@ function lastOneIsNotAWish() {
         currentStr = body;
         callback(null, body);
       });
-      res.on('error', (err) => {
-        console.log('MOTHERFUCKER OF ERROR: ', err);
-      });
+      res.on('error', console.log);
     }).on('error', (err) => {
       callback(err);
     });
@@ -220,4 +215,3 @@ function lastOneIsNotAWish() {
 
   async.whilst(testFnct, operationFnct, logsIter);
 } // lastOneIsNotAWish();  //WHILST Exercise 7 of 7 --> Their soltion dosent work eather but whathever, the principle is there.
-

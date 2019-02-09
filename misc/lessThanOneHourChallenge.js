@@ -1,9 +1,9 @@
 // source: https://www.shiftedup.com/2015/05/07/five-programming-problems-every-software-engineer-should-be-able-to-solve-in-less-than-1-hour
-const Q = {};
+
 // Problem 1
 // Write three function that compute the sum of the numbers in a given list using a for-loop, a while-loop, and recursion.
 
-Q.sumFor = function (arrayOfNumber) {
+const sumFor = function (arrayOfNumber) {
   let total = arrayOfNumber[0];
   for (let i = 1; i < arrayOfNumber.length; i++) {
     total += arrayOfNumber[i];
@@ -12,7 +12,7 @@ Q.sumFor = function (arrayOfNumber) {
   return total;
 };
 
-Q.sumLoop = function (arrayOfNumber) {
+const sumLoop = function (arrayOfNumber) {
   let total = arrayOfNumber[0];
   let i = 1;
   const len = arrayOfNumber.length;
@@ -23,19 +23,19 @@ Q.sumLoop = function (arrayOfNumber) {
   return total;
 };
 
-Q.sumRecur = function (arrayOfNumber) {
+const sumRecur = function (arrayOfNumber) {
   if (arrayOfNumber.length === 1) {
     return arrayOfNumber[0];
   }
   const popped = arrayOfNumber.pop();
   // console.log(popped, arrayOfNumber);
-  return Q.sumRecur(arrayOfNumber) + popped;
+  return sumRecur(arrayOfNumber) + popped;
 };
 
 // Problem 2
 // Write a function that combines two lists by alternatingly taking elements.
 // For example: given the two lists [a, b, c] and [1, 2, 3], the function should return [a, 1, b, 2, c, 3].
-Q.mergeBothList = function (arr1, arr2) {
+const mergeBothList = function (arr1, arr2) {
   let max = arr1.length;
   const finalArray = [];
   if (arr2.length > max) {
@@ -54,7 +54,7 @@ Q.mergeBothList = function (arr1, arr2) {
 };
 
 // Prob 3, Find Fibo Number Nth.
-Q.fibo = function (upToNbr, arrToPushTo) {
+const fibo = function (upToNbr, arrToPushTo) {
   if (arrToPushTo === undefined) {
     var arrToPushTo = [0, 1];
   }
@@ -66,10 +66,10 @@ Q.fibo = function (upToNbr, arrToPushTo) {
   }
   // console.log(arrToPushTo);
   arrToPushTo.push(n + nmin1);
-  return Q.fibo(upToNbr, arrToPushTo);
+  return fibo(upToNbr, arrToPushTo);
 };
 
-Q.fiboLoop = function (upToNbr) {
+const fiboLoop = function (upToNbr) {
   const arrToPushTo = [0, 1];
   for (let i = 2; i < upToNbr; i++) {
     arrToPushTo[i] = arrToPushTo[i - 1] + arrToPushTo[i - 2];
@@ -81,14 +81,13 @@ Q.fiboLoop = function (upToNbr) {
 // Write a function that given a list of non negative integers, arranges them such that they form the largest possible number.
 // For example, given [50, 2, 1, 9], the largest formed number is 95021.
 
-Q.largestNumberFromArray = function (arrToEvaluate) {
+const largestNumberFromArray = function (arrToEvaluate) {
   const sortedArray = arrToEvaluate.sort();
-  console.log(sortedArray);
   return parseInt(sortedArray.reverse().join(''));
 };
 
 
-Q.giveMeAllPossible100 = function () {
+const giveMeAllPossible100 = function () {
   arrayToUse = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   // It cannot be more than 5 number together.
   // To do this we need to do recursion after recursion.
@@ -98,4 +97,13 @@ Q.giveMeAllPossible100 = function () {
   return ['1+2+34–5+67–8', '1+2+34–5+67–8+9', '1+2+34–5–8+9'];
 };
 
-exports.Q = Q;
+module.exports = {
+  sumFor,
+  sumLoop,
+  sumRecur,
+  mergeBothList,
+  fibo,
+  fiboLoop,
+  largestNumberFromArray,
+  giveMeAllPossible100,
+}

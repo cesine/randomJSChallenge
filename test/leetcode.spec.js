@@ -11,7 +11,7 @@ const generateList = (nbr) => {
   return tmp;
 }
 
-describe.only('LeetCode testing', () => {
+describe('LeetCode testing', () => {
   describe('Easy testing', () => {
     it('Should find 2 item that sum to match a value', () => {
       // 4 test take 13ms

@@ -9,9 +9,7 @@
 // middleNumber(n, m) = 344.
 // n + m = 688. 6 / 2 = 3, and 8 / 2 = 4. Thus, the answer is 344.
 
-const Q = {};
-
-Q.middleNumber = (n, m) => {
+const middleNumber = (n, m) => {
   // This work in 10ms and with big number. But it was mainly to play with split. It is not a Viable function.
 
 
@@ -21,7 +19,7 @@ Q.middleNumber = (n, m) => {
   return parseInt(total);
 };
 
-Q.middleNumberCute = (n, m) => {
+const middleNumberCute = (n, m) => {
   // This work in 10ms and with big number.
 
 
@@ -35,12 +33,12 @@ Q.middleNumberCute = (n, m) => {
 
 // This is the winner's solution. Works on 11ms
 // Dosent work for number larger than 1Billion. Not sure why.
-Q.WinnerSolution = (n, m) => -/[13579]/.test(n += m) | n / 2;
+const WinnerSolution = (n, m) => -/[13579]/.test(n += m) | n / 2;
 
 // Reverse find the challenge. --> Found it, String "abcd" a*b + b*c + c*d
 // https://codefights.com/challenge/ZCYFuFbwzddBXXHgp/main
 // That work, now let's try shrinking it down
-Q.weirdSum = (s) => {
+const weirdSum = (s) => {
   const numberStr = s.split('');
   return recursion(0, ~~numberStr.pop(), numberStr);
 };
@@ -54,7 +52,7 @@ recursion = (sum, prev, remaning) => {
 };
 
 // Attemp2 reduce.
-Q.weirdSum2 = (s) => {
+const weirdSum2 = (s) => {
   let sum = 0;
   s.split('').reduce((prev, curr) => {
     sum += prev * curr;
@@ -64,4 +62,10 @@ Q.weirdSum2 = (s) => {
 };
 
 
-exports.Q = Q;
+module.exports = {
+  middleNumber,
+  middleNumberCute,
+  WinnerSolution,
+  weirdSum,
+  weirdSum2,
+};
