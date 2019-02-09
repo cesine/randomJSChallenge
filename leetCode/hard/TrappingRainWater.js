@@ -124,7 +124,6 @@ const walkPools = function(matrix) {
   return findPool(part).maxHeight;
 }
 
-
 const walkPoolsUsingBoxes = function(matrix) {
   let totalFilled = 0;
   for (var v = 1; v < matrix.length - 1; v++) {
@@ -136,15 +135,91 @@ const walkPoolsUsingBoxes = function(matrix) {
         right: matrix[v][h + 1],
         bottom: matrix[v + 1][h],
       };
-      totalFilled += findPoolFromBox(box).maxHeight;
+      const addedWater = findPoolFromBox(box).maxHeight;
+      totalFilled += addedWater;
+      // console.log('adding water', addedWater);
+      matrix[v][h] += addedWater; // local area just got water dumped inside.
     }
   }
  return totalFilled;
 }
+
+const walkPoolsUsingBoxesOutSideIn = function(matrix) {
+  let totalFilled = 0;
+  const rows = matrix.length;
+  const columns = matrix[0].length;
+
+  for (var v = 1; v <= rows / 2; v++) {
+    for (var h = 1; h < columns / 2; h++) {
+      const box = {
+        center: matrix[v][h],
+        top: matrix[v - 1][h],
+        left: matrix[v][h -1],
+        right: matrix[v][h + 1],
+        bottom: matrix[v + 1][h],
+      };
+      let addedWater = findPoolFromBox(box).maxHeight;
+      totalFilled += addedWater;
+      // console.log('adding water', addedWater);
+      // matrix[v][h] += addedWater; // local area just got water dumped inside.
+
+      // 2 = 4-1
+      // 4 = 6-1
+      const boxMirror = {
+        center: matrix[rows-v - 1][columns-h -1],
+        top: matrix[rows -v - 1 - 1][columns -h-1],
+        left: matrix[rows -v - 1][columns-h -2],
+        right: matrix[rows -v - 1][columns-h + 0],
+        bottom: matrix[rows -v - 1 + 1][columns-h-1],
+      };
+
+      addedWater = findPoolFromBox(boxMirror).maxHeight;
+      totalFilled += addedWater;
+      // console.log('adding water', addedWater);
+      // matrix[v][h] += addedWater; // local area just got water dumped inside.
+    }
+  }
+ return totalFilled;
+}
+
+const singlePool = [
+  [1,4,4,4],
+  [4,2,1,5],
+  [2,6,6,6]
+];
+
+const findLocalMaximum = (matrix)  => {
+  // walk until you find outside boundry.
+};
+
+// [{
+//   value: 1,
+//   leak: true,
+// },{
+//   value: 4,
+//   leak: true,
+// }, ...],
+// ...
+// [{
+//   value: 4
+//   leak: true
+// }, {
+//   value: 2
+//   leakability: 4
+//   leak: undefined,
+// }, {
+//   value: 1,
+//   leak: undefined,
+//   leakability: 4 from???
+//
+// }
+// ]
 
 module.exports = {
   findPool,
   findPoolFromBox,
   walkPools,
   walkPoolsUsingBoxes,
+  walkPoolsUsingBoxesOutSideIn,
+  findLocalMaximum,
 }

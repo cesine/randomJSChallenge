@@ -8,6 +8,7 @@ const {
   findPoolFromBox,
   walkPools,
   walkPoolsUsingBoxes,
+  walkPoolsUsingBoxesOutSideIn,
 } = require ('../leetCode/hard');
 
 const generateList = (nbr) => {
@@ -270,8 +271,8 @@ describe('LeetCode testing', () => {
       });
     });
 
-    describe('Walking pools using boxes', () => {
-      it('test walk pool', () => {
+    describe.only('Walking pools using boxes', () => {
+      it('test walk small pool', () => {
         const singleHoleof1 = [
           [1,3,3],
           [4,2,5],
@@ -292,13 +293,13 @@ describe('LeetCode testing', () => {
       });
 
       it('test walk medium pool', () => {
-        const singleHoleof1 = [
+        const multipleIndependentPool = [
           [1,3,3,3],
           [4,1,5,5],
           [2,6,2,6],
           [2,2,5,1]
         ];
-        const sum = walkPoolsUsingBoxes(singleHoleof1);
+        const sum = walkPoolsUsingBoxes(multipleIndependentPool);
         expect(sum).to.eql(5);
       });
 
@@ -312,6 +313,39 @@ describe('LeetCode testing', () => {
         const sum = walkPoolsUsingBoxes(singleHoleof1);
         expect(sum).to.eql(5);
       });
+
+
+      it.only('test walk medium n x m pool mirror', () => {
+        const singleHoleof1 = [
+          [1,3,3,3,3,1],
+          [4,1,5,5,5,4],
+          [2,6,2,6,7,2],
+          [2,2,5,1,3,2]
+        ];
+        const sum = walkPoolsUsingBoxesOutSideIn(singleHoleof1);
+        expect(sum).to.eql(5);
+      });
+
+      it.skip('test walk sinple river with connected items single pool', () => {
+        const connectedPool = [
+          [1,4,4,4,4,1],
+          [4,2,1,2,3,4],
+          [2,6,6,6,7,2]
+        ];
+        const sum = walkPoolsUsingBoxes(connectedPool);
+        expect(sum).to.eql(8);
+      });
     });
+
+    describe('.findLocalMaximum', () => {
+      it('simple maximum', () => {
+        const singlePool = [
+          [1,4,4,4],
+          [4,2,1,5],
+          [2,6,6,6]
+        ];
+        expect(findLocalMaximum(singlePool)).to.eql(4);
+      })
+    })
   })
 })
