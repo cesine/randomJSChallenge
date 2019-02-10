@@ -95,24 +95,34 @@ const findPoolFromBox = function(box) {
   }
 }
 
+
+// Different approch by augmenting each cell.
 const walkPools = function(matrix) {
   // Step 1 = modify matrix
-  console.log('Initial:', matrix);
-  const terrain = convertArrToMetadata(matrix);
-  const listOfunknown = [];
-  // Generate list of unkown (where we leak vis mirror);
+  const modifiedMatrix = convertArrToMetadata(matrix);
+  // Generate list of unkown (where we leak vs mirror);
   // Reduce the list until no movement.
-  console.log('terrain', terrain);
-  const modifiedMatrix = walkPoolsUsingBoxesOutSideIn(terrain);
-  console.log('firstRound', modifiedMatrix);
+  const listOfunknown = [];
+  walkPoolsUsingBoxes(modifiedMatrix, listOfunknown); // modified on spot (side effect to fix later).
+  while (listOfunknown.length > 0) {
+    // 1: no more unknown == No puddle
+    // 2: no unknownlist do not get reduced anymore.
+    let unkownLength = listOfunknown.length;
+    reduceListOfUnknown(modifiedMatrix, listOfunknown);
+    let newlength = listOfunknown.length;
+    if (unkownLength === newlength) { break; }
+  }
+  // Fill All puddle
+  console.log('end: ', listOfunknown.length);
+  return listOfunknown.reduce((prev, [v,h]) => {
+    console.log('Reducing: ', modifiedMatrix[v][h].leakability, modifiedMatrix[v][h].value);
+    return (prev + modifiedMatrix[v][h].leakability - modifiedMatrix[v][h].value);
+  }, 0)
 
-  // Here we should only have a list that is contain inside waster wall.
-
-  return modifiedMatrix;
+  // Then: Find adjacenthole & find max of them.
 }
 
-const walkPoolsUsingBoxes = function(matrix) {
-  let totalFilled = 0;
+const walkPoolsUsingBoxes = function(matrix, listOfunknown) {
   for (var v = 1; v < matrix.length - 1; v++) {
     for (var h = 1; h < matrix[0].length - 1; h++) {
       const box = {
@@ -122,13 +132,13 @@ const walkPoolsUsingBoxes = function(matrix) {
         right: matrix[v][h + 1],
         bottom: matrix[v + 1][h],
       };
-      const addedWater = findPoolFromBox(box).maxHeight;
-      totalFilled += addedWater;
-      // console.log('adding water', addedWater);
-      matrix[v][h] += addedWater; // local area just got water dumped inside.
+      matrix[v][h] = findPoolFromBox(box);
+      if (matrix[v][h].leak === undefined) {
+        listOfunknown.push([v,h]);
+      }
     }
   }
- return totalFilled;
+ return matrix;
 }
 
 const convertArrToMetadata = (matrix) => {
@@ -148,77 +158,31 @@ const convertArrToMetadata = (matrix) => {
   }));
 }
 
-
-const walkPoolsUsingBoxesOutSideIn = function(matrix) {
-  // matrix === [[{value: , leak: true/false, leakability: nbr}]]
-  let totalFilled = 0;
-  const rows = matrix.length;
-  const columns = matrix[0].length;
-
-  for (var v = 1; v <= rows / 2; v++) {
-    for (var h = 1; h < columns / 2; h++) {
-      const box = {
-        center: matrix[v][h],
-        top: matrix[v - 1][h],
-        left: matrix[v][h -1],
-        right: matrix[v][h + 1],
-        bottom: matrix[v + 1][h],
-      };
-      matrix[v][h] = findPoolFromBox(box);
-
-      const boxMirror = {
-        center: matrix[rows-v - 1][columns-h -1],
-        top: matrix[rows -v - 1 - 1][columns -h-1],
-        left: matrix[rows -v - 1][columns-h -2],
-        right: matrix[rows -v - 1][columns-h + 0],
-        bottom: matrix[rows -v - 1 + 1][columns-h-1],
-      };
-
-      matrix[rows-v - 1][columns-h -1] = findPoolFromBox(boxMirror);
+const reduceListOfUnknown = (matrix, listOfunknown) => {
+  const tmpMatrix = [...listOfunknown];
+  for (var i = 0; i < tmpMatrix.length; i++) {
+    const [v, h] = tmpMatrix[i];
+    console.log('testing:', v, h);
+    const box = {
+      center: matrix[v][h],
+      top: matrix[v - 1][h],
+      left: matrix[v][h -1],
+      right: matrix[v][h + 1],
+      bottom: matrix[v + 1][h],
+    };
+    matrix[v][h] = findPoolFromBox(box);
+    console.log('box will be:', matrix[v][h]);
+    if (matrix[v][h].leak === true) {
+      listOfunknown.splice(i, 1);
     }
   }
- return matrix;
-}
-
-const singlePool = [
-  [1,4,4,4],
-  [4,2,1,5],
-  [2,6,6,6]
-];
-
-const findLocalMaximum = (matrix)  => {
-  // walk until you find outside boundry.
+  return listOfunknown;
 };
-
-// [{
-//   value: 1,
-//   leak: true,
-// },{
-//   value: 4,
-//   leak: true,
-// }, ...],
-// ...
-// [{
-//   value: 4
-//   leak: true
-// }, {
-//   value: 2
-//   leakability: 4
-//   leak: undefined,
-// }, {
-//   value: 1,
-//   leak: undefined,
-//   leakability: 4 from???
-//
-// }
-// ]
 
 module.exports = {
   findPool,
   findPoolFromBox,
   walkPools,
   walkPoolsUsingBoxes,
-  walkPoolsUsingBoxesOutSideIn,
-  findLocalMaximum,
   convertArrToMetadata,
 }

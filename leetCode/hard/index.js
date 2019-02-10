@@ -14,6 +14,5 @@ module.exports = {
   walkPools,
   walkPoolsUsingBoxes,
   walkPoolsUsingBoxesOutSideIn,
-  findLocalMaximum,
   convertArrToMetadata,
 }

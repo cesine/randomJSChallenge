@@ -260,15 +260,25 @@ describe('LeetCode testing', () => {
       });
     })
 
-    describe.only('Walking pools', () => {
-      it('test walk pool', () => {
+    describe('Walking pools', () => {
+      it('test walk small pool', () => {
         const singleHoleof1 = [
-          [1,3,3,3],
-          [4,2,5,4],
-          [2,6,3,3]
+          [1,3,3,3,3],
+          [4,2,1,4,4],
+          [2,6,3,3,3]
         ];
         const sum = walkPools(singleHoleof1);
-        expect(sum).to.eql(1);
+        expect(sum).to.eql(3);
+      });
+
+      it.only('test walk original dual pool', () => {
+        const dualPool = [
+            [1,4,3,1,3,2],
+            [3,2,1,3,2,4],
+            [2,3,3,2,3,1]
+        ];
+        const sum = walkPools(dualPool);
+        expect(sum).to.eql(4);
       });
     });
 
@@ -337,17 +347,6 @@ describe('LeetCode testing', () => {
         expect(sum).to.eql(8);
       });
     });
-
-    describe('.findLocalMaximum', () => {
-      it('simple maximum', () => {
-        const singlePool = [
-          [1,4,4,4],
-          [4,2,1,5],
-          [2,6,6,6]
-        ];
-        expect(findLocalMaximum(singlePool)).to.eql(4);
-      })
-    })
 
     describe('.convertArrToMetadata', () => {
       it('validate Data structure', () => {
