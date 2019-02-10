@@ -1,4 +1,12 @@
-const { findPool, findPoolFromBox, walkPools, walkPoolsUsingBoxes, walkPoolsUsingBoxesOutSideIn, findLocalMaximum } = require('./TrappingRainWater');
+const {
+  findPool,
+  findPoolFromBox,
+  walkPools,
+  walkPoolsUsingBoxes,
+  walkPoolsUsingBoxesOutSideIn,
+  findLocalMaximum,
+  convertArrToMetadata,
+} = require('./TrappingRainWater');
 
 module.exports = {
   findPool,
@@ -7,4 +15,5 @@ module.exports = {
   walkPoolsUsingBoxes,
   walkPoolsUsingBoxesOutSideIn,
   findLocalMaximum,
+  convertArrToMetadata,
 }

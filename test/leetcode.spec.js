@@ -9,6 +9,7 @@ const {
   walkPools,
   walkPoolsUsingBoxes,
   walkPoolsUsingBoxesOutSideIn,
+  convertArrToMetadata,
 } = require ('../leetCode/hard');
 
 const generateList = (nbr) => {
@@ -259,19 +260,19 @@ describe('LeetCode testing', () => {
       });
     })
 
-    describe('Walking pools', () => {
+    describe.only('Walking pools', () => {
       it('test walk pool', () => {
         const singleHoleof1 = [
-          [1,3,3],
-          [4,2,5],
-          [2,6,3]
+          [1,3,3,3],
+          [4,2,5,4],
+          [2,6,3,3]
         ];
         const sum = walkPools(singleHoleof1);
         expect(sum).to.eql(1);
       });
     });
 
-    describe.only('Walking pools using boxes', () => {
+    describe('Walking pools using boxes', () => {
       it('test walk small pool', () => {
         const singleHoleof1 = [
           [1,3,3],
@@ -315,7 +316,7 @@ describe('LeetCode testing', () => {
       });
 
 
-      it.only('test walk medium n x m pool mirror', () => {
+      it('test walk medium n x m pool mirror', () => {
         const singleHoleof1 = [
           [1,3,3,3,3,1],
           [4,1,5,5,5,4],
@@ -345,6 +346,49 @@ describe('LeetCode testing', () => {
           [2,6,6,6]
         ];
         expect(findLocalMaximum(singlePool)).to.eql(4);
+      })
+    })
+
+    describe('.convertArrToMetadata', () => {
+      it('validate Data structure', () => {
+        const box = [
+          [1,2],
+          [3,4]
+        ];
+        const expecedBox = [
+          [{
+            value: 1,
+            leak: true,
+            leakability: 1,
+          },{
+            value: 2,
+            leak: true,
+            leakability: 2,
+          }],
+          [{
+            value: 3,
+            leak: true,
+            leakability: 3,
+          },{
+            value: 4,
+            leak: true,
+            leakability: 4,
+          }]
+        ]
+        expect(convertArrToMetadata(box)).to.eql(expecedBox);
+      })
+      it('validate more Data structure', () => {
+        const box = [
+          [1,2, 3],
+          [3,4, 5],
+          [6,7, 8]
+        ];
+
+        expect(convertArrToMetadata(box)[1][1]).to.eql({
+          value: 4,
+          leak: undefined,
+          leakability: undefined,
+        });
       })
     })
   })

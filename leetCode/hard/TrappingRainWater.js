@@ -65,63 +65,50 @@ const findPool = function(matrix, filler = {}) {
   }
 }
 
-const findPoolFromBox = function(box, filler = {}) {
+const findPoolFromBox = function(box) {
+  // if all side is known, return filling value.
+  // if 1 side is leaking but in a lake, return Max leakage except lake.
+
   // Assume the matrix is 3x3;
   let leakSides = [];
   let maxHeight = 0;
-  const center = box.center;
-  const top = filler.top || box.top;
-  const left = filler.left || box.left;
-  const right = filler.right || box.right;
-  const bottom = filler.bottom || box.bottom;
+  const center = box.center.value;
+  const toCheck = [box.top, box.left, box.right, box.bottom]
 
-  if (top > center) {
-    maxHeight = top - center;
-  } else if (top <= center) {
-    maxHeight = 0;
-    leakSides.push('top');
-  }
-
-  if (left > center) {
-    maxHeight = Math.min(maxHeight, left - center);
-  } else if (left <= center) {
-    maxHeight = 0;
-    leakSides.push('left');
-  }
-
-  if (right > center) {
-    maxHeight = Math.min(maxHeight, right - center);
-  } else if (right <= center) {
-    maxHeight = 0;
-    leakSides.push('right');
-  }
-
-  if (bottom > center) {
-    maxHeight = Math.min(maxHeight, bottom - center);
-  } else if (bottom <= center) {
-    maxHeight = 0;
-    leakSides.push('bottom');
-  }
-
-  return {
-    leakSides,
-    maxHeight,
-    box: {
-      center,
-      top,
-      left,
-      right,
-      bottom,
+  let minLeakage = 20000;
+  for (var i = 0; i < toCheck.length; i++) {
+    if (toCheck[i].leak && toCheck[i].value < center) {
+      return {
+        value: center,
+        leak: true,
+        leakability: center,
+      }
     }
+    if (toCheck[i].leakability) {
+      minLeakage = Math.min(minLeakage, toCheck[i].leakability);
+    }
+  }
+  return {
+    value: center,
+    leak: undefined,
+    leakability: minLeakage,
   }
 }
 
 const walkPools = function(matrix) {
-  const part = []
-  part[0] = matrix[0].slice(0,3);
-  part[1] = matrix[1].slice(0,3);
-  part[2] = matrix[2].slice(0,3);
-  return findPool(part).maxHeight;
+  // Step 1 = modify matrix
+  console.log('Initial:', matrix);
+  const terrain = convertArrToMetadata(matrix);
+  const listOfunknown = [];
+  // Generate list of unkown (where we leak vis mirror);
+  // Reduce the list until no movement.
+  console.log('terrain', terrain);
+  const modifiedMatrix = walkPoolsUsingBoxesOutSideIn(terrain);
+  console.log('firstRound', modifiedMatrix);
+
+  // Here we should only have a list that is contain inside waster wall.
+
+  return modifiedMatrix;
 }
 
 const walkPoolsUsingBoxes = function(matrix) {
@@ -144,7 +131,26 @@ const walkPoolsUsingBoxes = function(matrix) {
  return totalFilled;
 }
 
+const convertArrToMetadata = (matrix) => {
+  return matrix.map((row, i) => row.map((column, j) => {
+    if (i === 0 || j === 0 || i === matrix.length - 1 || j === matrix[0].length - 1) {
+      return {
+        value: column,
+        leak: true,
+        leakability: column,
+      }
+    }
+    return {
+      value: column,
+      leak: undefined,
+      leakability: undefined,
+    }
+  }));
+}
+
+
 const walkPoolsUsingBoxesOutSideIn = function(matrix) {
+  // matrix === [[{value: , leak: true/false, leakability: nbr}]]
   let totalFilled = 0;
   const rows = matrix.length;
   const columns = matrix[0].length;
@@ -158,13 +164,8 @@ const walkPoolsUsingBoxesOutSideIn = function(matrix) {
         right: matrix[v][h + 1],
         bottom: matrix[v + 1][h],
       };
-      let addedWater = findPoolFromBox(box).maxHeight;
-      totalFilled += addedWater;
-      // console.log('adding water', addedWater);
-      // matrix[v][h] += addedWater; // local area just got water dumped inside.
+      matrix[v][h] = findPoolFromBox(box);
 
-      // 2 = 4-1
-      // 4 = 6-1
       const boxMirror = {
         center: matrix[rows-v - 1][columns-h -1],
         top: matrix[rows -v - 1 - 1][columns -h-1],
@@ -173,13 +174,10 @@ const walkPoolsUsingBoxesOutSideIn = function(matrix) {
         bottom: matrix[rows -v - 1 + 1][columns-h-1],
       };
 
-      addedWater = findPoolFromBox(boxMirror).maxHeight;
-      totalFilled += addedWater;
-      // console.log('adding water', addedWater);
-      // matrix[v][h] += addedWater; // local area just got water dumped inside.
+      matrix[rows-v - 1][columns-h -1] = findPoolFromBox(boxMirror);
     }
   }
- return totalFilled;
+ return matrix;
 }
 
 const singlePool = [
@@ -222,4 +220,5 @@ module.exports = {
   walkPoolsUsingBoxes,
   walkPoolsUsingBoxesOutSideIn,
   findLocalMaximum,
+  convertArrToMetadata,
 }
