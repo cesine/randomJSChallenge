@@ -1,5 +1,5 @@
 const {
-  findPool,
+  // findPool,
   findPoolFromBox,
   walkPools,
   walkPoolsUsingBoxes,
@@ -9,7 +9,7 @@ const {
 } = require('./TrappingRainWater');
 
 module.exports = {
-  findPool,
+  // findPool,
   findPoolFromBox,
   walkPools,
   walkPoolsUsingBoxes,

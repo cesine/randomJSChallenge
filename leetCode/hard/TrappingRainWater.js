@@ -13,69 +13,16 @@
 // ]
 // Return 4.
 
-const findPool = function(matrix, filler = {}) {
-  // Assume the matrix is 3x3;
-  let leakSides = [];
-  let maxHeight = 0;
-  const center = matrix[1][1];
-  const top = filler.top || matrix[0][1];
-  const left = filler.left || matrix[1][0];
-  const right = filler.right || matrix[1][2];
-  const bottom = filler.bottom || matrix[2][1];
-
-  if (top > center) {
-    maxHeight = top - center;
-  } else if (top <= center) {
-    maxHeight = 0;
-    leakSides.push([0,1]);
-  }
-
-  if (left > center) {
-    maxHeight = Math.min(maxHeight, left - center);
-  } else if (left <= center) {
-    maxHeight = 0;
-    leakSides.push([1,0]);
-  }
-
-  if (right > center) {
-    maxHeight = Math.min(maxHeight, right - center);
-  } else if (right <= center) {
-    maxHeight = 0;
-    leakSides.push([1,2]);
-  }
-
-  if (bottom > center) {
-    maxHeight = Math.min(maxHeight, bottom - center);
-  } else if (bottom <= center) {
-    maxHeight = 0;
-    leakSides.push([2,1]);
-  }
-
-
-  return {
-    leakSides,
-    maxHeight,
-    values: {
-      center,
-      top,
-      left,
-      right,
-      bottom,
-    }
-  }
-}
-
 const findPoolFromBox = function(box) {
   // if all side is known, return filling value.
   // if 1 side is leaking but in a lake, return Max leakage except lake.
-
   // Assume the matrix is 3x3;
   let leakSides = [];
   let maxHeight = 0;
   const center = box.center.value;
   const toCheck = [box.top, box.left, box.right, box.bottom]
 
-  let minLeakage = 20000;
+  let minLeakage = 20001; // From the question.
   for (var i = 0; i < toCheck.length; i++) {
     if (toCheck[i].leak && toCheck[i].value < center) {
       return {
@@ -109,20 +56,19 @@ const walkPools = function(matrix) {
   const modifiedMatrix = convertArrToMetadata(matrix);
   // Generate list of unkown (where we leak vs mirror);
   // Reduce the list until no movement.
-  const listOfunknown = [];
+  let listOfunknown = [];
   walkPoolsUsingBoxes(modifiedMatrix, listOfunknown); // modified on spot (side effect to fix later).
-  console.log(modifiedMatrix);
   while (listOfunknown.length > 0) {
     // 1: no more unknown == No puddle
     // 2: no unknownlist do not get reduced anymore.
     let unkownLength = listOfunknown.length;
-    const nbrOfChange = reduceListOfUnknown(modifiedMatrix, listOfunknown);
-    let newlength = listOfunknown.length;
-    console.log('change:', newlength, nbrOfChange);
+    const {nbrOfChange, keepLookingInto} = reduceListOfUnknown(modifiedMatrix, listOfunknown);
+    let newlength = keepLookingInto.length;
     if (unkownLength === newlength && nbrOfChange === 0) { break; }
+    listOfunknown = keepLookingInto;
+
   }
   // Fill All puddle
-  console.log('end: ', listOfunknown.length);
   return listOfunknown.reduce((prev, [v,h]) => (prev + modifiedMatrix[v][h].leakability - modifiedMatrix[v][h].value), 0)
 }
 
@@ -163,12 +109,11 @@ const convertArrToMetadata = (matrix) => {
 }
 
 const reduceListOfUnknown = (matrix, listOfunknown) => {
-  const tmpMatrix = [...listOfunknown];
+  const keepLookingInto = [];
   let nbrOfChange = 0;
-  for (var i = 0; i < tmpMatrix.length; i++) {
-    const [v, h] = tmpMatrix[i];
+  for (var i = 0; i < listOfunknown.length; i++) {
+    const [v, h] = listOfunknown[i];
     const currentLeakLimit = matrix[v][h].leakability;
-    // console.log('testing:', v, h);
     const box = {
       center: matrix[v][h],
       top: matrix[v - 1][h],
@@ -177,19 +122,18 @@ const reduceListOfUnknown = (matrix, listOfunknown) => {
       bottom: matrix[v + 1][h],
     };
     matrix[v][h] = findPoolFromBox(box);
-    console.log('box will be:', matrix[v][h]);
-    if (matrix[v][h].leak === true) {
-      listOfunknown.splice(i, 1);
+    if (matrix[v][h].leak === undefined) {
+      keepLookingInto.push([v,h]);
     }
     if (currentLeakLimit !== matrix[v][h].leakability) {
       nbrOfChange++;
     }
   }
-  return nbrOfChange;
+  return {nbrOfChange, keepLookingInto};
 };
 
 module.exports = {
-  findPool,
+  // findPool,
   findPoolFromBox,
   walkPools,
   walkPoolsUsingBoxes,

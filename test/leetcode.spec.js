@@ -124,69 +124,7 @@ describe('LeetCode testing', () => {
       });
     });
   })
-  describe('Hard testing', () => {
-    describe('Trapping rain water', () => {
-      // Initial idea that cannot handle complex structure.
-      it('test localize pool', () => {
-        const singleHoleof1 = [
-          [1,3,3],
-          [4,2,5],
-          [2,6,3]
-        ];
-        expect(findPool(singleHoleof1).maxHeight).to.eql(1);
-      });
-      it('test deeper localize pool', () => {
-        const singleHoleof1 = [
-          [1,10,3],
-          [9,1,5],
-          [2,6,3]
-        ];
-        expect(findPool(singleHoleof1).maxHeight).to.eql(4);
-      });
-
-      it('test localize Hill', () => {
-        const singleHoleof1 = [
-          [1,10,3],
-          [9,11,5],
-          [2,6,3]
-        ];
-        expect(findPool(singleHoleof1).maxHeight).to.eql(0);
-        expect(findPool(singleHoleof1).leakSides.length).to.eql(4);
-      });
-
-      it('test localize valley', () => {
-        const singleHoleof1 = [
-          [1,10,3],
-          [9,5,5],
-          [2,6,3]
-        ];
-        expect(findPool(singleHoleof1).maxHeight).to.eql(0);
-        expect(findPool(singleHoleof1).leakSides).to.eql([[1,2]]);
-      });
-
-      it('test filled neibohor pool', () => {
-        // Here pool right is filled to 7;
-        const singleHoleof1 = [
-          [1,10,3],
-          [9,5,5],
-          [2,6,3]
-        ];
-        const newPool = findPool(singleHoleof1, {right: 7});
-        expect(newPool.maxHeight).to.eql(1);
-      });
-
-      it('test localize Hill with filler that still leak', () => {
-        const singleHoleof1 = [
-          [1,10,3],
-          [9,8,5],
-          [2,7,3]
-        ];
-        const newPool = findPool(singleHoleof1, {right: 10, bottom: 10});
-        expect(newPool.maxHeight).to.eql(1);
-        expect(newPool.leakSides.length).to.eql(0);
-      });
-    })
-
+  describe.only('Hard testing', () => {
     describe('Trapping rain water in a box', () => {
       let boxAllKnown;
       beforeEach(() => {
@@ -210,12 +148,12 @@ describe('LeetCode testing', () => {
       });
     })
 
-    describe.only('Walking pools', () => {
+    describe('Walking pools', () => {
       // work only if the pool all exit at the same level.
-      whatisMyPoolSum = (matrix, sum) => matrix.reduce((prev, vertical) => {
-          return prev + vertical.reduce((pre,val) => {
-            if (sum > val) { return pre + (sum - val); }
-            return pre;
+      whatisMyPoolSum = (matrix, leak) => matrix.reduce((prev, vertical) => {
+          return prev + vertical.reduce((pre, val) => {
+            if (leak > val) { return (pre + (leak - val)); }
+            return pre; // equal or bigger
           }, 0);
         }, 0);
 
@@ -272,7 +210,6 @@ describe('LeetCode testing', () => {
         ];
         const total = whatisMyPoolSum(pool, 5);
         const sum = walkPools(pool);
-        console.log('Water will be:', total);
         expect(sum).to.eql(total);
       });
 
@@ -291,7 +228,6 @@ describe('LeetCode testing', () => {
         ];
         const total = whatisMyPoolSum(pool, 5);
         const sum = walkPools(pool);
-        console.log('Water will be:', total);
         expect(sum).to.eql(total);
       });
 
@@ -306,21 +242,19 @@ describe('LeetCode testing', () => {
 
         ];
         const pool2 = [
+          [9,9,9,9,9,9,9,9,9,9,9],
           [9,4,4,2,2,5,2,2,2,4,8],
           [8,4,4,1,2,9,9,0,0,4,7],
           [7,4,3,4,3,5,2,0,0,2,6],
           [6,6,7,8,9,9,9,8,7,6,6],
         ]
         const completePool = [...pool1, ...pool2];
-        console.log('completePool:');
-        console.log(completePool);
         const total = whatisMyPoolSum(pool1, 5) + whatisMyPoolSum(pool2, 6);;
         const sum = walkPools(completePool);
-        console.log('Water will be:', total);
         expect(sum).to.eql(total);
       });
 
-      it.only('test walk DEEP 2x HUGE pool with middle Split & maze inside', () => {
+      it('test walk DEEP 2x HUGE pool with middle Split & maze inside', () => {
         const pool1 = [
             [5,5,7,8,9,9,9,8,7,6,5],
             [6,4,5,3,3,5,3,3,3,4,7],
@@ -334,18 +268,16 @@ describe('LeetCode testing', () => {
 
         const pool2 = [
           [9,9,9,9,9,9,9,9,9,9,9],
-          [9,4,4,2,5,5,9,2,2,4,8],
+          [9,4,4,2,9,5,9,2,2,4,8],
           [8,4,4,1,9,9,9,0,0,4,7],
           [7,4,3,4,3,5,2,0,0,2,6],
           [6,6,7,8,9,9,9,8,7,6,6],
         ]; // middle high lake center.
-        const totalP2 = whatisMyPoolSum(pool2, 6);
+        const totalP2 = whatisMyPoolSum(pool2, 6) + 3;
         expect(walkPools(pool2)).to.eql(totalP2);
         //
-        // const completePool = [...pool1, ...pool2];
-        // console.log(completePool);
-        // expect(walkPools(completePool)).to.eql(totalP1 + totalP2);
-        // console.log('Water will be:', total + 3);
+        const completePool = [...pool1, ...pool2];
+        expect(walkPools(completePool)).to.eql(totalP1 + totalP2);
       });
 
     });
