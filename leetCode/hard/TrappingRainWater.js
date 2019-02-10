@@ -88,6 +88,13 @@ const findPoolFromBox = function(box) {
       minLeakage = Math.min(minLeakage, toCheck[i].leakability);
     }
   }
+  if (minLeakage < center) {
+    return {
+      value: center,
+      leak: true,
+      leakability: center,
+    }
+  }
   return {
     value: center,
     leak: undefined,
@@ -104,22 +111,19 @@ const walkPools = function(matrix) {
   // Reduce the list until no movement.
   const listOfunknown = [];
   walkPoolsUsingBoxes(modifiedMatrix, listOfunknown); // modified on spot (side effect to fix later).
+  console.log(modifiedMatrix);
   while (listOfunknown.length > 0) {
     // 1: no more unknown == No puddle
     // 2: no unknownlist do not get reduced anymore.
     let unkownLength = listOfunknown.length;
-    reduceListOfUnknown(modifiedMatrix, listOfunknown);
+    const nbrOfChange = reduceListOfUnknown(modifiedMatrix, listOfunknown);
     let newlength = listOfunknown.length;
-    if (unkownLength === newlength) { break; }
+    console.log('change:', newlength, nbrOfChange);
+    if (unkownLength === newlength && nbrOfChange === 0) { break; }
   }
   // Fill All puddle
   console.log('end: ', listOfunknown.length);
-  return listOfunknown.reduce((prev, [v,h]) => {
-    console.log('Reducing: ', modifiedMatrix[v][h].leakability, modifiedMatrix[v][h].value);
-    return (prev + modifiedMatrix[v][h].leakability - modifiedMatrix[v][h].value);
-  }, 0)
-
-  // Then: Find adjacenthole & find max of them.
+  return listOfunknown.reduce((prev, [v,h]) => (prev + modifiedMatrix[v][h].leakability - modifiedMatrix[v][h].value), 0)
 }
 
 const walkPoolsUsingBoxes = function(matrix, listOfunknown) {
@@ -160,9 +164,11 @@ const convertArrToMetadata = (matrix) => {
 
 const reduceListOfUnknown = (matrix, listOfunknown) => {
   const tmpMatrix = [...listOfunknown];
+  let nbrOfChange = 0;
   for (var i = 0; i < tmpMatrix.length; i++) {
     const [v, h] = tmpMatrix[i];
-    console.log('testing:', v, h);
+    const currentLeakLimit = matrix[v][h].leakability;
+    // console.log('testing:', v, h);
     const box = {
       center: matrix[v][h],
       top: matrix[v - 1][h],
@@ -175,8 +181,11 @@ const reduceListOfUnknown = (matrix, listOfunknown) => {
     if (matrix[v][h].leak === true) {
       listOfunknown.splice(i, 1);
     }
+    if (currentLeakLimit !== matrix[v][h].leakability) {
+      nbrOfChange++;
+    }
   }
-  return listOfunknown;
+  return nbrOfChange;
 };
 
 module.exports = {

@@ -126,6 +126,7 @@ describe('LeetCode testing', () => {
   })
   describe('Hard testing', () => {
     describe('Trapping rain water', () => {
+      // Initial idea that cannot handle complex structure.
       it('test localize pool', () => {
         const singleHoleof1 = [
           [1,3,3],
@@ -187,80 +188,37 @@ describe('LeetCode testing', () => {
     })
 
     describe('Trapping rain water in a box', () => {
+      let boxAllKnown;
+      beforeEach(() => {
+        boxAllKnown = {
+          center: { value: 2, leak: undefined, leakability: undefined },
+          top: { value: 4, leak: true, leakability: 4 },
+          left: { value: 4, leak: true, leakability: 4 },
+          right: { value: 4, leak: true, leakability: 4 },
+          bottom: { value: 4, leak: true, leakability: 3 },
+        }
+      })
       it('test localize pool', () => {
-        const singleHoleof1 = {
-          center: 2,
-          top: 3,
-          right: 5,
-          left: 4,
-          bottom: 6,
-        };
-        expect(findPoolFromBox(singleHoleof1).maxHeight).to.eql(1);
-      });
-      it('test deeper localize pool', () => {
-        const singleHoleof1 = {
-          center: 1,
-          top: 10,
-          right: 9,
-          left: 5,
-          bottom: 6,
-        };
-        expect(findPoolFromBox(singleHoleof1).maxHeight).to.eql(4);
+        expect(findPoolFromBox(boxAllKnown).leakability).to.eql(3);
+        expect(findPoolFromBox(boxAllKnown).leak).to.eql(undefined);
       });
 
-      it('test localize Hill', () => {
-        const singleHoleof1 = {
-          center: 11,
-          top: 10,
-          right: 9,
-          left: 5,
-          bottom: 6,
-        };
-        expect(findPoolFromBox(singleHoleof1).maxHeight).to.eql(0);
-        expect(findPoolFromBox(singleHoleof1).leakSides.length).to.eql(4);
-      });
-
-      it('test localize valley', () => {
-        const singleHoleof1 = {
-          center: 5,
-          top: 10,
-          right: 9,
-          left: 5,
-          bottom: 6,
-        };
-        expect(findPoolFromBox(singleHoleof1).maxHeight).to.eql(0);
-        expect(findPoolFromBox(singleHoleof1).leakSides).to.eql(['left']);
-      });
-
-      it('test filled neibohor pool', () => {
-        // Here pool right is filled to 7;
-        const singleHoleof1 = {
-          center: 5,
-          top: 10,
-          right: 5,
-          left: 9,
-          bottom: 6,
-        };
-        const newPool = findPoolFromBox(singleHoleof1, {right: 7});
-        expect(newPool.maxHeight).to.eql(1);
-      });
-
-      it('test localize Hill with filler that still leak', () => {
-        const singleHoleof1 =
-        {
-          center: 8,
-          top: 10,
-          right: 5,
-          left: 9,
-          bottom: 7,
-        };
-        const newPool = findPoolFromBox(singleHoleof1, {right: 10, bottom: 10});
-        expect(newPool.maxHeight).to.eql(1);
-        expect(newPool.leakSides.length).to.eql(0);
+      it('test localize pool with unkown', () => {
+        boxAllKnown.bottom = { value: 4, leak: undefined, leakability: undefined };
+        expect(findPoolFromBox(boxAllKnown).leakability).to.eql(4);
+        expect(findPoolFromBox(boxAllKnown).leak).to.eql(undefined);
       });
     })
 
-    describe('Walking pools', () => {
+    describe.only('Walking pools', () => {
+      // work only if the pool all exit at the same level.
+      whatisMyPoolSum = (matrix, sum) => matrix.reduce((prev, vertical) => {
+          return prev + vertical.reduce((pre,val) => {
+            if (sum > val) { return pre + (sum - val); }
+            return pre;
+          }, 0);
+        }, 0);
+
       it('test walk small pool', () => {
         const singleHoleof1 = [
           [1,3,3,3,3],
@@ -271,7 +229,7 @@ describe('LeetCode testing', () => {
         expect(sum).to.eql(3);
       });
 
-      it.only('test walk original dual pool', () => {
+      it('test walk original dual pool', () => {
         const dualPool = [
             [1,4,3,1,3,2],
             [3,2,1,3,2,4],
@@ -280,72 +238,116 @@ describe('LeetCode testing', () => {
         const sum = walkPools(dualPool);
         expect(sum).to.eql(4);
       });
-    });
 
-    describe('Walking pools using boxes', () => {
-      it('test walk small pool', () => {
-        const singleHoleof1 = [
-          [1,3,3],
-          [4,2,5],
-          [2,6,3]
+      it('test walk Shallow HUGE pool', () => {
+        const bigFlatland = [
+            [5,5,7,8,9,10,9,8,7,6,5],
+            [6,4,5,5,5,4,5,5,5,4,7],
+            [7,5,5,5,5,5,5,5,5,5,8],
+            [8,5,5,5,5,5,5,5,5,5,9],
+            [9,5,5,5,5,5,5,5,5,5,10],
+            [10,5,5,5,5,5,5,5,5,5,9],
+            [9,5,5,5,5,5,5,5,5,5,8],
+            [8,5,5,5,5,5,5,5,5,5,7],
+            [7,5,5,5,5,5,4,0,0,2,6],
+            [5,6,7,8,9,10,9,8,7,6,5],
         ];
-        const sum = walkPoolsUsingBoxes(singleHoleof1);
-        expect(sum).to.eql(1);
-      });
-      it('test walk medium pool single pool', () => {
-        const singleHoleof1 = [
-          [1,3,3,3],
-          [4,5,5,5],
-          [2,6,2,6],
-          [2,2,5,1]
-        ];
-        const sum = walkPoolsUsingBoxes(singleHoleof1);
-        expect(sum).to.eql(3);
+        const sum = walkPools(bigFlatland);
+        const total = whatisMyPoolSum(bigFlatland, 5);
+        expect(sum).to.eql(total);
       });
 
-      it('test walk medium pool', () => {
-        const multipleIndependentPool = [
-          [1,3,3,3],
-          [4,1,5,5],
-          [2,6,2,6],
-          [2,2,5,1]
+      it('test walk DEEP HUGE pool', () => {
+        const pool = [
+            [5,6,7,8,9,10,9,8,7,6,5],
+            [6,4,5,3,3,5,3,3,3,4,7],
+            [7,5,4,4,4,4,4,4,4,4,8],
+            [8,4,4,3,3,3,3,3,3,4,9],
+            [9,4,4,3,3,3,0,3,3,4,10],
+            [10,4,4,3,3,3,3,3,3,4,9],
+            [9,4,4,2,2,3,2,2,2,4,8],
+            [8,4,4,1,2,2,1,0,0,4,7],
+            [7,4,3,4,3,4,2,0,0,2,6],
+            [5,6,7,8,9,10,9,8,7,5,5],
         ];
-        const sum = walkPoolsUsingBoxes(multipleIndependentPool);
-        expect(sum).to.eql(5);
+        const total = whatisMyPoolSum(pool, 5);
+        const sum = walkPools(pool);
+        console.log('Water will be:', total);
+        expect(sum).to.eql(total);
       });
 
-      it('test walk medium n x m pool', () => {
-        const singleHoleof1 = [
-          [1,3,3,3,3,1],
-          [4,1,5,5,5,4],
-          [2,6,2,6,7,2],
-          [2,2,5,1,3,2]
+      it('test walk DEEP HUGE pool with Complex island', () => {
+        const pool = [
+            [5,5,7,8,9,9,9,8,7,6,5],
+            [6,4,5,3,3,5,3,3,3,4,7],
+            [7,5,4,4,4,4,4,4,4,4,8],
+            [8,4,4,3,3,3,3,3,3,4,9],
+            [9,4,4,3,3,3,0,3,3,4,9],
+            [9,9,9,9,9,9,9,9,9,4,9],
+            [9,4,4,2,2,3,2,2,2,4,8],
+            [8,4,4,1,2,2,1,0,0,4,7],
+            [7,4,3,4,3,4,2,0,0,2,6],
+            [5,6,7,8,9,9,9,8,7,6,5],
         ];
-        const sum = walkPoolsUsingBoxes(singleHoleof1);
-        expect(sum).to.eql(5);
+        const total = whatisMyPoolSum(pool, 5);
+        const sum = walkPools(pool);
+        console.log('Water will be:', total);
+        expect(sum).to.eql(total);
       });
 
+      it('test walk DEEP 2x HUGE pool with middle Split', () => {
+        const pool1 = [
+            [5,5,7,8,9,9,9,8,7,6,5],
+            [6,4,5,3,3,5,3,3,3,4,7],
+            [7,5,4,4,4,8,4,4,6,4,8],
+            [8,4,4,3,3,8,3,3,6,5,9],
+            [9,4,4,3,3,3,0,3,6,4,9],
+            [9,9,9,9,9,9,9,9,9,9,9],
 
-      it('test walk medium n x m pool mirror', () => {
-        const singleHoleof1 = [
-          [1,3,3,3,3,1],
-          [4,1,5,5,5,4],
-          [2,6,2,6,7,2],
-          [2,2,5,1,3,2]
         ];
-        const sum = walkPoolsUsingBoxesOutSideIn(singleHoleof1);
-        expect(sum).to.eql(5);
+        const pool2 = [
+          [9,4,4,2,2,5,2,2,2,4,8],
+          [8,4,4,1,2,9,9,0,0,4,7],
+          [7,4,3,4,3,5,2,0,0,2,6],
+          [6,6,7,8,9,9,9,8,7,6,6],
+        ]
+        const completePool = [...pool1, ...pool2];
+        console.log('completePool:');
+        console.log(completePool);
+        const total = whatisMyPoolSum(pool1, 5) + whatisMyPoolSum(pool2, 6);;
+        const sum = walkPools(completePool);
+        console.log('Water will be:', total);
+        expect(sum).to.eql(total);
       });
 
-      it.skip('test walk sinple river with connected items single pool', () => {
-        const connectedPool = [
-          [1,4,4,4,4,1],
-          [4,2,1,2,3,4],
-          [2,6,6,6,7,2]
+      it.only('test walk DEEP 2x HUGE pool with middle Split & maze inside', () => {
+        const pool1 = [
+            [5,5,7,8,9,9,9,8,7,6,5],
+            [6,4,5,3,3,5,3,3,3,4,7],
+            [7,5,6,6,6,66,7,8,9,4,8],
+            [8,4,6,3,3,2,3,3,5,5,9],
+            [9,4,6,3,9,3,9,3,6,4,9],
+            [9,9,9,9,9,9,9,9,9,9,9],
         ];
-        const sum = walkPoolsUsingBoxes(connectedPool);
-        expect(sum).to.eql(8);
+        const totalP1 = whatisMyPoolSum(pool1, 5);
+        expect(walkPools(pool1)).to.eql(totalP1);
+
+        const pool2 = [
+          [9,9,9,9,9,9,9,9,9,9,9],
+          [9,4,4,2,5,5,9,2,2,4,8],
+          [8,4,4,1,9,9,9,0,0,4,7],
+          [7,4,3,4,3,5,2,0,0,2,6],
+          [6,6,7,8,9,9,9,8,7,6,6],
+        ]; // middle high lake center.
+        const totalP2 = whatisMyPoolSum(pool2, 6);
+        expect(walkPools(pool2)).to.eql(totalP2);
+        //
+        // const completePool = [...pool1, ...pool2];
+        // console.log(completePool);
+        // expect(walkPools(completePool)).to.eql(totalP1 + totalP2);
+        // console.log('Water will be:', total + 3);
       });
+
     });
 
     describe('.convertArrToMetadata', () => {
