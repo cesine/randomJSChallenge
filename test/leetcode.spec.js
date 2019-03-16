@@ -1,7 +1,10 @@
 const expect = require('expect.js');
 const { findTwoThatSumToTarget, isRootToLeafSumMatch } = require('../leetCode/easy');
 
-const { isValidBST } = require('../leetCode/medium');
+const {
+  isValidBST,
+  inorderTraversal,
+} = require('../leetCode/medium');
 
 const {
   findPool,
@@ -123,8 +126,46 @@ describe('LeetCode testing', () => {
         expect(isValidBST(tree)).to.eql(true);
       });
     });
+
+    describe('inOrder binary tree traversal', () => {
+      let simpleTree = {};
+      let complexArray = [];
+      beforeEach(() => {
+        //     5
+        //    / \
+        //   1   6
+        //      / \
+        //     3   4
+        //
+        simpleTree = {
+          value: 5,
+          left: { value: 1 },
+          right: {
+            value: 6,
+            left:  { value: 3 },
+            right: { value: 4 },
+          }
+        };
+
+        // complex(ish)
+        //     5
+        //    / \
+        //   1   6
+        //  /   / \
+        // a   3   4
+        //          \
+        //           b
+        complexArray = [5, [1, 'a', null], [6, 3, [4, null, 'b']]];
+
+      })
+      it('test the initial condition', () => {
+        expect(inorderTraversal([5])).to.eql([5]);
+        expect(inorderTraversal([5, null, 1])).to.eql([5, 1]);
+        expect(inorderTraversal(complexArray)).to.eql(['a',1,5,3,6,4,'b']);
+      })
+    })
   })
-  describe.only('Hard testing', () => {
+  describe('Hard testing', () => {
     describe('Trapping rain water in a box', () => {
       let boxAllKnown;
       beforeEach(() => {
