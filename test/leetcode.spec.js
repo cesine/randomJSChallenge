@@ -128,25 +128,8 @@ describe('LeetCode testing', () => {
     });
 
     describe('inOrder binary tree traversal', () => {
-      let simpleTree = {};
       let complexArray = [];
       beforeEach(() => {
-        //     5
-        //    / \
-        //   1   6
-        //      / \
-        //     3   4
-        //
-        simpleTree = {
-          value: 5,
-          left: { value: 1 },
-          right: {
-            value: 6,
-            left:  { value: 3 },
-            right: { value: 4 },
-          }
-        };
-
         // complex(ish)
         //     5
         //    / \
