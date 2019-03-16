@@ -4,6 +4,9 @@ const { findTwoThatSumToTarget, isRootToLeafSumMatch } = require('../leetCode/ea
 const {
   isValidBST,
   inorderTraversal,
+  ladderLength,
+  getWordDistance,
+  listAllDistanceOfOne,
 } = require('../leetCode/medium');
 
 const {
@@ -147,6 +150,34 @@ describe('LeetCode testing', () => {
         expect(inorderTraversal(complexArray)).to.eql(['a',1,5,3,6,4,'b']);
       })
     })
+    describe.only('World Ladder', () => {
+      let beginWord, endWord, wordList;
+
+      beforeEach(() => {
+        beginWord = "hit";
+        endWord = "cog";
+        wordList = ["hot","dot","dog","lot","log","cog"];
+      })
+      it('test Levenshtein_distance', () => {
+        expect(getWordDistance('abc', 'bbc')).to.eql(1);
+        expect(getWordDistance('abc', 'cba')).to.eql(2);
+        expect(getWordDistance('abc', 'c')).to.eql(2);
+        expect(getWordDistance('abc', 'ca')).to.eql(3);
+      })
+
+      it('get the proper list distance', () => {
+        expect(listAllDistanceOfOne('abc', ['abc', 'abb', 'bbc', 'aac', 'ccc'])).to.eql(['abb', 'bbc', 'aac']);
+        expect(listAllDistanceOfOne('abc', ['ddd', 'ddd', 'ccc'])).to.eql([]);
+      })
+
+      it('test missing endword in list', () => {
+        expect(ladderLength(beginWord, 'missingWord', wordList)).to.eql(0);
+      })
+
+      it('test missing endword in list', () => {
+        expect(ladderLength(beginWord, endWord, wordList)).to.eql(5);
+      })
+    });
   })
   describe('Hard testing', () => {
     describe('Trapping rain water in a box', () => {
