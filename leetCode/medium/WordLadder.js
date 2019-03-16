@@ -52,9 +52,19 @@ const ladderLength = (beginWord, endWord, wordList) => {
     }
   }
   console.log('baseMap:', baseMap);
+  // listAllPossiblePath =
 
   return 1;
 };
+
+const listAllPossiblePath = (baseMap, currentObj, pathUsed, allPath) => {
+  if (baseMap[currentObj].end === 1) { return allPath.push(pathUsed); };
+  const newlistTocheck = baseMap[currentObj].possibilityList.filter(item => (pathUsed.indexOf(item) === -1));
+  if (newlistTocheck.length === 0) return false; // No good end.
+  return newlistTocheck.reduce((prev, curr) => {
+    return listAllPossiblePath(baseMap, curr, [...pathUsed, curr], allPath)
+  }, pathUsed)
+}
 
 const listAllDistanceOfOne = (word, wordList) => {
   return wordList.filter((item) => {
@@ -102,4 +112,5 @@ module.exports = {
   ladderLength,
   getWordDistance,
   listAllDistanceOfOne,
+  listAllPossiblePath,
 };

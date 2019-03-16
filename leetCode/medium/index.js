@@ -1,6 +1,6 @@
 const { isValidBST } = require('./validateBinarySearchTree');
 const { inorderTraversal } = require('./binaryTreeInorderTraversal');
-const { ladderLength, getWordDistance, listAllDistanceOfOne } = require('./WordLadder');
+const { ladderLength, getWordDistance, listAllDistanceOfOne, listAllPossiblePath } = require('./WordLadder');
 
 module.exports = {
   isValidBST,
@@ -9,5 +9,6 @@ module.exports = {
   // word list
   ladderLength,
   getWordDistance,
-  listAllDistanceOfOne
+  listAllDistanceOfOne,
+  listAllPossiblePath,
 }

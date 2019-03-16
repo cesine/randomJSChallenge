@@ -7,6 +7,7 @@ const {
   ladderLength,
   getWordDistance,
   listAllDistanceOfOne,
+  listAllPossiblePath,
 } = require('../leetCode/medium');
 
 const {
@@ -169,6 +170,48 @@ describe('LeetCode testing', () => {
         expect(listAllDistanceOfOne('abc', ['abc', 'abb', 'bbc', 'aac', 'ccc'])).to.eql(['abb', 'bbc', 'aac']);
         expect(listAllDistanceOfOne('abc', ['ddd', 'ddd', 'ccc'])).to.eql([]);
       })
+
+      it('test the recursive function', () => {
+        const baseMap = {
+          hot: {
+            end: 2,
+            start: 1,
+            possibilityList: [ 'dot', 'lot' ]
+          },
+          dot: {
+            end: 2,
+            start: 2,
+            possibilityList: [ 'hot', 'dog', 'lot' ]
+          },
+          dog: {
+            end: 1,
+            start: 3,
+            possibilityList: [ 'dot', 'log', 'cog' ],
+          },
+          lot: {
+            end: 2,
+            start: 2,
+            possibilityList: [ 'hot', 'dot', 'log' ],
+          },
+          log: {
+            end: 1,
+            start: 3,
+            possibilityList: [ 'dog', 'lot', 'cog' ],
+          },
+          cog: {
+            end: 0,
+            start: 3,
+            possibilityList: [ 'dog', 'log' ],
+          }
+        };
+        const allObject1 = [];
+        listAllPossiblePath(baseMap, 'dog', ['dog'], allObject1);
+        expect(allObject1).to.eql([['dog']]) // Default case where we are at 1 distance from the end.
+
+        const allObject2 = [];
+        const finalResult = listAllPossiblePath(baseMap, 'dot', ['hot','dot'], allObject2);
+        expect(allObject2).to.eql([['hot', 'dot', 'dog'], ['hot', 'dot', 'lot', 'log']]) // Default case where we are at 1 distance from the end.
+      });
 
       it('test missing endword in list', () => {
         expect(ladderLength(beginWord, 'missingWord', wordList)).to.eql(0);
