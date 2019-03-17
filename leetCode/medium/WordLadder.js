@@ -41,8 +41,9 @@ const ladderLength = (beginWord, endWord, wordList) => {
 
   // List all word with a distance of 1 from the Start.
   // list the distance of 1 of each word from the end.
-  // From the start: Pick each that get you closer to the end.
+  // First intuition was to step toward a smaller "end", but it cannot work since multiple path migh deviate before going back to the proper end.
   const baseMap = {};
+  const startlist = [];
   for (var i = 0; i < wordList.length; i++) {
     baseMap[wordList[i]] = {
       end: getWordDistance(endWord, wordList[i]),
@@ -50,27 +51,27 @@ const ladderLength = (beginWord, endWord, wordList) => {
       possibilityList: listAllDistanceOfOne(wordList[i], wordList),
       forwardlist: [], // Next loop.
     }
+    if (baseMap[wordList[i]].start === 1) {
+      startlist.push(wordList[i]);
+    }
   }
-  console.log('baseMap:', baseMap);
-  // listAllPossiblePath =
 
-  return 1;
+  const allPath = [];
+  startlist.map(item => listAllPossiblePath(baseMap, item, [item], allPath));
+  // Here we could find all the path we have inside the allPath array.
+
+  return Math.min(...allPath.map(item => item.length)) + 2; // +2 is the start and end word.
 };
 
+// I dont like the way i do it here since I mutate allPath, but for now it will do.
 const listAllPossiblePath = (baseMap, currentObj, pathUsed, allPath) => {
-  if (baseMap[currentObj].end === 1) { return allPath.push(pathUsed); };
+  if (baseMap[currentObj].end === 1) return allPath.push(pathUsed);
   const newlistTocheck = baseMap[currentObj].possibilityList.filter(item => (pathUsed.indexOf(item) === -1));
   if (newlistTocheck.length === 0) return false; // No good end.
-  return newlistTocheck.reduce((prev, curr) => {
-    return listAllPossiblePath(baseMap, curr, [...pathUsed, curr], allPath)
-  }, pathUsed)
+  return newlistTocheck.reduce((prev, curr) => listAllPossiblePath(baseMap, curr, [...pathUsed, curr], allPath), pathUsed)
 }
 
-const listAllDistanceOfOne = (word, wordList) => {
-  return wordList.filter((item) => {
-    return (getWordDistance(word, item) === 1);
-  });
-};
+const listAllDistanceOfOne = (word, wordList) => wordList.filter((item) => (getWordDistance(word, item) === 1));
 
 // Compute the edit distance between the two given strings
 // https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance

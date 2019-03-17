@@ -151,7 +151,7 @@ describe('LeetCode testing', () => {
         expect(inorderTraversal(complexArray)).to.eql(['a',1,5,3,6,4,'b']);
       })
     })
-    describe.only('World Ladder', () => {
+    describe('World Ladder', () => {
       let beginWord, endWord, wordList;
 
       beforeEach(() => {
@@ -217,7 +217,7 @@ describe('LeetCode testing', () => {
         expect(ladderLength(beginWord, 'missingWord', wordList)).to.eql(0);
       })
 
-      it('test missing endword in list', () => {
+      it('test real list multiple path', () => {
         expect(ladderLength(beginWord, endWord, wordList)).to.eql(5);
       })
     });
