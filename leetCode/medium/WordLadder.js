@@ -31,6 +31,7 @@
 //
 // Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
 
+// Bruteforce version that track all possible path used and return the smallest one.
 const ladderLength = (beginWord, endWord, wordList) => {
   // exit early option:
     // - if he end word is not in the list exit.
@@ -42,6 +43,20 @@ const ladderLength = (beginWord, endWord, wordList) => {
   // List all word with a distance of 1 from the Start.
   // list the distance of 1 of each word from the end.
   // First intuition was to step toward a smaller "end", but it cannot work since multiple path migh deviate before going back to the proper end.
+  const {baseMap, startlist} = buildBaseMapObj(beginWord, endWord, wordList); // {} && [];
+
+  const allPath = [];
+  startlist.map(item => listAllPossiblePath(baseMap, item, [item], allPath));
+  // Here we could find all the path we have inside the allPath array.
+
+  return Math.min(...allPath.map(item => item.length)) + 2; // +2 is the start and end word.
+  // Improvement possible: (return early) as soon as we find a path of length X, if the pathUsed.length > X then exit.
+  // We could do a unique pre-pass to see if the most direct path exist (always via a smaller end value), otherwise try the main flow.
+  // doing an extra loop & ordering the possibilityList from smallest end first might give a small performance boust,
+  // but can be tricky if we have multiple distant graph that collide only with a single point between them, but might be better for 90% of the cases.
+};
+
+const buildBaseMapObj = (beginWord, endWord, wordList) => {
   const baseMap = {};
   const startlist = [];
   for (var i = 0; i < wordList.length; i++) {
@@ -55,13 +70,8 @@ const ladderLength = (beginWord, endWord, wordList) => {
       startlist.push(wordList[i]);
     }
   }
-
-  const allPath = [];
-  startlist.map(item => listAllPossiblePath(baseMap, item, [item], allPath));
-  // Here we could find all the path we have inside the allPath array.
-
-  return Math.min(...allPath.map(item => item.length)) + 2; // +2 is the start and end word.
-};
+  return {baseMap, startlist};
+}
 
 // I dont like the way i do it here since I mutate allPath, but for now it will do.
 const listAllPossiblePath = (baseMap, currentObj, pathUsed, allPath) => {
@@ -72,6 +82,25 @@ const listAllPossiblePath = (baseMap, currentObj, pathUsed, allPath) => {
 }
 
 const listAllDistanceOfOne = (word, wordList) => wordList.filter((item) => (getWordDistance(word, item) === 1));
+
+// Trying a slightly smarter approch.
+const ladderLengthSmarter = (beginWord, endWord, wordList) => {
+  if (wordList.indexOf(endWord) === -1) return 0;
+  const {baseMap, startlist} = buildBaseMapObj(beginWord, endWord, wordList); // {} && [];
+  const globPath = { max: undefined };
+  startlist.map(item => listShortestPath(baseMap, item, [item], globPath));
+  return (globPath.max)? globPath.max + 2 : 0; // Start & end step.
+
+}
+
+const listShortestPath = (baseMap, currentObj, pathUsed, globPath) => {
+  if (globPath.max && pathUsed.length >= globPath.max) return false; // Not the shortest path so stop looking.
+  if (baseMap[currentObj].end === 1) return globPath.max = pathUsed.length; // Shortest path so far.
+
+  const newlistTocheck = baseMap[currentObj].possibilityList.filter(item => (pathUsed.indexOf(item) === -1));
+  if (newlistTocheck.length === 0) return false; // No good end.
+  return newlistTocheck.reduce((prev, curr) => listShortestPath(baseMap, curr, [...pathUsed, curr], globPath), pathUsed)
+}
 
 // Compute the edit distance between the two given strings
 // https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance
@@ -114,4 +143,5 @@ module.exports = {
   getWordDistance,
   listAllDistanceOfOne,
   listAllPossiblePath,
+  ladderLengthSmarter,
 };

@@ -8,6 +8,7 @@ const {
   getWordDistance,
   listAllDistanceOfOne,
   listAllPossiblePath,
+  ladderLengthSmarter,
 } = require('../leetCode/medium');
 
 const {
@@ -219,6 +220,7 @@ describe('LeetCode testing', () => {
 
       it('test real list multiple path', () => {
         expect(ladderLength(beginWord, endWord, wordList)).to.eql(5);
+        expect(ladderLengthSmarter(beginWord, endWord, wordList)).to.eql(5);
       })
     });
   })
