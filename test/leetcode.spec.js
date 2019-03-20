@@ -1,5 +1,6 @@
 const expect = require('expect.js');
-const { findTwoThatSumToTarget, isRootToLeafSumMatch } = require('../leetCode/easy');
+const { findTwoThatSumToTarget, isRootToLeafSumMatch, minimumDepthTree } = require('../leetCode/easy');
+const { Node } = require('../leetCode/easy/minDepthTree');
 
 const {
   isValidBST,
@@ -92,6 +93,54 @@ describe('LeetCode testing', () => {
 
       });
     })
+    describe.only('Minum Depth Tree', () => {
+      it('should find the shortest branch on the left', () => {
+
+        // Given binary tree [3,9,20,null,null,15,7],
+        //
+        //     3
+        //    / \
+        //   9  20
+        //     /  \
+        //    15   7
+        const tree = new Node(3);
+        tree.left = new Node(9);
+        tree.right = new Node(20);
+        tree.right.left = new Node(15);
+        tree.right.right = new Node(7);
+        console.log('Tree', JSON.stringify(tree, null, 2));
+        expect(minimumDepthTree(tree)).to.eql(2);
+      })
+
+      it('should find the shortest branch on the right', () => {
+        const tree = new Node(3);
+        tree.left = new Node(9);
+        tree.left.left = new Node(9);
+        tree.left.left.left = new Node(9);
+        tree.left.right = new Node(9);
+
+        tree.right = new Node(20);
+        tree.right.left = new Node(15);
+        tree.right.right = new Node(7);
+        console.log('Tree', JSON.stringify(tree, null, 2));
+        expect(minimumDepthTree(tree)).to.eql(3);
+      });
+
+      it('should find the shortest branch in the middle', () => {
+        const tree = new Node(3);
+        tree.left = new Node(9);
+        tree.left.left = new Node(9);
+        tree.left.left.left = new Node(9);
+        tree.left.right = new Node(9);
+
+        tree.right = new Node(20);
+        tree.right.left = new Node(15);
+        tree.right.right = new Node(7);
+        tree.right.right.right = new Node(7);
+        console.log('Tree', JSON.stringify(tree, null, 2));
+        expect(minimumDepthTree(tree)).to.eql(3);
+      });
+    });
   })
   describe('Medium testing', () => {
     describe('test Binary tree', () => {
