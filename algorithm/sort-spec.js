@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const expect = require('expect.js');
 
-const { native, quicksort, partition, swap } = require('./sort');
+const {merge, mergesort, native, quicksort, partition, swap} = require('./sort');
 
 describe('sort', () => {
   function compareNumbers(a, b) {
@@ -130,6 +130,56 @@ describe('sort', () => {
 
     it('should sort unicode', () => {
       expect(quicksort([
+        'ヽ༼ຈل͜ຈ༽ﾉ ヽ༼ຈل͜ຈ༽ﾉ',
+        '1E02',
+        '(｡◕ ∀ ◕｡)',
+        '-1',
+        '-1.00',
+        '｀ｨ(´∀｀∩',
+        '🐶',
+        'عل',
+        '__ﾛ(,_,*)',
+        '1E+02',
+        '・(￣∀￣)・:*:',
+        'الإطلاق',
+        'إيو',
+        '1E2',
+      ], function (a, b) {
+        return a.localeCompare(b);
+      })).to.eql([
+        '__ﾛ(,_,*)',
+        '-1',
+        '-1.00',
+        '・(￣∀￣)・:*:',
+        '(｡◕ ∀ ◕｡)',
+        '｀ｨ(´∀｀∩',
+        '🐶',
+        'ヽ༼ຈل͜ຈ༽ﾉ ヽ༼ຈل͜ຈ༽ﾉ',
+        '1E+02',
+        '1E02',
+        '1E2',
+        'إيو',
+        'الإطلاق',
+        'عل',
+      ]);
+    });
+  });
+
+  describe('mergesort', () => {
+    it('should merge', () => {
+      expect(merge([1, 3], [2, 4], compareNumbers)).to.eql([1, 2, 3, 4]);
+    });
+
+    it('should sort sample numbers', () => {
+      expect(mergesort([6, 5, 3, 1, 8, 7, 2, 4], compareNumbers)).to.eql([1, 2, 3, 4, 5, 6, 7, 8]);
+    });
+
+    it('should sort numbers', () => {
+      expect(mergesort([1, 2, 8, 7, 6, 5, 4, 3, 2, 1], compareNumbers)).to.eql([1, 1, 2, 2, 3, 4, 5, 6, 7, 8]);
+    });
+
+    it('should sort unicode', () => {
+      expect(mergesort([
         'ヽ༼ຈل͜ຈ༽ﾉ ヽ༼ຈل͜ຈ༽ﾉ',
         '1E02',
         '(｡◕ ∀ ◕｡)',

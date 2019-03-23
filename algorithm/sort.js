@@ -89,7 +89,64 @@ function quicksort(input, compare) {
   return qSort(input, 0, input.length - 1, compare);
 }
 
+/**
+ * Merge two arrays so that they are in order
+ *
+ * (according to the compare function)
+ *
+ * @param left       Array
+ * @param right      Array
+ * @param compare    Function to compare two elements
+ * @returns {Array}  Sorted output
+ */
+function merge(left, right, compare) {
+  let position = 0;
+  const mergedLength = left.length + right.length;
+  const output = [];
+
+  while (position < mergedLength) {
+    if (left[0] && right[0] === undefined) {
+      output[position] = left.shift();
+    } else if (left[0] === undefined && right[0]) {
+      output[position] = right.shift();
+    } else if (compare(left[0], right[0]) < 0) {
+      output[position] = left.shift();
+    } else {
+      output[position] = right.shift();
+    }
+    // console.log('output', output, 'position', position);
+    position++;
+  }
+
+  return output;
+}
+
+/**
+ * Sort an input of inputs using the mergesort algorithm
+ * @param input
+ * @returns {Array}
+ */
+function mergesort(input, compare) {
+  if (input.length < 2) {
+    return input;
+  }
+
+  if (input.length === 2) {
+    if (compare(input[0], input[1]) > 0) {
+      return [input[1], input[0]];
+    }
+  }
+
+  const middle = Math.ceil(input.length / 2);
+  const left = mergesort(input.slice(0, middle), compare);
+  const right = mergesort(input.slice(middle, input.length), compare);
+  // console.log('left', left, 'right', right);
+  return merge(left, right, compare);
+}
+
 module.exports = {
+  merge,
+  mergesort,
   native,
   quicksort,
   partition,
