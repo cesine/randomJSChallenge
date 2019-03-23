@@ -16,12 +16,12 @@ function swap(input, i, j) {
   return input;
 }
 
-function partition(input, pivot, left, right) {
+function partition(input, pivot, left, right, compare) {
   let partitionIndex = left;
   // loops through the array from left to right
   for (let i = left; i < right; i++) {
     // if the value at left is too big, move it over one
-    if (input[i] < input[pivot]) {
+    if (compare(input[i], input[pivot]) < 0) {
       swap(input, i, partitionIndex);
       partitionIndex++;
     }
@@ -31,13 +31,13 @@ function partition(input, pivot, left, right) {
   return partitionIndex;
 }
 
-function qSort(input, left, right) {
+function qSort(input, left, right, compare) {
   if (left < right) {
     const pivot = right;
-    const partitionIndex = partition(input, pivot, left, right);
+    const partitionIndex = partition(input, pivot, left, right, compare);
 
-    qSort(input, left, partitionIndex - 1);
-    qSort(input, partitionIndex + 1, right);
+    qSort(input, left, partitionIndex - 1, compare);
+    qSort(input, partitionIndex + 1, right, compare);
   }
 
   return input;
@@ -49,7 +49,7 @@ function qSort(input, left, right) {
  * @returns {Array}
  */
 function quicksort(input, compare) {
-  return qSort(input, 0, input.length - 1);
+  return qSort(input, 0, input.length - 1, compare);
 };
 
 module.exports = {
