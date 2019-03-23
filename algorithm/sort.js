@@ -8,6 +8,9 @@ function native(input, compare) {
 }
 
 function swap(input, i, j) {
+  if (input[i] === input[j]) {
+    return input;
+  }
   const temp = input[i];
   // eslint-disable-next-line no-param-reassign
   input[i] = input[j];

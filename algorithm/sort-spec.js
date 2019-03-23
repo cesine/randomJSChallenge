@@ -112,6 +112,10 @@ describe('sort', () => {
       expect(quicksort([1, 7, 3, 4, 2, 6, 5, 8, 9], compareNumbers)).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
 
+    it('should sort non-unique numbers', () => {
+      expect(quicksort([1, 7, 3, 4, 2, 6, 7, 5, 8, 9], compareNumbers)).to.eql([1, 2, 3, 4, 5, 6, 7, 7, 8, 9]);
+    });
+
     it('should sort sorted numbers', () => {
       expect(quicksort([1, 2, 3, 4, 5, 6, 7, 8, 9], compareNumbers)).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
