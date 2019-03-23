@@ -120,12 +120,15 @@ describe('sort', () => {
       expect(quicksort([1, 2, 3, 4, 5, 6, 7, 8, 9], compareNumbers)).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
 
-    it('should sort numbers worst case', () => {
+    it('should sort numbers inverse case', () => {
       expect(quicksort([9, 8, 7, 6, 5, 4, 3, 2, 1], compareNumbers)).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
 
+    it('should sort numbers worst case', () => {
+      expect(quicksort([9, 1, 8, 2, 7, 3, 6, 4, 5], compareNumbers)).to.eql([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    });
+
     it('should sort unicode', () => {
-      // https://github.com/minimaxir/big-list-of-naughty-strings/blob/master/blns.txt
       expect(quicksort([
         'ヽ༼ຈل͜ຈ༽ﾉ ヽ༼ຈل͜ຈ༽ﾉ',
         '1E02',
