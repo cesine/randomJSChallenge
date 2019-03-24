@@ -274,7 +274,7 @@ describe('LeetCode testing', () => {
       })
     });
 
-    describe.only('.rotateImage', () => {
+    describe('.rotateImage', () => {
       it('Empty matrix', () => {
         expect(rotateImage([])).to.eql([]);
       });

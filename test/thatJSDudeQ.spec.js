@@ -80,7 +80,7 @@ describe('Question of 0', () => {
   });
 });
 
-describe('Testing Multiple Multiplication', () => {
+describe.skip('Testing Multiple Multiplication', () => {
   it('should return the sum of Function', () => {
     // javascript console.log(mul(2)(3)(4)); // output : 24 console.log(mul(4)(3)(4)); // output : 48
     expect(Qmul.mul(2)(3)(4)()).to.eql(24);
