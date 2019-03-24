@@ -321,6 +321,24 @@ describe('LeetCode testing', () => {
         expect(rotateImage(input)).to.eql(output);
       });
 
+      it('medium 5x5 matrix without inner matrix', () => {
+        const input = [
+            [ 5, 1, 3, 9, 11],
+            [ 2, 0, 0, 0, 10],
+            [ 6, 0, 0, 0, 4],
+            [13, 0, 0, 0, 7],
+            [15,14, 5, 12,16]
+          ];
+        const output = [
+            [15,13, 6, 2, 5],
+            [14, 0, 0, 0, 1],
+            [5,  0, 0, 0, 3],
+            [12, 0, 0 ,0, 9],
+            [16, 7, 4, 10,11]
+        ];
+        expect(rotateImage(input)).to.eql(output);
+      });
+
       it('medium 4x4 matrix with inner matrix', () => {
         const input = [
             [ 5, 1, 9,11],
@@ -333,6 +351,24 @@ describe('LeetCode testing', () => {
             [14, 3, 4, 1],
             [12, 6, 8, 9],
             [16, 7,10,11]
+        ];
+        expect(rotateImage(input)).to.eql(output);
+      });
+
+      it('medium 5x5 matrix with inner matrix', () => {
+        const input = [
+            [ 5, 1, 3, 9, 11],
+            [ 2, 1, 2, 3, 10],
+            [ 6, 4, 5, 6, 4],
+            [13, 7, 8, 9, 7],
+            [15,14, 5, 12,16]
+          ];
+        const output = [
+            [15,13, 6, 2, 5],
+            [14, 7, 4, 1, 1],
+            [5,  8, 5, 2, 3],
+            [12, 9, 6 ,3, 9],
+            [16, 7, 4, 10,11]
         ];
         expect(rotateImage(input)).to.eql(output);
       });
