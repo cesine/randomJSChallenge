@@ -68,6 +68,12 @@ describe('sort', () => {
       expect(swap(['x', 'xx', 'xxx'], 0, 2)).to.eql(['xxx', 'xx', 'x']);
     });
 
+    it('should partition empty array', () => {
+      const input = [];
+      expect(partition(input, 0, 0, compareNumbers)).to.equal(1);
+      expect(input).to.eql([]);
+    });
+
     it('should partition with no change', () => {
       const input = [1, 2, 3];
       expect(partition(input, 0, 2, compareNumbers)).to.equal(2);
@@ -102,6 +108,10 @@ describe('sort', () => {
       const input = [1, 4, 2, 3, 5, 8, 7];
       expect(partition(input, 0, 3, compareNumbers)).to.equal(3);
       expect(input).to.eql([1, 3, 2, 4, 5, 8, 7]);
+    });
+
+    it('should sort empty array', () => {
+      expect(quicksort([], compareNumbers)).to.eql([]);
     });
 
     it('should sort random numbers', () => {
