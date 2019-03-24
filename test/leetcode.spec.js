@@ -10,6 +10,7 @@ const {
   listAllDistanceOfOne,
   listAllPossiblePath,
   ladderLengthSmarter,
+  rotateImage,
 } = require('../leetCode/medium');
 
 const {
@@ -93,7 +94,7 @@ describe('LeetCode testing', () => {
 
       });
     })
-    describe.only('Minum Depth Tree', () => {
+    describe('Minum Depth Tree', () => {
       it('should find the shortest branch on the left', () => {
 
         // Given binary tree [3,9,20,null,null,15,7],
@@ -271,6 +272,71 @@ describe('LeetCode testing', () => {
         expect(ladderLength(beginWord, endWord, wordList)).to.eql(5);
         expect(ladderLengthSmarter(beginWord, endWord, wordList)).to.eql(5);
       })
+    });
+
+    describe.only('.rotateImage', () => {
+      it('Empty matrix', () => {
+        expect(rotateImage([])).to.eql([]);
+      });
+
+      it('small 2x2 matrix', () => {
+        const input = [
+          [1,2],
+          [3,4],
+        ];
+        const output = [
+          [3,1],
+          [4,2],
+        ];
+        expect(rotateImage(input)).to.eql(output);
+      });
+
+      it('small 3x3 matrix', () => {
+        const input = [
+          [1,2,3],
+          [4,5,6],
+          [7,8,9],
+        ];
+        const output = [
+          [7,4,1],
+          [8,5,2],
+          [9,6,3],
+        ];
+        expect(rotateImage(input)).to.eql(output);
+      });
+
+      it('medium 4x4 matrix no inner matrix', () => {
+        const input = [
+            [ 5, 1, 9,11],
+            [ 2, 0, 0,10],
+            [13, 0, 0, 7],
+            [15,14,12,16]
+          ];
+        const output = [
+            [15,13, 2, 5],
+            [14, 0, 0, 1],
+            [12, 0, 0, 9],
+            [16, 7,10,11]
+        ];
+        expect(rotateImage(input)).to.eql(output);
+      });
+
+      it('medium 4x4 matrix with inner matrix', () => {
+        const input = [
+            [ 5, 1, 9,11],
+            [ 2, 4, 8,10],
+            [13, 3, 6, 7],
+            [15,14,12,16]
+          ];
+        const output = [
+            [15,13, 2, 5],
+            [14, 3, 4, 1],
+            [12, 6, 8, 9],
+            [16, 7,10,11]
+        ];
+        expect(rotateImage(input)).to.eql(output);
+      });
+
     });
   })
   describe('Hard testing', () => {

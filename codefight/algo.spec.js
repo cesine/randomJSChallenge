@@ -27,7 +27,7 @@ const expect = require('expect.js');
 
 const { middleNumberCute, weirdSum, weirdSum2 } = require('./algo');
 
-describe.only('test the middleNumber challenge', () => {
+describe('test the middleNumber challenge', () => {
   it('should pass test 1', () => {
     expect(middleNumberCute(273, 415)).toEqual(344);
   });
