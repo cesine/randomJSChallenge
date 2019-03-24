@@ -35,14 +35,13 @@ function swap(input, i, j) {
  * Return the position where the pivot lands.
  *
  * @param input     An array to be sorted (in place)
- * @param pivot     Index of the pivot
  * @param left      Index of the left side to iterate over
  * @param right     Index of the right side to iterate over
  * @param compare   Function to compare two values
  * @returns Integer Index where the pivot landed
  */
 function partition(input, left, right, compare) {
-  const pivot = input[left + Math.floor(Math.random() * (right - left))];
+  const pivot = input[Math.floor((left + right) / 2)];
 
   while (left <= right) {
     while (compare(input[left], pivot) < 0) {
@@ -52,6 +51,7 @@ function partition(input, left, right, compare) {
       right--;
     }
     if (left <= right) {
+      // console.log(` (compare ${pivot})`);
       swap(input, left, right);
       left++;
       right--;
@@ -71,15 +71,16 @@ function partition(input, left, right, compare) {
  * @returns Array   Input array
  */
 function qSort(input, left, right, compare) {
-  if (left < right) {
-    const partitionIndex = partition(input, left, right, compare);
+  // console.log('qsort', input.map((item, i) => (i >= left && i <= right) ? item : '-'));
 
-    if (left < partitionIndex - 1) {
-      qSort(input, left, partitionIndex - 1, compare);
-    }
-    if (partitionIndex < right){
-      qSort(input, partitionIndex, right, compare);
-    }
+  const partitionIndex = partition(input, left, right, compare);
+
+  // console.log('partitionIndex', partitionIndex, input.map((item, i) => (i >= left && i <= right) ? item : '-'));
+  if (left < partitionIndex - 1) {
+    qSort(input, left, partitionIndex - 1, compare);
+  }
+  if (partitionIndex < right) {
+    qSort(input, partitionIndex, right, compare);
   }
 
   return input;

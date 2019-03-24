@@ -1,12 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const expect = require('expect.js');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const sinon = require('sinon');
 
-const { merge, mergesort, native, quicksort, partition, swap } = require('./sort');
+const {merge, mergesort, native, quicksort, partition, swap} = require('./sort');
 
 describe('sort', () => {
-  const sandbox = sinon.createSandbox();
   function compareNumbers(a, b) {
     return a - b;
   }
@@ -67,46 +64,38 @@ describe('sort', () => {
   });
 
   describe('quicksort', () => {
-    beforeEach(() => {
-      sandbox.stub(Math, 'random').returns(1);
-    });
-
-    afterEach(() => {
-      sandbox.restore();
-    });
-
     it('should swap', () => {
       expect(swap(['x', 'xx', 'xxx'], 0, 2)).to.eql(['xxx', 'xx', 'x']);
     });
 
     it('should partition with no change', () => {
-      const input = [1, 2];
-      expect(partition(input, 0, 1, compareNumbers)).to.equal(2);
-      expect(input).to.eql([1, 2]);
+      const input = [1, 2, 3];
+      expect(partition(input, 0, 2, compareNumbers)).to.equal(2);
+      expect(input).to.eql([1, 2, 3]);
     });
 
     it('should partition with inverse order', () => {
       const input = [3, 2, 1];
-      expect(partition(input, 0, 2, compareNumbers)).to.equal(1);
+      expect(partition(input, 0, 2, compareNumbers)).to.equal(2);
       expect(input).to.eql([1, 2, 3]);
     });
 
     it('should partition with random order', () => {
       const input = [3, 7, 8, 4, 2, 1, 5];
-      expect(partition(input, 0, 6, compareNumbers)).to.equal(5);
-      expect(input).to.eql([3, 5, 1, 4, 2, 8, 7]);
+      expect(partition(input, 0, 6, compareNumbers)).to.equal(4);
+      expect(input).to.eql([3, 1, 2, 4, 8, 7, 5]);
     });
 
     it('should partition with another random order', () => {
       const input = [3, 8, 7, 4, 2, 1, 5];
-      expect(partition(input, 0, 6, compareNumbers)).to.equal(5);
-      expect(input).to.eql([3, 5, 1, 4, 2, 7, 8]);
+      expect(partition(input, 0, 6, compareNumbers)).to.equal(4);
+      expect(input).to.eql([3, 1, 2, 4, 7, 8, 5]);
     });
 
     it('should partition inside an array', () => {
       const input = [3, 4, 2, 1, 5, 8, 7];
-      expect(partition(input, 0, 3, compareNumbers)).to.equal(1);
-      expect(input).to.eql([1, 4, 2, 3, 5, 8, 7]);
+      expect(partition(input, 0, 3, compareNumbers)).to.equal(3);
+      expect(input).to.eql([3, 1, 2, 4, 5, 8, 7]);
     });
 
     it('should partition inside an array again', () => {
