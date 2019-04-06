@@ -49,21 +49,21 @@ describe('Testing the basic', () => {
   it('should call a function', (done) => {
     exp.app.functionCall().then((res) => {
       // console.log(res);
-      expect(res[0].id).toEqual(1);
+      expect(res[0].id).to.eql(1);
       done();
     });
   });
 
   it('Check the prepared Statement', (done) => {
     exp.app.singleParam(3).then((res) => {
-      expect(res.id).toEqual(3);
+      expect(res.id).to.eql(3);
       done();
     });
   });
 
   it('Check multiple param', (done) => {
     exp.app.multiParam(4).then((res) => {
-      expect(res.length).toEqual(2);
+      expect(res.length).to.eql(2);
       done();
     });
   });

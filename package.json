@@ -22,7 +22,7 @@
     "mocha": "^3.5.3"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha './{,!(node_modules)/**}/*-spec.js'",
     "lint": "eslint .",
     "lintfix": "eslint --fix ."
   },
