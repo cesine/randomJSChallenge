@@ -1,3 +1,4 @@
+const expect = require('expect.js');
 /*
  ======== A Handy Little Jasmine Reference ========
  inspired by  https://github.com/pivotal/jasmine/wiki/Matchers
@@ -73,40 +74,40 @@ describe('testing all apect of the SPC report', () => {
   };
 
   it('should check that the Xbar for each user match the template', () => {
-    expect(Math.round(spc.xBar(trialArrOfUserA) * roundTo) / roundTo).toEqual(21.9903333);
-    expect(Math.round(spc.xBar(trialArrOfUserB) * roundTo) / roundTo).toEqual(21.9841);
-    expect(Math.round(spc.xBar(trialArrOfUserC) * roundTo) / roundTo).toEqual(21.9894);
+    expect(Math.round(spc.xBar(trialArrOfUserA) * roundTo) / roundTo).to.eql(21.9903333);
+    expect(Math.round(spc.xBar(trialArrOfUserB) * roundTo) / roundTo).to.eql(21.9841);
+    expect(Math.round(spc.xBar(trialArrOfUserC) * roundTo) / roundTo).to.eql(21.9894);
   });
 
   it('should return the RBar (average of max-min of each row', () => {
-    expect(Math.round(spc.rBar(trialArrOfUserA) * roundTo) / roundTo).toEqual(0.0269);
-    expect(Math.round(spc.rBar(trialArrOfUserB) * roundTo) / roundTo).toEqual(0.0162);
-    expect(Math.round(spc.rBar(trialArrOfUserC) * roundTo) / roundTo).toEqual(0.0248);
+    expect(Math.round(spc.rBar(trialArrOfUserA) * roundTo) / roundTo).to.eql(0.0269);
+    expect(Math.round(spc.rBar(trialArrOfUserB) * roundTo) / roundTo).to.eql(0.0162);
+    expect(Math.round(spc.rBar(trialArrOfUserC) * roundTo) / roundTo).to.eql(0.0248);
   });
 
   it('should get the difference between the maximum and minimum of the Xbar', () => {
-    expect(Math.round(spc.xBarMinMaxDiff(allTheTrials) * roundTo) / roundTo).toEqual(0.0062333);
-    expect(Math.round(spc.xBarMinMaxDiff([trialArrOfUserA, trialArrOfUserB]) * roundTo) / roundTo).toEqual(0.0062333);
+    expect(Math.round(spc.xBarMinMaxDiff(allTheTrials) * roundTo) / roundTo).to.eql(0.0062333);
+    expect(Math.round(spc.xBarMinMaxDiff([trialArrOfUserA, trialArrOfUserB]) * roundTo) / roundTo).to.eql(0.0062333);
   });
 
   it('should get the Average of the Rbar', () => {
-    expect(Math.round(spc.rDoubleBarAvg(allTheTrials) * roundTo) / roundTo).toEqual(0.0226333);
-    expect(Math.round(spc.rDoubleBarAvg([trialArrOfUserA, trialArrOfUserB]) * roundTo) / roundTo).toEqual(0.02155);
+    expect(Math.round(spc.rDoubleBarAvg(allTheTrials) * roundTo) / roundTo).to.eql(0.0226333);
+    expect(Math.round(spc.rDoubleBarAvg([trialArrOfUserA, trialArrOfUserB]) * roundTo) / roundTo).to.eql(0.02155);
   });
 
   it('Should give the UCL value depending on the number of trial', () => {
     // 3 operator 3 trial
-    expect(Math.round(spc.giveTheUcl(allTheTrials) * roundTo) / roundTo).toEqual(0.058394);
+    expect(Math.round(spc.giveTheUcl(allTheTrials) * roundTo) / roundTo).to.eql(0.058394);
     // Trying with 2 operator and 3 trial.
-    expect(Math.round(spc.giveTheUcl([trialArrOfUserA, trialArrOfUserB]) * roundTo) / roundTo).toEqual(0.055599);
+    expect(Math.round(spc.giveTheUcl([trialArrOfUserA, trialArrOfUserB]) * roundTo) / roundTo).to.eql(0.055599);
     // all operator but 2 trial:
-    expect(Math.round(spc.giveTheUcl(allOperator2Trial) * roundTo) / roundTo).toEqual(0.04796);
+    expect(Math.round(spc.giveTheUcl(allOperator2Trial) * roundTo) / roundTo).to.eql(0.04796);
   });
 
   it('Should match the final target value', () => {
     // Assuming a Min = 21.94 , Max = 22.28
-    expect(spc.returnAllAnalysis(allTheTrials, 21.94, 22.28)).toEqual(resultIf3OpAnd3Trial);
-    expect(spc.returnAllAnalysis(allOperator2Trial, 21.94, 22.28)).toEqual(resultIf3OpAnd2Trial);
+    expect(spc.returnAllAnalysis(allTheTrials, 21.94, 22.28)).to.eql(resultIf3OpAnd3Trial);
+    expect(spc.returnAllAnalysis(allOperator2Trial, 21.94, 22.28)).to.eql(resultIf3OpAnd2Trial);
   });
 });
 
@@ -117,40 +118,40 @@ describe('It shoudl check all aspect of the Z test for the array', () => {
     min = 0.018,
     target = 7;
   it('should give me the average', () => {
-    expect(Math.round(cap.giveAvg(arrToCheck) * roundTo) / roundTo).toEqual(7.0187667);
+    expect(Math.round(cap.giveAvg(arrToCheck) * roundTo) / roundTo).to.eql(7.0187667);
   });
 
   it('Should give me the StDev of the function', () => {
-    expect(Math.round(cap.giveStDev(arrToCheck) * roundTo) / roundTo).toEqual(0.0033598);
+    expect(Math.round(cap.giveStDev(arrToCheck) * roundTo) / roundTo).to.eql(0.0033598);
   });
 
   it('Should give me the Upper Z value', () => {
-    expect(Math.round(cap.zUpperSpec(7, 0.036, arrToCheck) * roundTo) / roundTo).toEqual(5.1292168);
+    expect(Math.round(cap.zUpperSpec(7, 0.036, arrToCheck) * roundTo) / roundTo).to.eql(5.1292168);
   });
 
   it('Should give me the lower Z value', () => {
-    expect(Math.round(cap.zLowerSpec(7, 0.018, arrToCheck) * roundTo) / roundTo).toEqual(10.9429907);
+    expect(Math.round(cap.zLowerSpec(7, 0.018, arrToCheck) * roundTo) / roundTo).to.eql(10.9429907);
   });
 
   it('Should give me the Remaining of the Cumulative NormalDistValue of the Z Value', () => {
-    expect(Math.round(cap.cdf(5.1292168) * roundTo) / roundTo).toEqual(0.0000001);
-    expect(Math.round(cap.cdf(0) * roundTo) / roundTo).toEqual(0.5);
-    expect(Math.round(cap.cdf(1.333333) * roundTo) / roundTo).toEqual(0.0912113);
-    expect(Math.round(cap.cdf(2) * roundTo) / roundTo).toEqual(0.0227501);
+    expect(Math.round(cap.cdf(5.1292168) * roundTo) / roundTo).to.eql(0.0000001);
+    expect(Math.round(cap.cdf(0) * roundTo) / roundTo).to.eql(0.5);
+    expect(Math.round(cap.cdf(1.333333) * roundTo) / roundTo).to.eql(0.0912113);
+    expect(Math.round(cap.cdf(2) * roundTo) / roundTo).to.eql(0.0227501);
   });
 
   it('Should give me the Zst point', () => {
-    expect(Math.round(cap.findZst(arrToCheck, min, max) * roundTo) / roundTo).toEqual(8.0361037);
+    expect(Math.round(cap.findZst(arrToCheck, min, max) * roundTo) / roundTo).to.eql(8.0361037);
   });
 
   it('Should give me the Z Quality', () => {
-    expect(Math.round(cap.findZQuality(arrToCheck, target, min, max) * roundTo) / roundTo).toEqual(4.9912169);
+    expect(Math.round(cap.findZQuality(arrToCheck, target, min, max) * roundTo) / roundTo).to.eql(4.9912169);
   });
 
   it('Should give me the Final Pass-Fail result', () => {
-    expect(cap.giveMeThePassFailStatus(arrToCheck, target, min, max, 4.5)).toBeTruthy();
+    expect(cap.giveMeThePassFailStatus(arrToCheck, target, min, max, 4.5)).to.eql(true);
 
     const arrToCheck2 = [21.0000, 21.9910, 21.9780, 21.9880, 21.9790, 21.9860, 21.9770, 21.9890, 21.9840, 21.9880, 21.9860, 21.9890, 21.9790, 21.9830, 21.9880, 21.9760, 21.9850, 21.9860, 21.9880, 21.9890, 21.9880, 21.9850, 21.9870, 21.9880, 21.9860, 21.9780, 21.9890, 21.9760, 21.9800, 21.9820];
-    expect(cap.giveMeThePassFailStatus(arrToCheck2, 22.11, 0.17, 0.17, 4.5)).toBeFalsy();
+    expect(cap.giveMeThePassFailStatus(arrToCheck2, 22.11, 0.17, 0.17, 4.5)).to.eql(false);
   });
 });

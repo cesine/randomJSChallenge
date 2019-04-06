@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const { isChainSymetrical, countAllInSubChain, countAllSymetricSubChain } = require('../codility/winterLights');
+const { isChainSymetrical, countAllInSubChain, countAllSymetricSubChain } = require('./winterLights');
 
 describe('testing the winterLights challenge', () => {
   it('test the isChainSymetrical', () => {

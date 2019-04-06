@@ -1,6 +1,6 @@
 const expect = require('expect.js');
-const { findTwoThatSumToTarget, isRootToLeafSumMatch, minimumDepthTree } = require('../leetCode/easy');
-const { Node } = require('../leetCode/easy/minDepthTree');
+const { findTwoThatSumToTarget, isRootToLeafSumMatch, minimumDepthTree } = require('./easy');
+const { Node } = require('./easy/minDepthTree');
 
 const {
   isValidBST,
@@ -11,7 +11,7 @@ const {
   listAllPossiblePath,
   ladderLengthSmarter,
   rotateImage,
-} = require('../leetCode/medium');
+} = require('./medium');
 
 const {
   findPool,
@@ -20,7 +20,7 @@ const {
   walkPoolsUsingBoxes,
   walkPoolsUsingBoxesOutSideIn,
   convertArrToMetadata,
-} = require ('../leetCode/hard');
+} = require ('./hard');
 
 const generateList = (nbr) => {
   const tmp = [];

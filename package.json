@@ -9,7 +9,6 @@
     "node-static": "^0.7.10",
     "q-fs": "^0.1.36",
     "q-io": "^1.13.2",
-    "scope-chains-closures": "^1.0.4",
     "through2-map": "^2.0.0"
   },
   "devDependencies": {
@@ -19,10 +18,11 @@
     "eslint-plugin-mocha": "^4.11.0",
     "expect": "^21.1.0",
     "expect.js": "^0.3.1",
-    "mocha": "^3.5.3"
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "nyc mocha './{,!(node_modules)/**}/*-spec.js'",
     "lint": "eslint .",
     "lintfix": "eslint --fix ."
   },

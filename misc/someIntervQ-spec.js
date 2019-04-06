@@ -13,7 +13,7 @@ const {
   splitinSubStrWithMatch,
   splitinSubStrRecuWithMatch,
   cleanTestStr,
-} = require('../misc/someIntervQ');
+} = require('./someIntervQ');
 const expect = require('expect.js');
 
 describe('Some test from GlassDoor on Addapa', () => {
