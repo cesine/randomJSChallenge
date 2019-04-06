@@ -1,6 +1,6 @@
 // Problem: Given an array of integers and a target sum, return every pair of integers that add up to the target sum.
 
-const { findTarget, equalTarget, hashMapTwoSum } = require('../arraytest/sum2array');
+const { findTarget, equalTarget, hashMapTwoSum } = require('./sum2array');
 const expect = require('expect.js');
 
 const nbrList = [30, 20, 10, 40, 50, 60, 70];

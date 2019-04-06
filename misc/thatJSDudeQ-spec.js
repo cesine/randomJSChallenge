@@ -7,7 +7,7 @@ const {
   Q16,
   Q18,
   Qmul,
-} = require('../misc/thatJSDudeQ');
+} = require('./thatJSDudeQ');
 const expect = require('expect.js');
 
 describe('that JS Dude Question', () => {

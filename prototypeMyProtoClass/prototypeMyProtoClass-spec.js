@@ -7,7 +7,7 @@ const {
   Lion,
   Programmer,
   makeProgrammerTendency,
-} = require('../prototypeMyProtoClass/app');
+} = require('./app');
 
 describe('For all those class lover', () => {
   it('test one', () => {

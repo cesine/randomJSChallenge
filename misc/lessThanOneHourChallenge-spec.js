@@ -7,7 +7,7 @@ const {
   fiboLoop,
   largestNumberFromArray,
   giveMeAllPossible100,
-} = require('../misc/lessThanOneHourChallenge');
+} = require('./lessThanOneHourChallenge');
 const expect = require('expect.js');
 
 describe('Less than 1h challenge', () => {

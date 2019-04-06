@@ -3,7 +3,7 @@ const {
   returnRowOfPascalBeforeNMath,
   theMostFrequentStringInArray,
   findWordInArray
-} = require('../misc/redditRandomQ');
+} = require('./redditRandomQ');
 const expect = require('expect.js');
 
 describe('Reddit random question Testing', () => {
