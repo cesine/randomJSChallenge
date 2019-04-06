@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const expect = require('expect.js');
 
-const { Node } = require('./tree');
+const {Node, RedBlackNode} = require('./tree');
 
 describe('Node', () => {
   it('should construct', () => {
@@ -186,6 +186,59 @@ describe('Node', () => {
             left: null, value: 'o', right: null,
           },
         },
+      });
+      expect(tree.walkBreadthFirst(undefined, (node) => console.log(node.value)).map(node => node.value)).to.eql(['e', 'a', 'b', 'h', 'm', 'o']);
+    });
+  });
+
+  describe('RedBlackTree breadth first walk', () => {
+    it('should walk empty trees', () => {
+      const tree = new RedBlackNode('a');
+      expect(tree.walkBreadthFirst().map(node => node.value)).to.eql(['a']);
+    });
+
+    it('should create a tree', () => {
+      const tree = new RedBlackNode('a');
+      tree.balancedAdd('b');
+      expect(tree).to.eql({
+        left: {
+          left: null,
+          value: 'a',
+          right: null,
+          color: 'BLACK',
+        },
+        value: 'b',
+        right: null,
+        color: 'BLACK',
+      });
+    });
+
+    it('should insert a balanced tree', () => {
+      const tree = new RedBlackNode('a');
+      tree.add('b');
+      tree.add('m');
+      tree.add('o');
+      tree.add('h');
+      tree.add('e');
+      expect(tree).to.eql({
+        left: {
+          left: {
+            left: null, value: 'a', right: null,
+          },
+          value: 'b',
+          right: null,
+        },
+        value: 'e',
+        right: {
+          left: {
+            left: null, value: 'h', right: null,
+          },
+          value: 'm',
+          right: {
+            left: null, value: 'o', right: null,
+          },
+        },
+        color: 'BLACK',
       });
       expect(tree.walkBreadthFirst(undefined, (node) => console.log(node.value)).map(node => node.value)).to.eql(['e', 'a', 'b', 'h', 'm', 'o']);
     });

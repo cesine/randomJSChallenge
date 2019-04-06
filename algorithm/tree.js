@@ -1,3 +1,6 @@
+const BLACK = 'BLACK';
+const RED = 'RED';
+
 /**
  * Tree class
  */
@@ -12,14 +15,16 @@ class Node {
   add(value) {
     if (value < this.value) {
       if (!this.left) {
-        this.left = new Node(value);
+        this.left = new this.constructor(value);
+        this.left.parent = this;
         return this.left;
       }
       return this.left.add(value);
     }
 
     if (!this.right) {
-      this.right = new Node(value);
+      this.right = new this.constructor(value);
+      this.left.parent = this;
       return this.right;
     }
     return this.right.add(value);
@@ -92,6 +97,47 @@ class Node {
   }
 }
 
+class RedBlackNode extends Node {
+  constructor(value) {
+    super(value);
+    this.color = BLACK;
+    return this;
+  }
+
+  recolor() {
+    if (this.parent.color !== "BLACK") {
+      if (!this.parent.parent) {
+        return;
+      }
+      let uncle;
+      if (this.parent.parent.left === this.parent) {
+        uncle = this.parent.parent.right;
+      } else (if this.parent.parent.right === this.parent){
+        uncle = this.parent.parent.left;
+      }
+      if (uncle.color === RED) {
+        this.parent.color = BLACK;
+        this.uncle = BLACK;
+        // TODO unlink?
+        this.parent.parent = this;
+      }
+    }
+
+  }
+
+  rebalance() {
+
+  }
+
+  balancedAdd(value) {
+    const newNode = this.add(value);
+    newNode.color = RED;
+    newNode.recolor();
+    this.rebalance();
+  }
+}
+
 module.exports = {
   Node,
+  RedBlackNode,
 };
