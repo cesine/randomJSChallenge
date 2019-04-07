@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const expect = require('expect.js');
 
-const { Node } = require('./tree');
+const {BLACK, Node, RED, RedBlackNode} = require('./tree');
 
 describe('Node', () => {
   it('should construct', () => {
@@ -188,6 +188,131 @@ describe('Node', () => {
         },
       });
       expect(tree.walkBreadthFirst(undefined, (node) => console.log(node.value)).map(node => node.value)).to.eql(['e', 'a', 'b', 'h', 'm', 'o']);
+    });
+  });
+
+  describe('RedBlackNode', () => {
+    it('should construct', () => {
+      const tree = new RedBlackNode('a');
+      expect(tree).to.eql({
+        left: null,
+        value: 'a',
+        right: null,
+        parent: null,
+      });
+    });
+
+    describe('colorFlip', () => {
+      it('should flip color', () => {
+        const tree = new RedBlackNode(4);
+        tree.add(3);
+        tree.add(7);
+
+        expect(tree).to.eql({
+          left: {
+            left: null,
+            value: 3,
+            color: RED,
+            right: null,
+            parent: tree,
+          },
+          value: 4,
+          color: BLACK,
+          right: {
+            left: null,
+            value: 7,
+            color: RED,
+            right: null,
+            parent: tree,
+          },
+          parent: null,
+        });
+
+        tree.add(10);
+
+        expect(tree).to.eql({
+          left: {
+            left: null,
+            value: 3,
+            color: BLACK,
+            right: null,
+            parent: tree,
+          },
+          value: 4,
+          color: BLACK,
+          right: {
+            left: null,
+            value: 7,
+            color: BLACK,
+            right: {
+              left: null,
+              value: 10,
+              color: RED,
+              right: null,
+              parent: tree.right,
+            },
+            parent: tree,
+          },
+          parent: null,
+        });
+      });
+
+      it('should flip color up the tree', () => {
+        const tree = new RedBlackNode(10);
+        tree.add(6);
+        tree.add(13);
+        tree.add(4);
+        tree.add(8);
+        tree.add(12);
+        tree.add(16);
+        tree.add(15);
+        tree.add(17);
+
+        expect(tree.value).to.eql(10);
+        expect(tree.left.value).to.eql(6);
+        expect(tree.left.left.value).to.eql(4);
+        expect(tree.left.right.value).to.eql(8);
+
+        expect(tree.left.color).to.eql(BLACK);
+        expect(tree.left.left.color).to.eql(RED);
+        expect(tree.left.right.color).to.eql(RED);
+
+        expect(tree.right.value).to.eql(13);
+        expect(tree.right.left.value).to.eql(12);
+        expect(tree.right.right.value).to.eql(16);
+
+        expect(tree.right.color).to.eql(RED);
+        expect(tree.right.left.color).to.eql(BLACK);
+        expect(tree.right.right.color).to.eql(BLACK);
+
+        expect(tree.right.right.value).to.eql(16);
+        expect(tree.right.right.left.value).to.eql(15);
+        expect(tree.right.right.right.value).to.eql(17);
+
+        expect(tree.right.right.color).to.eql(BLACK);
+        expect(tree.right.right.left.color).to.eql(RED);
+        expect(tree.right.right.right.color).to.eql(RED);
+
+        tree.add(3);
+        expect(tree.left.color).to.eql(RED);
+        expect(tree.left.left.color).to.eql(BLACK);
+        expect(tree.left.right.color).to.eql(BLACK);
+
+        // Cause a chained color flip
+        tree.add(18);
+
+        expect(tree.color).to.eql(BLACK);
+
+        expect(tree.left.value).to.eql(6);
+        expect(tree.left.color).to.eql(RED);
+        expect(tree.left.left.color).to.eql(BLACK);
+        expect(tree.left.right.color).to.eql(BLACK);
+
+        expect(tree.right.right.value).to.eql(16);
+        expect(tree.right.right.color).to.eql(RED);
+        expect(tree.right.right.left.color).to.eql(BLACK);
+        expect(tree.right.right.right.color).to.eql(BLACK);
+      });
     });
   });
 });
