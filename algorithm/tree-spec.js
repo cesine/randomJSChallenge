@@ -202,7 +202,7 @@ describe('Node', () => {
       });
     });
 
-    describe('colorFlip', () => {
+    describe('add', () => {
       it('should flip color', () => {
         const tree = new RedBlackNode(4);
         tree.add(3);
@@ -312,6 +312,78 @@ describe('Node', () => {
         expect(tree.right.right.color).to.eql(RED);
         expect(tree.right.right.left.color).to.eql(BLACK);
         expect(tree.right.right.right.color).to.eql(BLACK);
+      });
+
+
+      it('should rotate left', () => {
+        const tree = new RedBlackNode(10);
+        tree.add(6);
+        tree.add(13);
+        tree.add(4);
+        tree.add(8);
+        tree.add(12);
+        tree.add(16);
+        tree.add(15);
+        tree.add(17);
+
+        expect(tree.right.right.value).to.eql(16);
+        expect(tree.right.right.color).to.eql(BLACK);
+        expect(tree.right.right.left.color).to.eql(RED);
+        expect(tree.right.right.right.color).to.eql(RED);
+
+        // Cause a rotation
+        const eighteen = tree.add(18);
+
+        expect(eighteen.parent.color).to.eql(BLACK);
+        expect(eighteen.parent.parent.color).to.eql(RED);
+        expect(eighteen.parent.parent.parent.value).to.eql(13);
+        expect(eighteen.parent.parent.parent.color).to.eql(BLACK);
+
+        console.log(eighteen.parent.parent.parent.parent);
+        const newRoot = tree.parent;
+        // expect(newRoot.color).to.eql(BLACK);
+        // expect(newRoot.value).to.eql(13);
+      });
+    });
+
+    describe('rotateLeft', () => {
+      it('should rotate left', () => {
+        const tree = new RedBlackNode('a');
+        tree.add('c');
+        const b = tree.add('b')
+
+        expect(tree.value).to.eql('a');
+        expect(tree.right.value).to.eql('c');
+        expect(tree.right.left.value).to.eql('b');
+
+        b.rotateLeft();
+        expect(b.parent).to.eql(null);
+        expect(b.left.value).to.eql('a');
+        expect(b.left.parent).to.eql(b);
+
+        expect(b.right.value).to.eql('c');
+        expect(b.right.parent).to.eql(b);
+
+        expect(tree.parent.value).to.eql('b');
+      });
+    });
+
+    describe('rotateRight', () => {
+      it('should rotate left', () => {
+        const tree = new RedBlackNode('a');
+        tree.add('b');
+        const c = tree.add('c');
+
+        expect(tree.value).to.eql('a');
+        expect(tree.right.value).to.eql('b');
+        expect(tree.right.right.value).to.eql('c');
+
+        c.rotateRight();
+        console.log('tree', tree);
+        const updatedRoot = tree.parent;
+        expect(updatedRoot.value).to.eql('b');
+        expect(updatedRoot.left.value).to.eql('a');
+        expect(updatedRoot.right.value).to.eql('c');
       });
     });
   });

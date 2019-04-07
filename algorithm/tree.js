@@ -118,6 +118,7 @@ class RedBlackNode extends Node {
 
   add(value) {
     const result = super.add(value);
+    console.log(`${value} add visiting ${this.value}`);
     if (!result.parent) {
       result.parent = this;
     }
@@ -133,12 +134,29 @@ class RedBlackNode extends Node {
       console.log(`${result.value} has no aunt`, result.parent.color);
       return result;
     }
-    // Detect color flip
+    // Color flip
     if (result.parent.color === RED && aunt.color === RED) {
       console.log(`${result.value} need a color flip`, result.parent.color, aunt.color);
-      return result.colorFlip();
+      result.colorFlip();
+    } else {
+      console.log(`  not flipping at ${this.value}`);
+    }
+
+    if (result.parent.color === RED && aunt.color === BLACK && result.parent.parent.left === aunt) {
+      console.log(`${result.value} need a left rotation`, result.parent.color, aunt.color);
+      result.rotateLeft();
+    } else {
+      console.log(`  ${result.value} not rotating left `, result.parent.color, aunt.color);
+    }
+
+    if (result.parent.color === RED && aunt.color === BLACK && result.parent.parent.right === aunt) {
+      console.log(`${result.value} need a left rotation`, result.parent.color, aunt.color);
+      result.rotateRight();
+    } else {
+      console.log(`  ${result.value} not rotating right `, result.parent.color, aunt.color);
     }
     // console.log(`${result.value} dont need a color flip`, result.parent.color, aunt.color);
+    console.log(`${value}  done ${result.value} \n`);
     return result;
   }
 
@@ -146,7 +164,7 @@ class RedBlackNode extends Node {
     const grandparent = this.parent.parent;
     const aunt = (grandparent.left !== this.parent ? grandparent.left : grandparent.right) || {};
 
-    console.log(`${this.value} ColorFlip  ${aunt.value} ${aunt.color} ${grandparent.value} ${grandparent.color} ${this.parent.value} ${this.parent.color}`);
+    console.log(`  ${this.value} ColorFlip  ${aunt.value} ${aunt.color} ${grandparent.value} ${grandparent.color} ${this.parent.value} ${this.parent.color}`);
     // Grandparent is RED (if its not root)
     if (grandparent.parent) {
       grandparent.color = RED;
@@ -161,11 +179,64 @@ class RedBlackNode extends Node {
     console.log(` Flipped     ${aunt.value} ${aunt.color} ${grandparent.value} ${grandparent.color} ${this.parent.value} ${this.parent.color}`);
     return this;
   }
+
+  /**
+   * Rotate
+   *
+   * A
+   *  \
+   *   C
+   *  /
+   * B
+   */
+  rotateLeft() {
+    console.log(`${this.value} rotate Left`);
+    const a = this.parent.parent;
+    const c = this.parent;
+    const p = a.left;
+    const q = c.right;
+
+    this.parent = null;
+    this.left = a;
+    a.parent = this;
+    this.right = c;
+    c.parent = this;
+
+    a.right = p;
+    if (p) {
+      p.parent = a;
+    }
+    c.left = q;
+    if (q) {
+      q.parent = c;
+    }
+
+    return this;
+  }
+
+  /**
+   * Rotate
+   *
+   * A
+   *  \
+   *   B
+   *    \
+   *     C
+   */
+  rotateRight() {
+    console.log(`${this.value} rotate right`);
+    const grandparent = this.parent.parent;
+    const p = this.parent.left;
+    this.parent.left = grandparent;
+    grandparent.right = p;
+    grandparent.parent = this.parent;
+    return this;
+  }
 }
 
 module.exports = {
-    BLACK,
+  BLACK,
   Node,
-    RED,
+  RED,
   RedBlackNode,
 };
