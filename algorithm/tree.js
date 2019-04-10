@@ -123,41 +123,35 @@ class RedBlackNode extends Node {
       result.parent = this;
     }
     result.color = RED;
+    this.balance(result);
+    return result;
+  }
 
-    if (!result.parent.parent) {
-      console.log(`${result.value} has no grandparent`);
-      return result;
+  balance(result) {
+    if (!result.parent) {
+      console.log(`${result.value} has no parent (its the root)`);
+      return;
     }
+    if (result.parent.color === BLACK) {
+      return;
+    }
+
     // console.log(`result of ${value} is`, result);
-    const aunt = result.parent.parent.left !== result ? result.parent.parent.left : result.parent.parent.right;
-    if (!aunt) {
-      console.log(`${result.value} has no aunt`, result.parent.color);
-      return result;
-    }
+    const aunt = (result.parent.parent.left !== result ? result.parent.parent.left : result.parent.parent.right) || {};
     // Color flip
+
     if (result.parent.color === RED && aunt.color === RED) {
       console.log(`${result.value} need a color flip`, result.parent.color, aunt.color);
       result.colorFlip();
+
+      this.balance(result.parent.parent);
+      return;
     } else {
       console.log(`  not flipping at ${this.value}`);
     }
 
-    if (result.parent.color === RED && aunt.color === BLACK && result.parent.parent.left === aunt) {
-      console.log(`${result.value} need a left rotation`, result.parent.color, aunt.color);
-      result.rotateLeft();
-    } else {
-      console.log(`  ${result.value} not rotating left `, result.parent.color, aunt.color);
-    }
 
-    if (result.parent.color === RED && aunt.color === BLACK && result.parent.parent.right === aunt) {
-      console.log(`${result.value} need a left rotation`, result.parent.color, aunt.color);
-      result.rotateRight();
-    } else {
-      console.log(`  ${result.value} not rotating right `, result.parent.color, aunt.color);
-    }
-    // console.log(`${result.value} dont need a color flip`, result.parent.color, aunt.color);
-    console.log(`${value}  done ${result.value} \n`);
-    return result;
+    return this.balance(result.parent);
   }
 
   colorFlip() {
@@ -225,11 +219,23 @@ class RedBlackNode extends Node {
    */
   rotateRight() {
     console.log(`${this.value} rotate right`);
-    const grandparent = this.parent.parent;
     const p = this.parent.left;
-    this.parent.left = grandparent;
-    grandparent.right = p;
-    grandparent.parent = this.parent;
+    const formerGrandparent = this.parent.parent.parent
+
+    this.parent.left = this.parent.parent;
+    this.parent.left.parent = this.parent;
+    this.parent.left.right = p;
+
+    this.parent.parent.right = p;
+    if (p) {
+      p.parent = this.parent.parent;
+    }
+
+    this.parent.parent = formerGrandparent;
+    if (formerGrandparent) {
+      formerGrandparent.right = this.parent;
+    }
+
     return this;
   }
 }
