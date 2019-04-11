@@ -1,15 +1,14 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 const expect = require('expect.js');
 
 const { Node } = require('./tree');
 
-// Given the below binary tree and sum = 22,
-/**
-
- */
+function calculatePotentialBelow (n) {
+  // console.log('  calculatePotentialBelow', n, n/2*n);
+  return Math.ceil(n/2 * n);
+}
 
 function findIfHasSum(node, acc = 0, X) {
-  console.log('findIfHasSum', node.value)
+  // console.log('findIfHasSum', node.value)
   if (node.value + acc === X && !node.left && !node.right) {
     return true;
   }
@@ -18,7 +17,9 @@ function findIfHasSum(node, acc = 0, X) {
     return false;
   }
 
-  if (node.left) {
+  // console.log('  looking for ', X - acc);
+  // console.log('     potential left', X - node.value - acc);
+  if (node.left && calculatePotentialBelow(node.left.value) >= X - node.value - acc) {
     const left = findIfHasSum(node.left, node.value + acc, X);
     if (left) {
       return true;
@@ -46,13 +47,13 @@ describe('Find', () => {
   it('should find a branch on the left', () => {
     const tree = new Node(2);
     tree.add(1);
-    expect(findIfHasSum(tree, null, 3)).to.eql(true);
+    expect(findIfHasSum(tree, 0, 3)).to.eql(true);
   });
 
   it('should find a branch on the right', () => {
     const tree = new Node(2);
     tree.add(4);
-    expect(findIfHasSum(tree, null, 6)).to.eql(true);
+    expect(findIfHasSum(tree, 0, 6)).to.eql(true);
   });
 
   it('should find if there is a branch that sums to X', () => {
@@ -67,8 +68,9 @@ describe('Find', () => {
     tree.add(15);
     tree.add(17);
 
-    // expect(findIfHasSum(tree, null, 2)).to.eql(false);
-    // expect(findIfHasSum(tree, null, 24)).to.eql(true);
-    expect(findIfHasSum(tree, null, 10+13+16+15)).to.eql(true);
+    expect(findIfHasSum(tree, 0, 2)).to.eql(false);
+    expect(findIfHasSum(tree, 0, 24)).to.eql(true);
+    expect(findIfHasSum(tree, 0, 10+13+16+15)).to.eql(true);
+    expect(findIfHasSum(tree, 0, 100)).to.eql(false);
   });
 });
