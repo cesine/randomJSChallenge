@@ -1,4 +1,5 @@
 const expect = require('expect.js');
+const debug = () => {};
 
 function findPaths (input) {
   const paths = [];
@@ -6,23 +7,21 @@ function findPaths (input) {
     return paths;
   }
 
-  console.log('findPaths', input);
-
   function findPath (index, acc) {
-    console.log(`${index} so far`, acc);
+    debug(`${index} so far`, acc);
 
     // no more outgoing edges, add the path
     if (input[index].length === 0) {
-      console.log(`${index} no outgoing edges\n`);
+      debug(`${index} no outgoing edges\n`);
       paths.push([ ...acc, index ]);
       return;
     }
 
     // for each edge
     input[index].forEach((dest) => {
-      console.log(`${index} outgoing edges ${dest}`);
+      debug(`${index} outgoing edges ${dest}`);
       if (input[dest]) {
-        console.log(`  exploring ${dest}`);
+        debug(`  exploring ${dest}`);
         findPath(dest, [ ...acc, index ]);
       }
     });
@@ -36,14 +35,14 @@ function findPaths (input) {
  * @param {*} param
  */
 function adjacencyMatrixBFS({ graph, root }) {
-  var nodesLen = {};
+  var distances = {};
 
   // N: initialize all lengths to infinity
   for (var i = 0; i < graph.length; i++) {
-    nodesLen[i] = Infinity;
+    distances[i] = Infinity;
   }
   // the root node is 0 away from itself
-  nodesLen[root] = 0;
+  distances[root] = 0;
 
   var queue = [root];
   var current;
@@ -51,26 +50,23 @@ function adjacencyMatrixBFS({ graph, root }) {
   while (queue.length != 0) {
     current = queue.shift();
 
-    // N: Reduce row to array of neighbors
+    // N: For each vertex that the current node is connected to
     var row = graph[current];
-    var neighborIdx = row.reduce((aggregator, curr, index) => {
-      if (curr) {
-        return [...aggregator, index];
+    row.forEach((value, index) => {
+      if (!value) {
+        return;
       }
-      return aggregator;
-    }, []);
 
-    // N: If the length the neighbor is not yet known,
-    // set the distance to this neighbor to the current distance plus one
-    // and add the neighbor to the queue to be explored
-    for (var j = 0; j < neighborIdx.length; j++) {
-      if (nodesLen[neighborIdx[j]] === Infinity) {
-        nodesLen[neighborIdx[j]] = nodesLen[current] + 1;
-        queue.push(neighborIdx[j]);
+      // If the distance isnt known yet, it will be current + 1
+      // And other nodes connecting to it should be explored
+      // so add it to the queue
+      if (distances[index] === Infinity) {
+        distances[index] = distances[current] + 1;
+        queue.push(index);
       }
-    }
+    });
   }
-  return nodesLen;
+  return distances;
 };
 
 
