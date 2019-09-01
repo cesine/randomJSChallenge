@@ -67,6 +67,41 @@ function adjacencyListBFS({ graph, root }) {
 };
 
 /**
+ * Breadth first search from a root node to find the path of other nodes from that node
+ * @param {*} param
+ */
+function adjacencyListFindPathsBFS({ graph, root }) {
+  var paths = {};
+
+  // N: initialize all lengths to infinity
+  for (var i = 0; i < graph.length; i++) {
+    paths[i] = [];
+  }
+  // the root node is 0 away from itself
+  paths[root] = [root];
+
+  var queue = [root];
+  var current;
+
+  while (queue.length != 0) {
+    current = queue.shift();
+
+    // N: For each vertex that the current node is connected to
+    var row = graph[current];
+    row.forEach((index) => {
+      // If the distance isnt known yet, it will be current + 1
+      // And other nodes connecting to it should be explored
+      // so add it to the queue
+      if (!paths[index].length) {
+        paths[index] =  [ ...paths[current], index];
+        queue.push(index);
+      }
+    });
+  }
+  return paths;
+};
+
+/**
  * Breadth first search from a root node to find the distance of other nodes from that node
  * @param {*} param
  */
@@ -130,7 +165,7 @@ describe('graph', () => {
     });
   });
 
-  describe('as adjacency list, find all paths', () => {
+  describe('as adjacency list, find all distances', () => {
     it('should handle interconnected graphs', () => {
       const adjacencyList = [
         [1, 2, 3],
@@ -154,6 +189,34 @@ describe('graph', () => {
         2: 1,
         3: 3,
         4: Infinity
+      });
+    });
+  });
+
+  describe('as adjacency list, find all paths', () => {
+    it('should handle interconnected graphs', () => {
+      const adjacencyList = [
+        [1, 2, 3],
+        [2],
+        [0, 1],
+        [3],
+        [1]
+      ];
+      const pathsFromVertexZero = adjacencyListFindPathsBFS({ graph: adjacencyList, root: 0 });
+      expect(pathsFromVertexZero).to.eql({
+        0: [0],
+        1: [0, 1],
+        2: [0, 2],
+        3: [0, 3],
+        4: []
+      });
+      const pathsFromVertexOne = adjacencyListFindPathsBFS({ graph: adjacencyList, root: 1 });
+      expect(pathsFromVertexOne).to.eql({
+        0: [1, 2, 0],
+        1: [1],
+        2: [1, 2],
+        3: [1, 2, 0, 3],
+        4: []
       });
     });
   });
