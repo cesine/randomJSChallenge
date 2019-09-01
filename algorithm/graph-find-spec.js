@@ -30,6 +30,42 @@ function findPaths (input) {
   findPath(0, []);
   return paths;
 }
+
+/**
+ * Breadth first search from a root node to find the distance of other nodes from that node
+ * @param {*} param
+ */
+function adjacencyListBFS({ graph, root }) {
+  var distances = {};
+
+  // N: initialize all lengths to infinity
+  for (var i = 0; i < graph.length; i++) {
+    distances[i] = Infinity;
+  }
+  // the root node is 0 away from itself
+  distances[root] = 0;
+
+  var queue = [root];
+  var current;
+
+  while (queue.length != 0) {
+    current = queue.shift();
+
+    // N: For each vertex that the current node is connected to
+    var row = graph[current];
+    row.forEach((index) => {
+      // If the distance isnt known yet, it will be current + 1
+      // And other nodes connecting to it should be explored
+      // so add it to the queue
+      if (distances[index] === Infinity) {
+        distances[index] = distances[current] + 1;
+        queue.push(index);
+      }
+    });
+  }
+  return distances;
+};
+
 /**
  * Breadth first search from a root node to find the distance of other nodes from that node
  * @param {*} param
@@ -69,7 +105,6 @@ function adjacencyMatrixBFS({ graph, root }) {
   return distances;
 };
 
-
 describe('graph', () => {
   describe('as array of arrays, find all paths', () => {
     it('should exit early if there is no outgoing edges', () => {
@@ -92,6 +127,34 @@ describe('graph', () => {
        /* 3 */ []
       ];
       expect(findPaths(adjacencyList)).to.eql([ [ 0, 1, 2, 3 ], [ 0, 1, 3 ], [ 0, 2, 3 ], [ 0, 3 ] ]);
+    });
+  });
+
+  describe('as adjacency list, find all paths', () => {
+    it('should handle interconnected graphs', () => {
+      const adjacencyList = [
+        [1, 2, 3],
+        [2],
+        [0, 1],
+        [3],
+        [1]
+      ];
+      const distancesFromVertexZero = adjacencyListBFS({ graph: adjacencyList, root: 0 });
+      expect(distancesFromVertexZero).to.eql({
+        0: 0,
+        1: 1,
+        2: 1,
+        3: 1,
+        4: Infinity
+      });
+      const distancesFromVertexOne = adjacencyListBFS({ graph: adjacencyList, root: 1 });
+      expect(distancesFromVertexOne).to.eql({
+        0: 2,
+        1: 0,
+        2: 1,
+        3: 3,
+        4: Infinity
+      });
     });
   });
 
@@ -137,4 +200,5 @@ describe('graph', () => {
       });
     });
   });
+
 });
