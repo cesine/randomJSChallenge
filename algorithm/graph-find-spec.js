@@ -53,15 +53,12 @@ function adjacencyMatrixBFS({ graph, root }) {
 
     // row for this vertex
     var row = graph[current];
-    var neighborIdx = [];
-    // find a connected vertex
-    var idx = row.indexOf(1);
-    while (idx != -1) {
-      neighborIdx.push(idx);
-      // find the next cell that is connected from that index
-      // refactor to make more clear
-      idx = row.indexOf(1, idx + 1);
-    }
+    // Convert matrix into an array of neighbors
+    var neighborIdx = row
+      .map((value, index) => ({ value, index}))
+      .filter(({ value }) => (!!value))
+      .map(({ index }) => index);
+    console.log(`${current} is connected to ${neighborIdx}`)
 
     for (var j = 0; j < neighborIdx.length; j++) {
       if (nodesLen[neighborIdx[j]] == Infinity) {
@@ -115,7 +112,7 @@ describe('graph', () => {
       });
     });
 
-    it('should handle interconnected graphs', () => {
+    it.only('should handle interconnected graphs', () => {
       const adjacencyMatrix = [
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0],
@@ -123,7 +120,16 @@ describe('graph', () => {
         [0, 0, 0, 1, 0],
         [0, 1, 0, 0, 0]
       ];
-      expect(adjacencyMatrixBFS({ graph: adjacencyMatrix, root: 1 })).to.eql({
+      // const distancesFromVertexZero = adjacencyMatrixBFS({ graph: adjacencyMatrix, root: 0 });
+      // expect(distancesFromVertexZero).to.eql({
+      //   0: 0,
+      //   1: 1,
+      //   2: 1,
+      //   3: 1,
+      //   4: Infinity
+      // });
+      const distancesFromVertexOne = adjacencyMatrixBFS({ graph: adjacencyMatrix, root: 1 });
+      expect(distancesFromVertexOne).to.eql({
         0: 2,
         1: 0,
         2: 1,
