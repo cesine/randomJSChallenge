@@ -38,7 +38,7 @@ function findPaths (input) {
 function adjacencyMatrixBFS({ graph, root }) {
   var nodesLen = {};
 
-  // initialize all lengths to infinity
+  // N: initialize all lengths to infinity
   for (var i = 0; i < graph.length; i++) {
     nodesLen[i] = Infinity;
   }
@@ -51,17 +51,20 @@ function adjacencyMatrixBFS({ graph, root }) {
   while (queue.length != 0) {
     current = queue.shift();
 
-    // row for this vertex
+    // N: Reduce row to array of neighbors
     var row = graph[current];
-    // Convert matrix into an array of neighbors
-    var neighborIdx = row
-      .map((value, index) => ({ value, index}))
-      .filter(({ value }) => (!!value))
-      .map(({ index }) => index);
-    console.log(`${current} is connected to ${neighborIdx}`)
+    var neighborIdx = row.reduce((aggregator, curr, index) => {
+      if (curr) {
+        return [...aggregator, index];
+      }
+      return aggregator;
+    }, []);
 
+    // N: If the length the neighbor is not yet known,
+    // set the distance to this neighbor to the current distance plus one
+    // and add the neighbor to the queue to be explored
     for (var j = 0; j < neighborIdx.length; j++) {
-      if (nodesLen[neighborIdx[j]] == Infinity) {
+      if (nodesLen[neighborIdx[j]] === Infinity) {
         nodesLen[neighborIdx[j]] = nodesLen[current] + 1;
         queue.push(neighborIdx[j]);
       }
@@ -112,7 +115,7 @@ describe('graph', () => {
       });
     });
 
-    it.only('should handle interconnected graphs', () => {
+    it('should handle interconnected graphs', () => {
       const adjacencyMatrix = [
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0],
@@ -120,14 +123,14 @@ describe('graph', () => {
         [0, 0, 0, 1, 0],
         [0, 1, 0, 0, 0]
       ];
-      // const distancesFromVertexZero = adjacencyMatrixBFS({ graph: adjacencyMatrix, root: 0 });
-      // expect(distancesFromVertexZero).to.eql({
-      //   0: 0,
-      //   1: 1,
-      //   2: 1,
-      //   3: 1,
-      //   4: Infinity
-      // });
+      const distancesFromVertexZero = adjacencyMatrixBFS({ graph: adjacencyMatrix, root: 0 });
+      expect(distancesFromVertexZero).to.eql({
+        0: 0,
+        1: 1,
+        2: 1,
+        3: 1,
+        4: Infinity
+      });
       const distancesFromVertexOne = adjacencyMatrixBFS({ graph: adjacencyMatrix, root: 1 });
       expect(distancesFromVertexOne).to.eql({
         0: 2,
