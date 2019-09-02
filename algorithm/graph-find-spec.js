@@ -101,6 +101,98 @@ function adjacencyListFindPathsBFS({ graph, root }) {
   return paths;
 };
 
+function calcManhattanDistance(a, b) {
+  const xDistance = Math.abs(a.x - b.x);
+  const yDistance = Math.abs(a.y - b.y);
+  return xDistance + yDistance;
+}
+
+/**
+ * Find shortest path from a root node to another node
+ * using euclidean/manhattan distance
+ *
+ * each vertex should have an lat, long or x, y corrdinates, or some other measurement in space
+ * https://www.youtube.com/watch?v=eSOJ3ARN5FM
+ * @param {*} param
+ */
+function aStar({ graph, root, leaf }) {
+  const manhattanDistance = calcManhattanDistance(root, leaf);
+  debug('manhattanDistance', manhattanDistance);
+
+  const open = [root];
+  const closed = [];
+
+  const resultingPath = [];
+
+  // g()
+  // h()
+  function distanceFromLeaf(node) {
+    if (node.distanceFromLeaf) {
+      return node.distanceFromLeaf;
+    }
+    node.distanceFromLeaf = calcManhattanDistance(leaf, node);
+    return node.distanceFromLeaf;
+  }
+
+  // f()
+  function distanceFromRootAndLeaf(node) {
+    if (node.distanceFromRootAndLeaf) {
+      return node.distanceFromRootAndLeaf;
+    }
+    node.distanceFromRootAndLeaf = node.distanceFromRoot | distanceFromLeaf(node);
+    return node.distanceFromRootAndLeaf;
+  }
+
+  let current;
+  while (open.length) {
+    if (!current) {
+      current = open.shift();
+      current.distanceFromRoot = 0;
+    }
+    debug('looking at', current);
+    if (!current.neighbors || !current.neighbors.length) {
+      closed.push(current);
+      break;
+    }
+
+    if (current === leaf) {
+      debug('found it', current);
+      open = [];
+    }
+
+    let nextProbable;
+    current.neighbors.forEach((edge) => {
+      const neighbor = graph[edge.node];
+      neighbor.distanceFromRoot = current.distanceFromRoot + edge.weight;
+      neighbor.previous = current;
+      if (neighbor === leaf) {
+        nextProbable = neighbor;
+        return;
+      }
+      open.push(neighbor);
+      if (!nextProbable || distanceFromRootAndLeaf(neighbor) < distanceFromRootAndLeaf(nextProbable)) {
+        nextProbable = neighbor;
+      }
+    });
+    debug('nextProbable', nextProbable);
+
+    closed.push(current);
+    current = nextProbable;
+  }
+
+  while (current.previous) {
+    resultingPath.unshift(current.label);
+    current = current.previous;
+  }
+  resultingPath.unshift(root.label);
+
+  return {
+    graph,
+    resultingPath,
+    manhattanDistance,
+  }
+};
+
 /**
  * Breadth first search from a root node to find the distance of other nodes from that node
  * @param {*} param
@@ -141,6 +233,81 @@ function adjacencyMatrixBFS({ graph, root }) {
 };
 
 describe('graph', () => {
+  describe('as a weight graph, find shortest path', () => {
+    it('should find the shortest distance', () => {
+      const graph = {
+        a: {
+          label: 'a',
+          x: 0,
+          y: 8,
+          neighbors: [{
+            node: 'b',
+            weight: 5
+          }, {
+            node: 'c',
+            weight: 5,
+          }],
+        },
+        b: {
+          label: 'b',
+          x: 2,
+          y: 11,
+          neighbors: [{
+            node: 'd',
+            weight: 3,
+          }, {
+            node: 'c',
+            weight: 4,
+          }],
+        },
+        c: {
+          label: 'c',
+          x: 3,
+          y: 8,
+          neighbors: [{
+            node: 'd',
+            weight: 7,
+          }, {
+            node: 'h',
+            weight: 8,
+          }, {
+            node: 'e',
+            weight: 7,
+          }],
+        },
+        d: {
+          label: 'd',
+          x: 4,
+          y: 12,
+          neighbors: [],
+        },
+        h: {
+          label: 'h',
+          x: 7,
+          y: 6,
+          neighbors: [],
+        },
+        e: {
+          label: 'e',
+          x: 4,
+          y: 4,
+          neighbors: [],
+        },
+      };
+      const distancesFromVertexZero = aStar({
+        graph,
+        root: graph.a,
+        leaf: graph.h,
+      });
+      expect(distancesFromVertexZero.resultingPath).to.eql([
+        'a',
+        'c',
+        'h',
+      ]);
+      expect(graph.h.distanceFromRoot).to.eql(13)
+    });
+  });
+
   describe('as array of arrays, find all paths', () => {
     it('should exit early if there is no outgoing edges', () => {
       expect(findPaths([ [] ])).to.eql([]);
@@ -237,7 +404,7 @@ describe('graph', () => {
       });
     });
 
-    it('should handle interconnected graphs', () => {
+    it('should find distances', () => {
       const adjacencyMatrix = [
         [0, 1, 1, 1, 0],
         [0, 0, 1, 0, 0],
@@ -263,5 +430,4 @@ describe('graph', () => {
       });
     });
   });
-
 });
