@@ -157,26 +157,41 @@ function aStar({ graph, root, leaf }) {
 
     if (current === leaf) {
       debug('found it', current);
-      open = [];
+      if (open.length) {
+        open.splice(0, open.length);
+      }
+      break;
     }
 
     let nextProbable;
     current.neighbors.forEach((edge) => {
       const neighbor = graph[edge.node];
+      if (!neighbor) {
+        throw new Error(`this node ${edge.node} is not found in the graph`);
+      }
       neighbor.distanceFromRoot = current.distanceFromRoot + edge.weight;
-      neighbor.previous = current;
       if (neighbor === leaf) {
         nextProbable = neighbor;
         return;
       }
-      open.push(neighbor);
+      if (closed.indexOf(neighbor) > -1) {
+        return;
+      }
+      if (open.indexOf(neighbor) === -1) {
+        open.push(neighbor);
+      }
       if (!nextProbable || distanceFromRootAndLeaf(neighbor) < distanceFromRootAndLeaf(nextProbable)) {
         nextProbable = neighbor;
       }
     });
     debug('nextProbable', nextProbable);
 
+    nextProbable.previous = current;
     closed.push(current);
+    const currentInOpen = open.indexOf(current);
+    if (currentInOpen > -1) {
+      open.splice(currentInOpen, 1);
+    }
     current = nextProbable;
   }
 
@@ -279,32 +294,209 @@ describe('graph', () => {
           label: 'd',
           x: 4,
           y: 12,
-          neighbors: [],
+          neighbors: [{
+            node: 'm',
+            weight: 14,
+          }, {
+            node: 'l',
+            weight: 13,
+          }, {
+            node: 'k',
+            weight: 16,
+          }, {
+            node: 'h',
+            weight: 11,
+          }],
         },
         h: {
           label: 'h',
           x: 7,
           y: 6,
-          neighbors: [],
+          neighbors: [{
+            node: 'd',
+            weight: 11,
+          }, {
+            node: 'i',
+            weight: 3,
+          }, {
+            node: 'e',
+            weight: 5,
+          }],
+        },
+        i: {
+          label: 'i',
+          x: 9,
+          y: 5,
+          neighbors: [{
+            node: 'h',
+            weight: 3,
+          }, {
+            node: 'j',
+            weight: 4,
+          }],
+        },
+        j: {
+          label: 'j',
+          x: 12,
+          y: 4,
+          neighbors: [{
+            node: 'i',
+            weight: 4,
+          }, {
+            node: 'n',
+            weight: 3,
+          }, {
+            node: 'p',
+            weight: 8,
+          }],
         },
         e: {
           label: 'e',
           x: 4,
           y: 4,
-          neighbors: [],
+          neighbors: [{
+            node: 'h',
+            weight: 5,
+          }, {
+            node: 'c',
+            weight: 7,
+          }, {
+            node: 'f',
+            weight: 4,
+          }],
+        },
+        f: {
+          label: 'f',
+          x: 1,
+          y: 3,
+          neighbors: [{
+            node: 'e',
+            weight: 4,
+          }, {
+            node: 'g',
+            weight: 9,
+          }],
+        },
+        g: {
+          label: 'g',
+          x: 6,
+          y: 1,
+          neighbors: [{
+            node: 'f',
+            weight: 9,
+          }, {
+            node: 'n',
+            weight: 12,
+          }],
+        },
+        m: {
+          label: 'm',
+          x: 12,
+          y: 14,
+          neighbors: [{
+            node: 'd',
+            weight: 14,
+          }, {
+            node: 'l',
+            weight: 9,
+          }, {
+            node: 'o',
+            weight: 5,
+          }],
+        },
+        l: {
+          label: 'l',
+          x: 12,
+          y: 11,
+          neighbors: [{
+            node: 'd',
+            weight: 14,
+          }, {
+            node: 'm',
+            weight: 9,
+          }, {
+            node: 'o',
+            weight: 4,
+          }, {
+            node: 'k',
+            weight: 5,
+          }],
+        },
+        k: {
+          label: 'k',
+          x: 12,
+          y: 8,
+          neighbors: [{
+            node: 'd',
+            weight: 16,
+          }, {
+            node: 'l',
+            weight: 5,
+          }, {
+            node: 'p',
+            weight: 4,
+          }, {
+            node: 'n',
+            weight: 7,
+          }],
+        },
+        n: {
+          label: 'n',
+          x: 14,
+          y: 3,
+          neighbors: [{
+            node: 'k',
+            weight: 7,
+          }, {
+            node: 'j',
+            weight: 3,
+          }, {
+            node: 'p',
+            weight: 7,
+          }],
+        },
+        p: {
+          label: 'p',
+          x: 16,
+          y: 8,
+          neighbors: [{
+            node: 'k',
+            weight: 4,
+          }, {
+            node: 'j',
+            weight: 8,
+          }, {
+            node: 'n',
+            weight: 7,
+          }],
         },
       };
-      const distancesFromVertexZero = aStar({
+      const distanceToH = aStar({
         graph,
         root: graph.a,
         leaf: graph.h,
       });
-      expect(distancesFromVertexZero.resultingPath).to.eql([
+      expect(distanceToH.resultingPath).to.eql([
         'a',
         'c',
         'h',
       ]);
       expect(graph.h.distanceFromRoot).to.eql(13)
+
+      const distanceToP = aStar({
+        graph,
+        root: graph.a,
+        leaf: graph.p,
+      });
+      expect(distanceToP.resultingPath).to.eql([
+        'a',
+        'c',
+        'h',
+        'i',
+        'j',
+        'p',
+      ]);
+      expect(graph.p.distanceFromRoot).to.eql(28)
     });
   });
 
