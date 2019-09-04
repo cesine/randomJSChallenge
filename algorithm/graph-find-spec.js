@@ -247,10 +247,22 @@ function adjacencyMatrixBFS({ graph, root }) {
   return distances;
 };
 
+describe('sub Function check', () => {
+  it('.calcManhattanDistance', () => {
+    const root = { x: 0, y: 8 }
+    const leaf = { x: 0, y: 10 }
+    expect(calcManhattanDistance(root, leaf)).to.eql(2);
+    expect(calcManhattanDistance(root, { x: 1, y: 10 })).to.eql(3);
+    expect(calcManhattanDistance(root, { x: -1, y: -8 })).to.eql(17);
+    expect(calcManhattanDistance({ x: -1, y: -8 }, root)).to.eql(17);
+  })
+});
+
 describe('graph', () => {
+  let graph = {};
   describe('as a weight graph, find shortest path', () => {
-    it('should find the shortest distance', () => {
-      const graph = {
+    beforeEach(() => {
+      graph = {
         a: {
           label: 'a',
           x: 0,
@@ -323,6 +335,7 @@ describe('graph', () => {
             weight: 5,
           }],
         },
+        
         i: {
           label: 'i',
           x: 9,
@@ -335,6 +348,7 @@ describe('graph', () => {
             weight: 4,
           }],
         },
+        
         j: {
           label: 'j',
           x: 12,
@@ -471,6 +485,9 @@ describe('graph', () => {
           }],
         },
       };
+    })
+
+    it('should find the shortest distance to H', () => {
       const distanceToH = aStar({
         graph,
         root: graph.a,
@@ -482,12 +499,15 @@ describe('graph', () => {
         'h',
       ]);
       expect(graph.h.distanceFromRoot).to.eql(13)
+    });
 
+    it('should find the shortest distance to P', () => {
       const distanceToP = aStar({
         graph,
         root: graph.a,
         leaf: graph.p,
       });
+      
       expect(distanceToP.resultingPath).to.eql([
         'a',
         'c',
@@ -498,6 +518,7 @@ describe('graph', () => {
       ]);
       expect(graph.p.distanceFromRoot).to.eql(28)
     });
+
   });
 
   describe('as array of arrays, find all paths', () => {
