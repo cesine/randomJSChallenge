@@ -14,13 +14,16 @@ const expect = require('expect.js');
 
 // Loop solution: 
 const numberOfRedAround = (table, sp) => {
-  const itemLeftTocheck = [sp];
+  const safety = (table.length * table[0].length); // Infinite loop is bad... Hein ;)
+  let itemLeftTocheck = [sp];
   const knownList = {};
-  let totalRed = '';
-  while (itemLeftTocheck.length !== 0) {
-    console.log('itemLeftToCheck', itemLeftToCheck.length);
+  let totalRed = 0;
+  let i = 0;
+  while (itemLeftTocheck.length !== 0 && i <= safety) {
+    i++;
     const itemToCheck = itemLeftTocheck.pop();
-    const [ red, black ] = findAllEdge(table, itemToCheck, knownList);
+    addToVisited(knownList, itemToCheck);
+    const { red, black } = findAllEdge(table, itemToCheck, knownList);
     red.map((item)=> addToVisited(knownList, item));
     totalRed += red.length;
     itemLeftTocheck = [...itemLeftTocheck, ...black];
@@ -68,23 +71,16 @@ const findAllEdge = (table, point, visted) => {
       }
     }
   }, {red: [], black: []});
-}
+};
+
+// NEXT: Recursive solution & compare memory/speed?
 
 
-describe.only('.numberOfRedAround', () => {
+describe('table Red-Black dot grouping interview Q.', () => {
   let table = [];
   const R = false;
   const B = true;
   const O = undefined
-  
-  beforeEach(() => {
-    let table = [
-      [O,O,R,B,R],
-      [O,R,B,B,B],
-      [R,O,R,B,R],
-      [B,R,O,R,O],
-    ];
-  });
 
   describe('.givePointAroundMiddle', () => {
     it('largetable', () => {
@@ -160,8 +156,39 @@ describe.only('.numberOfRedAround', () => {
     });
   });
 
-  it.skip('test Simple table', () => {
-    sp = {x: 1, Y: 4};
-    expect(numberOfRedAround(table, sp)).to.eql(6);
-  });
+  describe('.numberOfRedAround', () => {
+    beforeEach(() => {
+      table = [
+        [O,O,R,B,R],
+        [O,R,B,B,B],
+        [R,O,R,B,R],
+        [B,R,O,R,O],
+      ];
+    });
+
+    it('smallest table', () => {
+      const base = [
+        [R,R,R],
+        [R,B,R],
+        [R,R,R]
+      ];
+      const st = {x:1, y:1};
+      expect(numberOfRedAround(base, st)).to.eql(4);
+    });
+
+    it('smallest table edge', () => {
+      const base = [
+        [R,R,R],
+        [R,R,B],
+        [R,R,R]
+      ];
+      const st = {x:1, y:2};
+      expect(numberOfRedAround(base, st)).to.eql(3);
+    });
+
+    it('smallest table edge', () => {
+      const st = {x:1, y:2};
+      expect(numberOfRedAround(table, st)).to.eql(6);
+    });
+  })
 });
