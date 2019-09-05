@@ -74,6 +74,21 @@ const findAllEdge = (table, point, visted) => {
 };
 
 // NEXT: Recursive solution & compare memory/speed?
+const numberOfRedRecursive = (table, sp) => {
+  return recursiveWay(table, [sp], {}, 0);
+};
+
+const recursiveWay = (table, toInspectList, visited, redCount) => {
+  if (toInspectList.length === 0) return redCount;
+  const itemToCheck = toInspectList.pop();
+  addToVisited(visited, itemToCheck);
+  const { red, black } = findAllEdge(table, itemToCheck, visited);
+  red.map((item)=> addToVisited(visited, item));
+  redCount += red.length;
+  toInspectList = [...toInspectList, ...black];
+  return recursiveWay(table, toInspectList, visited, redCount);
+}
+
 
 
 describe('table Red-Black dot grouping interview Q.', () => {
@@ -189,6 +204,82 @@ describe('table Red-Black dot grouping interview Q.', () => {
     it('smallest table edge', () => {
       const st = {x:1, y:2};
       expect(numberOfRedAround(table, st)).to.eql(6);
+    });
+  })
+
+  describe('.numberOfRedRecursive', () => {
+    beforeEach(() => {
+      table = [
+        [O,O,R,B,R],
+        [O,R,B,B,B],
+        [R,O,R,B,R],
+        [B,R,O,R,O],
+      ];
+    });
+
+    it('smallest table', () => {
+      const base = [
+        [R,R,R],
+        [R,B,R],
+        [R,R,R]
+      ];
+      const st = {x:1, y:1};
+      expect(numberOfRedRecursive(base, st)).to.eql(4);
+    });
+
+    it('smallest table edge', () => {
+      const base = [
+        [R,R,R],
+        [R,R,B],
+        [R,R,R]
+      ];
+      const st = {x:1, y:2};
+      expect(numberOfRedRecursive(base, st)).to.eql(3);
+    });
+
+    it('smallest table edge', () => {
+      const st = {x:1, y:2};
+      expect(numberOfRedRecursive(table, st)).to.eql(6);
+    });
+  });
+
+
+  
+  describe.skip('MassivetableTest', () => {
+    // To test if Recursion or loop is better in this case?
+    // Conclusion: Even with proper tail call in recursion we still have memory issue and max stack size.
+    // Loop is therefor better in this case
+
+    beforeEach(() => {
+      const size = 200;
+      table = [
+        Array(size+2).fill(R),
+        [R, ...Array(size).fill(B),R],
+        [R, ...Array(size).fill(B),R],
+        [R, ...Array(size).fill(B),R],
+        [R, ...Array(size).fill(B),R],
+        [R, ...Array(size).fill(B),R],
+        [R, ...Array(size).fill(B),R],
+        [R, ...Array(size).fill(B),R],
+        [R, ...Array(size).fill(B),R],
+        Array(size+2).fill(R),
+      ];
+    });
+
+    it('test Looping with BigTable', () => {
+      const st = {x:2, y:2};
+      const result = numberOfRedAround(table, st);
+      const used = process.memoryUsage().heapUsed / 1024 / 1024;
+      console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
+      // 36Mb for 2000 Iterations (200*10);
+    });
+
+    it('test Recursive with BigTable', () => {
+      const st = {x:2, y:2};
+      const result = numberOfRedRecursive(table, st);
+      const used = process.memoryUsage().heapUsed / 1024 / 1024;
+      console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
+      // 48Mb for 2000 Iterations (200*10);
     });
   })
 });
