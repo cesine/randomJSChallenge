@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const expect = require('expect.js');
 
-const {merge, mergesort, native, quicksort, partition, swap} = require('./sort');
+const {merge, mergesort, native, quicksort, quicksortRecursive, partition, swap} = require('./sort');
 
 describe('sort', () => {
   function compareNumbers(a, b) {

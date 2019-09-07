@@ -1,3 +1,5 @@
+const debug = console.log;
+
 /**
  * Sort an input of inputs using the native sort function
  * @param input
@@ -24,7 +26,7 @@ function swap(input, i, j) {
   // eslint-disable-next-line no-param-reassign
   input[j] = temp;
 
-  // console.log('swapped', temp, input[i]);
+  debug('swapped', temp, input[i]);
   return input;
 }
 
@@ -51,7 +53,7 @@ function partition(input, left, right, compare) {
       right--;
     }
     if (left <= right) {
-      // console.log(` (compare ${pivot})`);
+      debug(` (pivot ${pivot})`);
       swap(input, left, right);
       left++;
       right--;
@@ -70,17 +72,50 @@ function partition(input, left, right, compare) {
  * @param compare   Function to compare two values
  * @returns Array   Input array
  */
-function qSort(input, left, right, compare) {
-  // console.log('qsort', input.map((item, i) => (i >= left && i <= right) ? item : '-'));
+function quicksort(input, compare) {
+  const stack = [0, input.length - 1];
+
+  while (stack.length) {
+    const right = stack.pop();
+    const left = stack.pop();
+    debug('\nq', input.map((item, i) => (i >= left && i <= right) ? item : '-'));
+    // If we have crossed positions
+    if (right - left < 2) {
+      continue;
+    }
+    let partitionIndex = partition(input, left, right, compare);
+    debug(`partitionIndex ${partitionIndex}: `, input[partitionIndex], input.map((item, i) => (i >= left && i <= right) ? item : '-'));
+
+    stack.push(partitionIndex);
+    stack.push(right);
+
+    stack.push(left);
+    stack.push(partitionIndex - 1);
+  }
+
+  return input;
+}
+
+/**
+ * Sort all the items in the input between left and right indicies, using the compare function
+ *
+ * @param input     An array to be sorted (in place)
+ * @param left      Index of the left side to iterate over
+ * @param right     Index of the right side to iterate over
+ * @param compare   Function to compare two values
+ * @returns Array   Input array
+ */
+function qSortRecursive(input, left, right, compare) {
+  debug('\nqsortRecursive', input.map((item, i) => (i >= left && i <= right) ? item : '-'));
 
   const partitionIndex = partition(input, left, right, compare);
 
-  // console.log('partitionIndex', partitionIndex, input.map((item, i) => (i >= left && i <= right) ? item : '-'));
+  debug(`partitionIndex ${partitionIndex}: `, input[partitionIndex], input.map((item, i) => (i >= left && i <= right) ? item : '-'));
   if (left < partitionIndex - 1) {
-    qSort(input, left, partitionIndex - 1, compare);
+    qSortRecursive(input, left, partitionIndex - 1, compare);
   }
   if (partitionIndex < right) {
-    qSort(input, partitionIndex, right, compare);
+    qSortRecursive(input, partitionIndex, right, compare);
   }
 
   return input;
@@ -91,8 +126,8 @@ function qSort(input, left, right, compare) {
  * @param input
  * @returns {Array}
  */
-function quicksort(input, compare) {
-  return qSort(input, 0, input.length - 1, compare);
+function quicksortRecursive(input, compare) {
+  return qSortRecursive(input, 0, input.length - 1, compare);
 }
 
 /**
@@ -120,7 +155,7 @@ function merge(left, right, compare) {
     } else {
       output[position] = right.shift();
     }
-    // console.log('output', output, 'position', position);
+    debug('output', output, 'position', position);
     position++;
   }
 
@@ -137,16 +172,10 @@ function mergesort(input, compare) {
     return input;
   }
 
-  if (input.length === 2) {
-    if (compare(input[0], input[1]) > 0) {
-      return [input[1], input[0]];
-    }
-  }
-
   const middle = Math.ceil(input.length / 2);
   const left = mergesort(input.slice(0, middle), compare);
   const right = mergesort(input.slice(middle, input.length), compare);
-  // console.log('left', left, 'right', right);
+  debug('left', left, 'right', right);
   return merge(left, right, compare);
 }
 
@@ -155,6 +184,7 @@ module.exports = {
   mergesort,
   native,
   quicksort,
+  quicksortRecursive,
   partition,
   swap,
 };
