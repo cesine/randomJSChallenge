@@ -1,6 +1,6 @@
 const debug =
- () => {}
-//  console.log;
+//  () => {}
+ console.log;
 
 /**
  * Sort an input of inputs using the native sort function
@@ -89,11 +89,15 @@ function quicksort(input, compare) {
     let partitionIndex = partition(input, left, right, compare);
     debug(`partitionIndex ${partitionIndex}: `, input[partitionIndex], input.map((item, i) => (i >= left && i <= right) ? item : '-'));
 
-    stack.push(partitionIndex);
-    stack.push(right);
+    if (right - partitionIndex > 0) {
+      stack.push(partitionIndex);
+      stack.push(right);
+    }
 
-    stack.push(left);
-    stack.push(partitionIndex - 1);
+    if (partitionIndex - left > 0) {
+      stack.push(left);
+      stack.push(partitionIndex - 1);
+    }
   }
 
   return input;
