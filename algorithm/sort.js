@@ -1,4 +1,6 @@
-const debug = console.log;
+const debug =
+ () => {}
+//  console.log;
 
 /**
  * Sort an input of inputs using the native sort function
@@ -78,9 +80,10 @@ function quicksort(input, compare) {
   while (stack.length) {
     const right = stack.pop();
     const left = stack.pop();
-    debug('\nq', input.map((item, i) => (i >= left && i <= right) ? item : '-'));
+    debug('\nqsort', input.map((item, i) => (i >= left && i <= right) ? item : '-'));
     // If we have crossed positions
-    if (right - left < 2) {
+    if (right - left < 1) {
+      debug('continue', right, left)
       continue;
     }
     let partitionIndex = partition(input, left, right, compare);
